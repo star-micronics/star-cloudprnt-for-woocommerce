@@ -15,6 +15,7 @@ Star CloudPRNT for WooCommerce will enable you to print automated receipts each 
 This plugin can only be used alongside the WooCommerce WordPress plugin.  For more information on the WooCommerce plugin please visit www.woocommerce.com
 
 == Installation ==
+
 1. Install and activate the plugin.
 2. Go to your WordPress admin control panel and you should notice a new link for "Star CloudPRNT for WooCommerce" under your WordPress "Settings" category.
 3. Once you have opened up the Star CloudPRNT settings page, you will be given a unique Server URL which you need to copy.
@@ -33,6 +34,11 @@ For help and support please e-mail support@star-emea.com
 * WooCommerce plugin 2.5.X, 2.6.X or 3.0.0
 * Star TSP650II, TSP700II, TSP800II or SP700 series printer with a IFBD-HI01X/HI02X interface.
 * Recommended printer firmware 1.2 or greater.
+
+== Screenshots ==
+
+1. Star CloudPRNT settings page.
+2. Printer management page.
 
 == Changelog ==
 1.0 - 2017-04-06
