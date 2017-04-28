@@ -137,7 +137,7 @@
 			{
 				if ($item == '.' || $item == '..') continue;
 
-				if (!deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) return false;
+				if (!$this->deleteDirectory($dir . DIRECTORY_SEPARATOR . $item)) return false;
 			}
 			return rmdir($dir);
 		}
@@ -149,7 +149,7 @@
 			if (!$printerdata['printerOnline'])
 			{
 				$dirpath = STAR_CLOUDPRNT_PRINTER_DATA_SAVE_PATH."/".star_cloudprnt_get_printer_folder($this->printer_mac);
-				deleteDirectory($dirpath);
+				$this->deleteDirectory($dirpath);
 			}
 		}
 	}

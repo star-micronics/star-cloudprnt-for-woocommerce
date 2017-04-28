@@ -56,7 +56,8 @@
 		
 		if (isset($printerMac))
 		{
-			deletePrinter($printerMac);
+			$printer = new Star_CloudPRNT_Printer($printerMac);
+			$printer->deletePrinter();
 			header('location: ?page='.$_GET['page']);
 		}
 	}
