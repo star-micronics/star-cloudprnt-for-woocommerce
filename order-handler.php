@@ -172,22 +172,6 @@
 		$printer->add_text_line("Tel: ".$tel);
 	}
 	
-	// Checks order history and printer queue 
-	function star_cloudprnt_is_duplicate_order($order_id)
-	{
-		$history_path = STAR_CLOUDPRNT_DATA_FOLDER_PATH.star_cloudprnt_get_os_path("/order_history.txt");
-		$fh = fopen($history_path, "r");
-		if ($fh)
-		{
-			while (($line = fgets($handle)) !== false)
-			{
-				// process the line read.
-			}
-			fclose($handle);
-		}
-		return false;
-	}
-	
 	function star_cloudprnt_print_order_summary($selectedPrinter, $file, $order_id)
 	{
 		$order = wc_get_order($order_id);
