@@ -128,6 +128,7 @@
 						{
 							if (isset($_GET['npn'])) star_cloudprnt_change_printer_name();
 							else if (isset($_GET['cq'])) star_cloudprnt_clear_printer_queue();
+							else if (isset($_GET['coh'])) star_cloudprnt_clear_order_history();
 							else if (isset($_GET['dp'])) star_cloudprnt_delete_printer();
 							else star_cloudprnt_show_printer_settings_page();
 						}

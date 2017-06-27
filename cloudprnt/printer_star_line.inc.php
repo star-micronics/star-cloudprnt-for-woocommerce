@@ -99,7 +99,7 @@
 			$fh = fopen($this->tempFilePath, 'w');
 			fwrite($fh, hex2bin($this->printJobBuilder.self::SLM_FEED_PARTIAL_CUT_HEX));
 			fclose($fh);
-			star_cloudprnt_queue_add_print_job($this->printerMac, $this->tempFilePath);
+			star_cloudprnt_queue_add_print_job($this->printerMac, $this->tempFilePath, 1);
 			unlink($this->tempFilePath);
 		}
 	}

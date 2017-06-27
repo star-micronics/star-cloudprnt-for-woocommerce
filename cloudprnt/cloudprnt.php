@@ -125,7 +125,7 @@
 			else if (star_cloudprnt_queue_get_next_job($parsedJson['printerMAC']) != "")
 			{
 				$arr = array("jobReady" => true,
-				"mediaTypes" => array('text/plain'));		
+				"mediaTypes" => array('text/plain'));	
 			}
 			else $arr = array("jobReady" => false);
 			
@@ -208,6 +208,7 @@
 	if (!is_dir(STAR_CLOUDPRNT_DATA_FOLDER_PATH)) mkdir(STAR_CLOUDPRNT_DATA_FOLDER_PATH, 0755);
 	if (!is_dir(STAR_CLOUDPRNT_PRINTER_PENDING_SAVE_PATH)) mkdir(STAR_CLOUDPRNT_PRINTER_PENDING_SAVE_PATH, 0755);
 	if (!is_dir(STAR_CLOUDPRNT_PRINTER_DATA_SAVE_PATH)) mkdir(STAR_CLOUDPRNT_PRINTER_DATA_SAVE_PATH, 0755);
+	if (!file_exists(STAR_CLOUDPRNT_DATA_FOLDER_PATH.'/order_history.txt')) file_put_contents(STAR_CLOUDPRNT_DATA_FOLDER_PATH.'/order_history.txt', '');
 	
 	$printer_handler = new Star_CloudPRNT_Printer_Handler();
 	// POST requests from the printer come with a JSON payload

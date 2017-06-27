@@ -2,8 +2,8 @@
 Contributors: fmahmood
 Tags: star, printing, printers, automated, e-commerce, store, sales, downloadable, downloads, woocommerce
 Requires at least: 4.7.0
-Tested up to: 4.7.4
-Stable tag: 1.0.1
+Tested up to: 4.8.0
+Stable tag: 1.0.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -30,8 +30,8 @@ For help and support please e-mail support@star-emea.com
 
 = Minimum Requirements =
 * PHP 5.6 or greater.
-* WordPress 4.7.0 or greater.
-* WooCommerce plugin 2.5.X, 2.6.X or 3.0.0
+* WordPress 4.7.X or 4.8.X.
+* WooCommerce plugin 2.5.X, 2.6.X or 3.0.X.
 * Star TSP650II, TSP700II, TSP800II or SP700 series printer with a IFBD-HI01X/HI02X interface.
 * Recommended printer firmware 1.2 or greater.
 
@@ -40,6 +40,10 @@ For help and support please e-mail support@star-emea.com
 2. Printer management page.
 
 == Changelog ==
+1.0.2 - 2017-06-27
+- Added order history feature to log printed orders.
+- Added support for WordPress 4.8.0 and WooCommerce 3.0.X.
+
 1.0.1 - 2017-04-28
 - Bug fixes.
 
