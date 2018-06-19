@@ -2,8 +2,8 @@
 Contributors: fmahmood
 Tags: star, printing, printers, automated, e-commerce, store, sales, downloadable, downloads, woocommerce
 Requires at least: 4.7.0
-Tested up to: 4.8.0
-Stable tag: 1.0.2
+Tested up to: 4.9.6
+Stable tag: 1.0.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -30,16 +30,22 @@ For help and support please e-mail support@star-emea.com
 
 = Minimum Requirements =
 * PHP 5.6 or greater.
-* WordPress 4.7.X or 4.8.X.
+* WordPress 4.7.X, 4.8.X or 4.9.X.
 * WooCommerce plugin 2.5.X, 2.6.X or 3.0.X.
 * Star TSP650II, TSP700II, TSP800II or SP700 series printer with a IFBD-HI01X/HI02X interface.
-* Recommended printer firmware 1.2 or greater.
+* Recommended printer interface firmware 1.4 or greater.
 
 == Screenshots ==
 1. Star CloudPRNT settings page.
 2. Printer management page.
 
 == Changelog ==
+1.0.3 - 2018-06-19
+- Replaced HTTP DELETE requests with HTTP GET requests, due to some servers not supporting this method.
+- Fixed bug where print job is lost after failed HTTP GET request.
+- Added support for Wordpress 4.9.X (tested up to 4.9.6).
+- Changed recommended printer interface firmware to 1.4 or greater.
+
 1.0.2 - 2017-06-27
 - Added order history feature to log printed orders.
 - Added support for WordPress 4.8.0 and WooCommerce 3.0.X.

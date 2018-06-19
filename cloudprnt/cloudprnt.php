@@ -125,7 +125,8 @@
 			else if (star_cloudprnt_queue_get_next_job($parsedJson['printerMAC']) != "")
 			{
 				$arr = array("jobReady" => true,
-				"mediaTypes" => array('text/plain'));	
+				"mediaTypes" => array('text/plain'),
+				"deleteMethod" => "GET");	
 			}
 			else $arr = array("jobReady" => false);
 			
@@ -196,7 +197,7 @@
 			if ($sanitized_mac === '') return;
 			// Validate
 			if (!self::is_valid_mac($sanitized_mac)) return;
-			star_cloudprnt_queue_remove_last_print_job($sanitized_mac);
+			if (isset($_GET['code']) && ($_GET['code'][0] === '2')) star_cloudprnt_queue_remove_last_print_job($sanitized_mac);
 		}
 	}
 	
