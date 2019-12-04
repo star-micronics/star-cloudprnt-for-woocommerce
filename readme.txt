@@ -2,8 +2,8 @@
 Contributors: fmahmood
 Tags: star, printing, printers, automated, e-commerce, store, sales, downloadable, downloads, woocommerce
 Requires at least: 4.7.0
-Tested up to: 4.9.6
-Stable tag: 1.0.3
+Tested up to: 5.3.0
+Stable tag: 1.0.4
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
