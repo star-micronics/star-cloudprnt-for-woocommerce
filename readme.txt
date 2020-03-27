@@ -45,7 +45,7 @@ For help and support please e-mail support@star-emea.com
 - Support mC-Print31 and mC-Print21 printer models
 - Enable Unicode characters sets on supported printer modesl (TSP654II, mC-Print31, mC-Print21)
 - Support character magnification
-- Tested with WordPress up to version 5.3.3 and WooCommerce 4.0.X
+- Tested with WordPress up to version 5.3.2 and WooCommerce 4.0.X
 
 1.0.3 - 2018-06-19
 - Replaced HTTP DELETE requests with HTTP GET requests, due to some servers not supporting this method.
