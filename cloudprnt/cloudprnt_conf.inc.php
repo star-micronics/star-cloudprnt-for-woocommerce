@@ -7,6 +7,7 @@
 
 	// Store paper widths in pixels
 	define('STAR_CLOUDPRNT_MAX_CHARACTERS_THREE_INCH', 48);
+	define('STAR_CLOUDPRNT_MAX_CHARACTERS_TWO_INCH', 32);
 	define('STAR_CLOUDPRNT_MAX_CHARACTERS_DOT_THREE_INCH', 42);
 	define('STAR_CLOUDPRNT_MAX_CHARACTERS_FOUR_INCH', 69);
 	
@@ -71,4 +72,6 @@
 	define('STAR_CLOUDPRNT_PRINTER_PENDING_SAVE_PATH', STAR_CLOUDPRNT_DATA_FOLDER_PATH.star_cloudprnt_get_os_path('/pending'));
 	// STAR_CLOUDPRNT_ADDITIONAL_DATA_INTERVAL = Adjust how often (in seconds) the server requests printer configuration data (e.g. poll interval)
 	define('STAR_CLOUDPRNT_ADDITIONAL_DATA_INTERVAL', 120);
+	
+	define('STAR_CLOUDPRNT_SPOOL_FILE_FORMAT', 'txt');
 ?>

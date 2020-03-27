@@ -1,9 +1,9 @@
 === Star CloudPRNT for WooCommerce ===
-Contributors: fmahmood
-Tags: star, printing, printers, automated, e-commerce, store, sales, downloadable, downloads, woocommerce
+Contributors: fmahmood, lawrenceowen
+Tags: star, printing, printers, automated, e-commerce, store, sales, downloadable, downloads, woocommerce, restaurant, order, receipt
 Requires at least: 4.7.0
-Tested up to: 5.3.0
-Stable tag: 1.0.4
+Tested up to: 5.3.2
+Stable tag: 1.0.3
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -11,6 +11,7 @@ Star CloudPRNT for WooCommerce enables Cloud printing technology with your Star 
 
 == Description ==
 Star CloudPRNT for WooCommerce will enable you to print automated receipts each time a customer places an order on your WooCommerce based eCommerce website.
+This can be used to quickly create a remote order/receipt printing solution for restaurants, take-aways, bakeries and similar sites, with minimal set-up time or cost.
 
 This plugin can only be used alongside the WooCommerce WordPress plugin.  For more information on the WooCommerce plugin please visit www.woocommerce.com
 
@@ -31,7 +32,7 @@ For help and support please e-mail support@star-emea.com
 = Minimum Requirements =
 * PHP 5.6 or greater.
 * WordPress 4.7.X, 4.8.X or 4.9.X.
-* WooCommerce plugin 2.5.X, 2.6.X or 3.0.X.
+* WooCommerce plugin 2.5.X, 2.6.X, 3.0.X or 4.0.X.
 * Star TSP650II, TSP700II, TSP800II or SP700 series printer with a IFBD-HI01X/HI02X interface.
 * Recommended printer interface firmware 1.4 or greater.
 
@@ -40,6 +41,12 @@ For help and support please e-mail support@star-emea.com
 2. Printer management page.
 
 == Changelog ==
+1.1.0 - 2020-03-26
+- Support mC-Print31 and mC-Print21 printer models
+- Enable Unicode characters sets on supported printer modesl (TSP654II, mC-Print31, mC-Print21)
+- Support character magnification
+- Tested with WordPress up to version 5.3.3 and WooCommerce 4.0.X
+
 1.0.3 - 2018-06-19
 - Replaced HTTP DELETE requests with HTTP GET requests, due to some servers not supporting this method.
 - Fixed bug where print job is lost after failed HTTP GET request.

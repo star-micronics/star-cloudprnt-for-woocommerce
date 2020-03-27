@@ -1,7 +1,7 @@
 <?php
 	include_once('printer_queue.inc.php');
 
-	class Star_CloudPRNT_Star_Line_Mode_Job
+	class Star_CloudPRNT_Star_Prnt_Job
 	{
 		const SLM_NEW_LINE_HEX = "0A";
 		const SLM_SET_EMPHASIZED_HEX = "1B45";
@@ -76,7 +76,8 @@
 		
 		public function add_nv_logo($keycode)
 		{
-			$this->printJobBuilder .= "1B1C70".$keycode."00".self::SLM_NEW_LINE_HEX;
+			//$this->printJobBuilder .= "1B1C70".$keycode."00".self::SLM_NEW_LINE_HEX
+			$this->printJobBuilder .="1B1D284C06003045".$this->str_to_hex($keycode)."0101";
 		}
 		
 		public function set_font_magnification($width, $height)
@@ -101,7 +102,7 @@
 			}
 			
 			$this->printJobBuilder .= "1B69"."0".$h."0".$w;
-		}
+		}		
 		
 		public function add_hex($hex)
 		{

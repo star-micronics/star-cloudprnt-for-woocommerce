@@ -125,7 +125,7 @@
 			else if (star_cloudprnt_queue_get_next_job($parsedJson['printerMAC']) != "")
 			{
 				$arr = array("jobReady" => true,
-				"mediaTypes" => array('text/plain'),
+				"mediaTypes" => array('text/plain', 'application/vnd.star.line', 'application/vnd.star.starprnt', 'application/vnd.star.linematrix'),
 				"deleteMethod" => "GET");	
 			}
 			else $arr = array("jobReady" => false);
@@ -179,9 +179,19 @@
 					$fh = fopen($file, 'rb');
 					fpassthru($fh);
 				}
-				else if (strtolower($ext) == "bin")
+				else if (strtolower($ext) == "slt")
 				{
 					header('Content-Type: application/vnd.star.line');
+					echo file_get_contents($file);
+				}
+				else if (strtolower($ext) == "slm")
+				{
+					header('Content-Type: application/vnd.star.linematrix');
+					echo file_get_contents($file);
+				}
+				else if (strtolower($ext) == "spt")
+				{
+					header('Content-Type: application/vnd.star.starprnt');
 					echo file_get_contents($file);
 				}
 			}

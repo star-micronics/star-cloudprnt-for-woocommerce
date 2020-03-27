@@ -17,6 +17,8 @@
 	if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') include_once(plugin_dir_path(__FILE__).'cloudprnt\\printer.inc.php');
 	else include_once(plugin_dir_path(__FILE__).'cloudprnt/printer.inc.php');
 	include_once(plugin_dir_path(__FILE__).star_cloudprnt_get_os_path('cloudprnt/printer_star_line.inc.php'));
+	include_once(plugin_dir_path(__FILE__).star_cloudprnt_get_os_path('cloudprnt/printer_text_plain.inc.php'));
+	include_once(plugin_dir_path(__FILE__).star_cloudprnt_get_os_path('cloudprnt/printer_star_prnt.inc.php'));
 	
 	// Include plugin page settings and woo commerce hooks
 	include_once(plugin_dir_path(__FILE__).star_cloudprnt_get_os_path('create-settings.php'));

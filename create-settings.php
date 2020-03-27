@@ -12,7 +12,9 @@
 		add_settings_field("star-cloudprnt-select", "CloudPRNT", "star_cloudprnt_select_display", "star_cloudprnt_setup", "star_cloudprnt_setup_section");  
 		add_settings_field("star-cloudprnt-printer-select", "Selected Printer", "star_cloudprnt_printer_select_display", "star_cloudprnt_setup", "star_cloudprnt_setup_section"); 
 		
-		add_settings_section("star_cloudprnt_print_logo_settings_section", "Printer Logo Settings", null, "star_cloudprnt_setup");
+		add_settings_field("star-cloudprnt-printer-encoding-select", "Text Encoding", "star_cloudprnt_printer_encoding_select_display", "star_cloudprnt_setup", "star_cloudprnt_setup_section");  
+		
+		add_settings_section("star_cloudprnt_print_logo_settings_section", "Printer Logo Settings", "star_cloudprnt_printer_logo_settings_header", "star_cloudprnt_setup");
 		add_settings_field("star-cloudprnt-print-logo-top-cb", "Print Logo (Top of Receipt)", 
 			"star_cloudprnt_print_logo_top_display", "star_cloudprnt_setup", "star_cloudprnt_print_logo_settings_section");  		
 		add_settings_field("star-cloudprnt-print-logo-top-input", "Top Logo Key Code", 
@@ -24,6 +26,8 @@
 		
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-select");
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-printer-select");
+		
+		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-printer-encoding-select");
 		
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-logo-top-cb");
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-logo-top-input");
@@ -49,6 +53,24 @@
 			<option value="disable" <?php selected(get_option('star-cloudprnt-select'), "disable"); ?>>DISABLE</option>
 			<option value="enable" <?php selected(get_option('star-cloudprnt-select'), "enable"); ?>>ENABLE</option>
 		</select>
+	   <?php
+	}
+	
+	function star_cloudprnt_printer_logo_settings_header()
+	{
+		?>
+		<p>Logos should be writtent to printer FlashROM memory, using a suitable tool, such as the
+		   StarPRNT Software for Windows, which can be downloaded from the <a href="http://starmicronics.com/support/Default.aspx">Star global downlad site</a>.
+		<?php
+	}
+	
+	function star_cloudprnt_printer_encoding_select_display()
+	{
+	   ?>
+		<select name="star-cloudprnt-printer-encoding-select">
+			<option value="UTF-8" <?php selected(get_option('star-cloudprnt-printer-encoding-select'), "utf-8"); ?>>UTF-8</option>
+			<option value="1252" <?php selected(get_option('star-cloudprnt-printer-encoding-select'), "1252"); ?>>1252</option>
+		</select> UTF-8 mode is recommended for mC-Print or TSP650II printer models.
 	   <?php
 	}
 	
@@ -86,6 +108,7 @@
 		echo '<input type="checkbox" name="star-cloudprnt-print-logo-top-cb" '.checked(get_option('star-cloudprnt-print-logo-top-cb'), 'on', false).' onclick="document.getElementById(\'star-cloudprnt-top-logo-input\').disabled = !this.checked;">';
 	}
 	
+
 	function star_cloudprnt_print_logo_top_input_display()
 	{
 		$option_value = '01';
