@@ -31,7 +31,7 @@ For help and support please e-mail support@star-emea.com
 
 = Minimum Requirements =
 * PHP 5.6 or greater.
-* WordPress 4.7.X, 4.8.X or 4.9.X.
+* WordPress 4.7.X, 4.8.X, 4.9.X, 5.0.x, 5.1.x or 5.3.x.
 * WooCommerce plugin 2.5.X, 2.6.X, 3.0.X or 4.0.X.
 * Star TSP650II, TSP700II, TSP800II or SP700 series printer with a IFBD-HI01X/HI02X interface.
 * Recommended printer interface firmware 1.4 or greater.
