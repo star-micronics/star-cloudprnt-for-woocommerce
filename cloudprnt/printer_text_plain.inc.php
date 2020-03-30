@@ -25,7 +25,7 @@
 			$this->tempFilePath = $tempFilePath;
 			$printJobBuilder = "";
 			
-			print("<h4>Text Print Job ".$this->printerMac."</h4>");
+			//print("<h4>Text Print Job ".$this->printerMac."</h4>");
 			
 		}
 		
