@@ -2,7 +2,7 @@
 Contributors: fmahmood, lawrenceowen
 Tags: star, printing, printers, automated, e-commerce, store, sales, downloadable, downloads, woocommerce, restaurant, order, receipt
 Requires at least: 4.7.0
-Tested up to: 5.3.2
+Tested up to: 5.4.0
 Requires PHP: 5.6
 Stable tag: 1.1.0
 License: GPLv3
