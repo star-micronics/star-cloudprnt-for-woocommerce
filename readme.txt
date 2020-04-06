@@ -4,7 +4,7 @@ Tags: star, printing, printers, automated, e-commerce, store, sales, downloadabl
 Requires at least: 4.7.0
 Tested up to: 5.4.0
 Requires PHP: 5.6
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -30,6 +30,9 @@ This plugin can only be used alongside the WooCommerce WordPress plugin.  For mo
 
 For help and support please e-mail support@star-emea.com
 
+= Video Installation Guide =
+https://www.youtube.com/watch?v=2O3pZJ-kfqk
+
 = Minimum Requirements =
 * PHP 5.6 or greater.
 * WordPress 4.7.X, 4.8.X, 4.9.X, 5.0.x, 5.1.x, 5.3.x or 5.4.x.
@@ -38,14 +41,54 @@ For help and support please e-mail support@star-emea.com
 * Star mC-Print3 or mC-Print2 series printer
 
 
+== Frequently Asked Questions ==
+ 
+= Which printer models are supported? =
+ 
+Supported printer models are:
+
+* Star TSP650II with HIX interface
+* Star mC-Print3 (required plugin version 1.1.0 or later)
+* Star mC-Print2 (required plugin version 1.1.0 or later)
+* Star TSP700II with HIX interface
+* Star TSP800II with HIX interface (currently limited to 80mm paper width support)
+* Star SP700 with HIX interface
+
+= Can I print my local language characters? =
+
+Yes, you can enable UTF-8 text encoding if you have a compatible printer model to
+resolve typical language specific character issues..
+Please use the plugin settings page to enable UTB-8 mode.
+
+Models with UTF-8 support are the TSP650II, mC-Print3 and mC-Print2. 
+These printers cover most Latin, Cyrilic, Greek and CJK characters, although not
+all characters can be supported by all device models and for TSP654II a firmware
+update may be required. Please talk with Star for advice if necessary.
+
+= Can I modify the print job design/layout? =
+
+At this time, modifying the print job layout is possible only by directly editing
+the plugin PHP source code. This is entirely permitted by the GPLv3 license terms.
+Your local Star Micronics support contacy may be able to offer some assistance.
+
 == Screenshots ==
 1. Star CloudPRNT settings page.
 2. Printer management page.
 
+== Upgrade Notice ==
+
+= 1.1.0 = 
+* Add Support for Star mC-Print3 and mC-Print2 printer ranges
+* Add support for UTF-8 text encoding
+* Enable text magnification.
+
 == Changelog ==
+1.1.1 - 2020-04-06
+- Add support for WordPress 5.4.X
+
 1.1.0 - 2020-03-26
 - Support mC-Print31 and mC-Print21 printer models
-- Enable Unicode characters sets on supported printer modesl (TSP654II, mC-Print31, mC-Print21)
+- Enable Unicode characters sets on supported printer models (TSP654II, mC-Print31, mC-Print21)
 - Support character magnification
 - Tested with WordPress up to version 5.3.2 and WooCommerce 4.0.X
 
