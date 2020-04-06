@@ -56,20 +56,16 @@ Supported printer models are:
 
 = Can I print my local language characters? =
 
-Yes, you can enable UTF-8 text encoding if you have a compatible printer model to
-resolve typical language specific character issues..
+Yes, you can enable UTF-8 text encoding if you have a compatible printer model to resolve typical language specific character issues.
 Please use the plugin settings page to enable UTB-8 mode.
 
 Models with UTF-8 support are the TSP650II, mC-Print3 and mC-Print2. 
-These printers cover most Latin, Cyrilic, Greek and CJK characters, although not
-all characters can be supported by all device models and for TSP654II a firmware
-update may be required. Please talk with Star for advice if necessary.
+These printers cover most Latin, Cyrilic, Greek and CJK characters, although not all characters can be supported by all device models and for TSP654II a firmware update may be required. Please talk with Star for advice if necessary.
 
 = Can I modify the print job design/layout? =
 
-At this time, modifying the print job layout is possible only by directly editing
-the plugin PHP source code. This is entirely permitted by the GPLv3 license terms.
-Your local Star Micronics support contacy may be able to offer some assistance.
+At this time, modifying the print job layout is possible only by directly editing the plugin PHP source code. This is entirely permitted by the GPLv3 license terms.
+Your local Star Micronics support contact may be able to offer some assistance.
 
 == Screenshots ==
 1. Star CloudPRNT settings page.
