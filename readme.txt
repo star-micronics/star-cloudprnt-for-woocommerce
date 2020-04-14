@@ -4,7 +4,7 @@ Tags: star, printing, printers, automated, e-commerce, store, sales, downloadabl
 Requires at least: 4.7.0
 Tested up to: 5.4.0
 Requires PHP: 5.6
-Stable tag: 1.1.1
+Stable tag: 1.1.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -37,7 +37,7 @@ https://www.youtube.com/watch?v=2O3pZJ-kfqk
 * PHP 5.6 or greater.
 * WordPress 4.7.X, 4.8.X, 4.9.X, 5.0.x, 5.1.x, 5.3.x or 5.4.x.
 * WooCommerce plugin 2.5.X, 2.6.X, 3.0.X or 4.0.X.
-* Star TSP650II, TSP700II, TSP800II or SP700 series printer with a IFBD-HI01X/HI02X interface. Printer interface firmware 1.4 or later recommended.
+* Star TSP650II, TSP700II, TSP800II or SP700 series printer with a IFBD-HI01X/HI02X interface. Printer interface firmware 1.6 or later recommended.
 * Star mC-Print3 or mC-Print2 series printer
 
 
@@ -67,6 +67,11 @@ These printers cover most Latin, Cyrilic, Greek and CJK characters, although not
 At this time, modifying the print job layout is possible only by directly editing the plugin PHP source code. This is entirely permitted by the GPLv3 license terms.
 Your local Star Micronics support contact may be able to offer some assistance.
 
+= How can I add an image to the top or end of my print? =
+
+Images must be pre-stored inside the printer FlashROM memory in order to be printed bu this plugin. Once stored, they will have logo number/id, which can be input into the "Printer Logo Settings" settings area to enable top and/or bottom logo printing.
+Storing images inside the Print FlashROM is possible with a software utility provided by Star Micronics, included with the standard indows driver package. These can be downloaded from the Star Micronics web site.
+
 == Screenshots ==
 1. Star CloudPRNT settings page.
 2. Printer management page.
@@ -79,6 +84,9 @@ Your local Star Micronics support contact may be able to offer some assistance.
 * Enable text magnification.
 
 == Changelog ==
+1.1.2 - 2020-04-14
+- Work around an issue that prevents printing to thermal printer models with HIX Connect interface that has earlier firmware. In this situation, the plugin will now follow the same logic as 1.0.x plugin releases.
+
 1.1.1 - 2020-04-06
 - Add support for WordPress 5.4.X
 

@@ -280,14 +280,27 @@
 				$selectedPrinter = $printerList[0];
 			}
 			
-			/* Decide best printer emulation and print width */
+			/* Decide best printer emulation and print width as far as possible
+			   NOTE: this is not the ideal way, but suits the existing
+			   code structure. Will be reviewed.
+			   */
 			
 			$encodings = $selectedPrinter['Encodings'];
 			$columns = STAR_CLOUDPRNT_MAX_CHARACTERS_THREE_INCH;
-			if (strpos($encodings, "application/vnd.star.linematrix") !== false) {
+			if (strpos($encodings, "application/vnd.star.line;") !== false) {
+				/* There is no guarantee that printers will always return zero spacing between
+				   the encoding name and separating semi-colon. But, definitely the HIX does, socket_accept
+				   this is enough to ensure that thermal print mode is always used on HIX printers
+				   with pre 1.5 firmware. This matches older plugin behaviour and therefore
+				   avoids breaking customer sites.
+				*/
+				$extension = "slt";
+			} else if (strpos($encodings, "application/vnd.star.linematrix") !== false) {
 				$extension = "slm";
 				$columns = STAR_CLOUDPRNT_MAX_CHARACTERS_DOT_THREE_INCH;
 			} else if (strpos($encodings, "application/vnd.star.line") !== false) {
+				// a second check for Line mode - just in case the above one didn't catch item
+				// and after the "linemodematrix" check, to avoid a false match.
 				$extension = "slt";
 			} else if (strpos($encodings, 'application/vnd.star.starprnt') !== false) {
 				$extension = "spt";
