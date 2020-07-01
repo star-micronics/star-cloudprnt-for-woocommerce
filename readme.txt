@@ -2,7 +2,7 @@
 Contributors: fmahmood, lawrenceowen
 Tags: star, printing, printers, automated, e-commerce, store, sales, downloadable, downloads, woocommerce, restaurant, order, receipt
 Requires at least: 4.7.0
-Tested up to: 5.4.0
+Tested up to: 5.4.2
 Requires PHP: 5.6
 Stable tag: 1.1.2
 License: GPLv3
@@ -34,11 +34,11 @@ For help and support please e-mail support@star-emea.com
 https://www.youtube.com/watch?v=2O3pZJ-kfqk
 
 = Minimum Requirements =
-* PHP 5.6 or greater.
+* PHP 7.2 or greater.
 * WordPress 4.7.X, 4.8.X, 4.9.X, 5.0.x, 5.1.x, 5.3.x or 5.4.x.
-* WooCommerce plugin 2.5.X, 2.6.X, 3.0.X or 4.0.X.
+* WooCommerce plugin 3.0.X, 4.0.X or 4.2.X
 * Star TSP650II, TSP700II, TSP800II or SP700 series printer with a IFBD-HI01X/HI02X interface. Printer interface firmware 1.6 or later recommended.
-* Star mC-Print3 or mC-Print2 series printer
+* Star mC-Print3 or mC-Print2 series printer, firmware version 3.0 or later recommended.
 
 
 == Frequently Asked Questions ==
@@ -77,6 +77,9 @@ Storing images inside the Print FlashROM is possible with a software utility pro
 2. Printer management page.
 
 == Upgrade Notice ==
+
+= 1.2.0 =
+* 
 
 = 1.1.0 = 
 * Add Support for Star mC-Print3 and mC-Print2 printer ranges

@@ -70,21 +70,26 @@
 			$order_id = $exploded[2];
 			$last_copy = star_cloudprnt_queue_get_last_copy_count($order_id);
 			// Duplicate detected
+			
+			/*
 			if ($current_copy <= $last_copy)
 			{
+				error_log("BAM!!!!!");
 				// Delete duplicate print job
 				unlink($queuepath.$file);
 				unlink($queuepath.$filename);
 				// Call method again to check next file
 				$file = star_cloudprnt_queue_get_next_job($printerMac);
 			}
+			*/
+			
 		}
 		return $file;
 	}
 	
 	// Adds a file to the next available queue position
 	function star_cloudprnt_queue_add_print_job($printerMac, $filepath, $copycount)
-	{
+	{	
 		for ($i = 0; $i < $copycount; $i++)
 		{
 			$filename = star_cloudprnt_queue_get_next_position($printerMac);
@@ -107,7 +112,7 @@
 		$printerFolder = star_cloudprnt_get_printer_folder($printerMac);
 		$filepath = star_cloudprnt_get_os_path(STAR_CLOUDPRNT_PRINTER_DATA_SAVE_PATH.'/'.$printerFolder.'/queue/'.$filename);
 		$filepath2 = star_cloudprnt_get_os_path(STAR_CLOUDPRNT_PRINTER_DATA_SAVE_PATH.'/'.$printerFolder.'/queue/'.$filename2);
-		
+				
 		// Save successful printed job in order history
 		$history_path = STAR_CLOUDPRNT_DATA_FOLDER_PATH.star_cloudprnt_get_os_path("/order_history.txt");
 		if (file_exists($history_path))
@@ -183,8 +188,12 @@
 			}
 			closedir($handle);
 		}
-		if (!empty($queueItems)) ksort($queueItems);
-		return $queueItems;
+		if (!empty($queueItems))
+		{
+			ksort($queueItems);
+			return $queueItems;
+		}
+		return null;
 	}
 	
 	// Delete all items in the printer queue

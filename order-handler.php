@@ -51,23 +51,34 @@
 		else return "Unknown";
 	}
 	
+	function star_cloudprnt_get_wc_order_notes($order_id){
+		//make sure it's a number
+		$order_id = intval($order_id);
+		//get the post 
+		$post = get_post($order_id);
+		//if there's no post, return as error
+		if (!$post) return false;
+
+		return $post->post_excerpt;
+	}
+
 	function star_cloudprnt_get_codepage_currency_symbol()
 	{
 		$encoding = get_option('star-cloudprnt-printer-encoding-select');
 		$symbol = get_woocommerce_currency_symbol();
 
 		if ($encoding === "UTF-8") {
-			if ($symbol === "&pound;") return "£"; // £ pound
+			if ($symbol === "&pound;") return "Â£"; // Â£ pound
 			else if ($symbol === "&#36;") return "$"; // $ dollar
-			else if ($symbol === "&euro;") return "€"; // € euro
+			else if ($symbol === "&euro;") return "â‚¬"; // â‚¬ euro
 		} elseif ($encoding == "1252"){
-			if ($symbol === "&pound;") return "\xA3"; // £ pound
+			if ($symbol === "&pound;") return "\xA3"; // Â£ pound
 			else if ($symbol === "&#36;") return "\x24"; // $ dollar
-			else if ($symbol === "&euro;") return "\x80"; // € euro
+			else if ($symbol === "&euro;") return "\x80"; // â‚¬ euro
 		} else {
-			if ($symbol === "&pound;") return "GBP"; // £ pound
+			if ($symbol === "&pound;") return "GBP"; // Â£ pound
 			else if ($symbol === "&#36;") return ""; // $ dollar
-			else if ($symbol === "&euro;") return "EUR"; // € euro
+			else if ($symbol === "&euro;") return "EUR"; // â‚¬ euro
 		}
 		
 		return ""; // return blank by default
@@ -110,18 +121,29 @@
 	
 	function star_cloudprnt_create_receipt_items($order, &$printer, $max_chars)
 	{
+	
 		$order_items = $order->get_items();
 		foreach ($order_items as $item_id => $item_data)
 		{
+
 			$product_name = $item_data['name'];
 			$product_id = $item_data['product_id'];
 			$variation_id = $item_data['variation_id'];
 			
-			$item_qty = $order->get_item_meta($item_id, "_qty", true);
-			$item_total_price = floatval($order->get_item_meta($item_id, "_line_total", true))
-							+floatval($order->get_item_meta($item_id, "_line_tax", true));
+			$item_qty = wc_get_order_item_meta($item_id, "_qty", true);
+			
+			$item_total_price = floatval(wc_get_order_item_meta($item_id, "_line_total", true))
+				+floatval(wc_get_order_item_meta($item_id, "_line_tax", true));
+			
 			$item_price = floatval($item_total_price) / intval($item_qty);
 			$currencyHex = star_cloudprnt_get_codepage_currency_symbol();
+			
+			if ($variation_id != 0)
+			{
+				$product_variation = new WC_Product_Variation( $variation_id );
+				$product_name = $product_variation->get_title();
+			}
+			
 			$formatted_item_price = number_format($item_price, 2, '.', '');
 			$formatted_total_price = number_format($item_total_price, 2, '.', '');
 			
@@ -129,23 +151,45 @@
 			$printer->add_text_line(str_replace('&ndash;', '-', $product_name)." - ID: ".$product_id."");
 			$printer->cancel_text_emphasized();
 			
-			if ($variation_id != 0)
+			
+			$meta = $item_data->get_formatted_meta_data("_", TRUE);
+			foreach ($meta as $meta_key => $meta_item)
 			{
-				$product_variation = new WC_Product_Variation( $variation_id );
-				$variation_data = $product_variation->get_variation_attributes();
-				$variation_detail = star_cloudprnt_get_formatted_variation($variation_data, $order, $item_id); 
-				$exploded = explode("||", $variation_detail);
-				foreach($exploded as $exploded_variation)
-				{
-					$printer->add_text_line(" ".ucwords($exploded_variation));
-				}
+				// Don't use display_key and display_value, because those are formatted as html
+				$printer->add_text_line(" ".$meta_item->key.": ".$meta_item->value);
 			}
+			
 			$printer->add_text_line(star_cloudprnt_get_column_separated_data(array(" Qty: ".
 						$item_qty." x Cost: ".$currencyHex.$formatted_item_price,
 						$currencyHex.$formatted_total_price), $max_chars));
 		}
 	}
 	
+	function star_cloudprnt_create_receipt_order_meta_data($meta_data, &$printer, $max_chars)
+	{
+		if(get_option('star-cloudprnt-print-order-meta-cb') != on)
+			return;
+		
+		$is_printed = false;
+		
+		foreach ($meta_data as $item_id => $meta_data_item)
+		{
+			if(! $is_printed)
+			{
+				$is_printed = true;
+				$printer->set_text_emphasized();
+				$printer->add_text_line("Additional Order Information");
+				$printer->cancel_text_emphasized();
+			}
+			
+			$item_data = $meta_data_item->get_data();
+			$printer->add_text_line($item_data["key"].": ".$item_data["value"]);
+		}
+		
+		if($is_printed)	$printer->add_text_line("");
+	}
+
+
 	function star_cloudprnt_create_address($order, $order_meta, &$printer)
 	{
 		$fname = $order_meta['_shipping_first_name'][0];
@@ -187,9 +231,12 @@
 	
 	function star_cloudprnt_print_order_summary($selectedPrinter, $file, $order_id)
 	{
+
 		$order = wc_get_order($order_id);
 		$shipping_items = @array_shift($order->get_items('shipping'));
 		$order_meta = get_post_meta($order_id);
+		
+		$meta_data = $order->get_meta_data();
 		
 		if ($selectedPrinter['format'] == "txt") {
 			$printer = new Star_CloudPRNT_Text_Plain_Job($selectedPrinter, $file);
@@ -221,8 +268,10 @@
 		$printer->add_new_line(1);
 		$printer->add_text_line(star_cloudprnt_get_column_separated_data(array("Order #".$order_id, date("d-m-y H:i:s", time())), $selectedPrinter['columns']));
 		$printer->add_new_line(1);
-		$printer->add_text_line("Order Status: ".star_cloudprnt_parse_order_status($order->post->post_status));
-		$printer->add_text_line("Order Date: ".$order->order_date);
+		//$printer->add_text_line("Order Status: ".star_cloudprnt_parse_order_status($order->post->post_status));
+		$printer->add_text_line("Order Status: ".$order->get_status());
+		//$printer->add_text_line("Order Date: ".$order->order_date);
+		$printer->add_text_line("Order Date: ".$order->get_date_created());
 		if (isset($shipping_items['name']))
 		{
 			$printer->add_new_line(1);
@@ -244,20 +293,31 @@
 		$printer->add_text_line("All prices are inclusive of tax (if applicable).");
 		$printer->add_new_line(1);
 		
+		star_cloudprnt_create_receipt_order_meta_data($meta_data, $printer, $selectedPrinter['columns']);
+		
 		star_cloudprnt_create_address($order, $order_meta, $printer);
 		
 		$printer->add_new_line(1);
 		$printer->set_text_emphasized();
 		$printer->add_text_line("Customer Provided Notes:");
 		$printer->cancel_text_emphasized();
-		$printer->add_text_line(empty($order->post->post_excerpt) ? "None" : $order->post->post_excerpt);
+		
+		$notes = star_cloudprnt_get_wc_order_notes($order_id);
+		$printer->add_text_line(empty($notes) ? "None" : $notes);
+		
+		
 		if (get_option('star-cloudprnt-print-logo-bottom-input')) $printer->add_nv_logo(esc_attr(get_option('star-cloudprnt-print-logo-bottom-input')));
 		
-		$printer->printjob();
+		$copies=intval(get_option("star-cloudprnt-print-copies-input"));
+		//$copies = intval($copies);
+		if($copies < 1) $copies = 1;
+		
+		$printer->printjob($copies);
 	}
 	
-	function star_cloudprnt_woo_on_thankyou($order_id)
+	function star_cloudprnt_trigger_print($order_id)
 	{
+
 		$extension = STAR_CLOUDPRNT_SPOOL_FILE_FORMAT;	
 		
 		$selectedPrinterMac = "";
@@ -318,18 +378,32 @@
 			$selectedPrinter['columns'] = $columns;
 			
 			$file = STAR_CLOUDPRNT_PRINTER_PENDING_SAVE_PATH.star_cloudprnt_get_os_path("/order_".$order_id."_".time().".".$extension);
-			
-			
-			
+
 			if ($selectedPrinter !== "") star_cloudprnt_print_order_summary($selectedPrinter, $file, $order_id);
 		}
 	}
 	
+	function star_cloudprnt_order_reprint_action( $actions ) {
+		global $theorder;
+
+		$actions['star_cloudprnt_reprint_action'] = __( 'Print via Star CloudPRNT', 'my-textdomain' );
+		return $actions;
+	}
+
+	function star_cloudprnt_reprint($order)
+	{
+		star_cloudprnt_trigger_print($order->get_id());
+	}
+
 	function star_cloudprnt_setup_order_handler()
 	{
 		if (selected(get_option('star-cloudprnt-select'), "enable", false) !== "" && star_cloudprnt_is_woo_activated())
 		{
-			add_action('woocommerce_thankyou', 'star_cloudprnt_woo_on_thankyou', 1, 1);
+			add_action( 'woocommerce_order_actions', 'star_cloudprnt_order_reprint_action' );
+			
+			//add_action('woocommerce_thankyou', 'star_cloudprnt_trigger_print', 1, 1);
+			add_action('woocommerce_order_status_processing', 'star_cloudprnt_trigger_print', 1, 1);
+			add_action('woocommerce_order_action_star_cloudprnt_reprint_action', 'star_cloudprnt_reprint', 1, 1 );
 		}
 	}
 ?>

@@ -12,7 +12,11 @@
 		add_settings_field("star-cloudprnt-select", "CloudPRNT", "star_cloudprnt_select_display", "star_cloudprnt_setup", "star_cloudprnt_setup_section");  
 		add_settings_field("star-cloudprnt-printer-select", "Selected Printer", "star_cloudprnt_printer_select_display", "star_cloudprnt_setup", "star_cloudprnt_setup_section"); 
 		
-		add_settings_field("star-cloudprnt-printer-encoding-select", "Text Encoding", "star_cloudprnt_printer_encoding_select_display", "star_cloudprnt_setup", "star_cloudprnt_setup_section");  
+		add_settings_field("star-cloudprnt-printer-encoding-select", "Text Encoding", "star_cloudprnt_printer_encoding_select_display", "star_cloudprnt_setup", "star_cloudprnt_setup_section");
+		
+		add_settings_field("star-cloudprnt-print-order-meta-cb", "Additional Order Fields", "star_cloudprnt_print_order_meta_cb_display", "star_cloudprnt_setup", "star_cloudprnt_setup_section");  
+		
+		add_settings_field("star-cloudprnt-print-copies-input", "Copies", "star_cloudprnt_print_copies_input_display", "star_cloudprnt_setup", "star_cloudprnt_setup_section");  
 		
 		add_settings_section("star_cloudprnt_print_logo_settings_section", "Printer Logo Settings", "star_cloudprnt_printer_logo_settings_header", "star_cloudprnt_setup");
 		add_settings_field("star-cloudprnt-print-logo-top-cb", "Print Logo (Top of Receipt)", 
@@ -28,6 +32,8 @@
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-printer-select");
 		
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-printer-encoding-select");
+		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-order-meta-cb");
+		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-copies-input");
 		
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-logo-top-cb");
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-logo-top-input");
@@ -70,10 +76,32 @@
 		<select name="star-cloudprnt-printer-encoding-select">
 			<option value="UTF-8" <?php selected(get_option('star-cloudprnt-printer-encoding-select'), "utf-8"); ?>>UTF-8</option>
 			<option value="1252" <?php selected(get_option('star-cloudprnt-printer-encoding-select'), "1252"); ?>>1252</option>
-		</select> UTF-8 mode is recommended for mC-Print or TSP650II printer models.
+		</select>
+		<label>UTF-8 mode is recommended for mC-Print or TSP650II printer models.</label>
 	   <?php
 	}
+
+	function star_cloudprnt_print_order_meta_cb_display()
+	{
+		?>
+			<!-- <input type='hidden' value='off' name='star-cloudprnt-print-order-meta-cb'>-->
+			<input type="checkbox" name="star-cloudprnt-print-order-meta-cb" value="on" <?php checked(get_option('star-cloudprnt-print-order-meta-cb'), 'on', true) ?> >
+			<label>Print additional order meta-data, such as custom fields.</label>
+		<?php
+
+	}
 	
+	function star_cloudprnt_print_copies_input_display()
+	{
+		$copies=get_option("star-cloudprnt-print-copies-input");
+		$copies = intval($copies);
+		if($copies < 1) $copies = 1;
+		
+		?>
+			<input type="number" name="star-cloudprnt-print-copies-input" value="<?php echo $copies; ?>" min=1 max=10>
+		<?php
+	}
+
 	function star_cloudprnt_printer_select_display()
 	{
 		$printerList = star_cloudprnt_get_printer_list();
@@ -145,19 +173,22 @@
 			echo '<img src="'.plugins_url('images/logo.png', __FILE__).'">';
 				echo '<h1>Star CloudPRNT for WooCommerce Settings</h1>';
 
-					if (star_cloudprnt_is_woo_activated())
-					{
-						if (isset($_GET['printersettings'])) 
-						{
-							if (isset($_GET['npn'])) star_cloudprnt_change_printer_name();
-							else if (isset($_GET['cq'])) star_cloudprnt_clear_printer_queue();
-							else if (isset($_GET['coh'])) star_cloudprnt_clear_order_history();
-							else if (isset($_GET['dp'])) star_cloudprnt_delete_printer();
-							else star_cloudprnt_show_printer_settings_page();
-						}
-						else star_cloudprnt_show_settings_page();
-					}
-					else echo '<br><span style="color: red"><span class="dashicons dashicons-no"></span>Error: WooCommerce plugin is not activated.</span>';
+				if (!star_cloudprnt_is_woo_activated())
+				{
+					echo '<br><span style="color: red"><span class="dashicons dashicons-no"></span>Warning: Unable to detect WooCommerce plugin.<br/>This can sometimes occur, if the plugin has been installed to a custom folder. If you are certain that WooCommerce is installed and functioning, then you can safely ignore this warning</span>';
+				}
+		
+				if (isset($_GET['printersettings'])) 
+				{
+					if (isset($_GET['npn'])) star_cloudprnt_change_printer_name();
+					else if (isset($_GET['cq'])) star_cloudprnt_clear_printer_queue();
+					else if (isset($_GET['coh'])) star_cloudprnt_clear_order_history();
+					else if (isset($_GET['dp'])) star_cloudprnt_delete_printer();
+					else star_cloudprnt_show_printer_settings_page();
+				}
+				else star_cloudprnt_show_settings_page();
+					
+					
 		echo '</div>';
 	}
 	

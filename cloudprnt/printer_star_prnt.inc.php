@@ -127,13 +127,13 @@
 			}
 		}
 		
-		public function printjob()
+		public function printjob($copies)
 		{
 			$fh = fopen($this->tempFilePath, 'w');
 			fwrite($fh, hex2bin($this->printJobBuilder.self::SLM_FEED_PARTIAL_CUT_HEX));
 			//fwrite($fh, hex2bin($this->printJobBuilder));
 			fclose($fh);
-			star_cloudprnt_queue_add_print_job($this->printerMac, $this->tempFilePath, 1);
+			star_cloudprnt_queue_add_print_job($this->printerMac, $this->tempFilePath, $copies);
 			unlink($this->tempFilePath);
 		}
 	}

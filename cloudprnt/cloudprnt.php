@@ -140,7 +140,7 @@
 		}
 		
 		public function handle_get()
-		{
+		{	
 			// Sanitize
 			$sanitized_mac = self::sanitize_parameter($_GET['mac']);
 			if ($sanitized_mac === '') return;
