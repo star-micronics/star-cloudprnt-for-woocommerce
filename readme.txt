@@ -1,12 +1,12 @@
 === Star CloudPRNT for WooCommerce ===
-Contributors: fmahmood, lawrenceowen
+Contributors: lawrenceowen, athompson1, gcubero, fmahmood
 Tags: star, printing, printers, automated, e-commerce, store, sales, downloadable, downloads, woocommerce, restaurant, order, receipt
-Requires at least: 4.7.0
-Tested up to: 5.4.2
-Requires PHP: 5.6
-Stable tag: 1.1.2
-License: GPLv3
-License URI: https://www.gnu.org/licenses/gpl-3.0.html
+Requires at least: 5.0.0
+Tested up to: 5.5.1
+Requires PHP: 7.2
+Stable tag: 1.2.0
+License: MIT
+License URI:
 
 Star CloudPRNT for WooCommerce enables Cloud printing technology with your Star Receipt printer.
 
@@ -35,11 +35,12 @@ https://www.youtube.com/watch?v=2O3pZJ-kfqk
 
 = Minimum Requirements =
 * PHP 7.2 or greater.
-* WordPress 4.7.X, 4.8.X, 4.9.X, 5.0.x, 5.1.x, 5.3.x or 5.4.x.
-* WooCommerce plugin 3.0.X, 4.0.X or 4.2.X
+* WordPress 5.0.x, 5.1.x, 5.3.x, 5.4.x or 5.5.x.
+* WooCommerce plugin 4.0.X, 4.1.x, 4.2.x, 4.3.x, 4.4.x or 4.5.x.
 * Star TSP650II, TSP700II, TSP800II or SP700 series printer with a IFBD-HI01X/HI02X interface. Printer interface firmware 1.6 or later recommended.
 * Star mC-Print3 or mC-Print2 series printer, firmware version 3.0 or later recommended.
-
+* Now display a warning when WooCommerce can not be detected, instead of refusing to work completely, because the detection can fail in case of some Custom WooCommerce installs.
+* Improve Timestamp display to match the site formatting local and site timezone (instead of server timezone)
 
 == Frequently Asked Questions ==
  
@@ -79,7 +80,12 @@ Storing images inside the Print FlashROM is possible with a software utility pro
 == Upgrade Notice ==
 
 = 1.2.0 =
-* 
+* Change print job trigger to the "Order Status Processing" event, instead of the "Thank You" event
+* Add support for printing order item metadata - compatible with many Add-Ons plugins
+* Add support for printing order metadata - compatible with some delivery scheduling plugins and others that append data to an order
+* Drop support for WordPress versions earlier than 5.x.x
+* Drop support for WooCommerce verions earlier than 4.x.x
+* Drop support for PHP verions earlier than 7.2
 
 = 1.1.0 = 
 * Add Support for Star mC-Print3 and mC-Print2 printer ranges

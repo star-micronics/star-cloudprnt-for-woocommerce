@@ -4,10 +4,10 @@
 	 * Plugin URI: http://www.star-emea.com
 	 * Description: Star CloudPRNT for WooCommerce enables cloud printing technology with your Star Receipt printer.
 	 * Version: 1.2.0 beta
-	 * Author: fmahmood
+	 * Author: lawrenceowen, athompson1, gcubero, fmahmood
 	 * Author URI: http://www.star-emea.com/support
-	 * Requires at least: 4.7.0
-	 * Tested up to: 5.4.2
+	 * Requires at least: 5.0.0
+	 * Tested up to: 5.5.1
 	 */
 	 
 	// Block direct access to this script
