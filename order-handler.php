@@ -119,6 +119,27 @@
 		return $return;
 	}
 	
+	function filterHTML($data)
+	{
+		/* Filter known html key words, convert to printer appropriate commands */
+		
+		$encoding = get_option('star-cloudprnt-printer-encoding-select');
+		$ukp = "£";
+		
+		if ($encoding == "1252"){
+			$ukp = "\xA3"; // £ pound
+		}
+		
+		$data = str_replace("£", $ukp, $data);				// convert any UTF8 '£' to a codepage normalised '£'
+		$data = str_replace("&pound;", $ukp, $data);
+		
+		$data = str_replace('&ndash;', '-', $data);
+		$data = str_replace('&gt;', '>', $data);
+		$data = str_replace('&lt;', '<', $data);
+		
+		return $data;
+	}
+
 	function star_cloudprnt_create_receipt_items($order, &$printer, $max_chars)
 	{
 	
@@ -148,7 +169,8 @@
 			$formatted_total_price = number_format($item_total_price, 2, '.', '');
 			
 			$printer->set_text_emphasized();
-			$printer->add_text_line(str_replace('&ndash;', '-', $product_name)." - ID: ".$product_id."");
+			//$printer->add_text_line(str_replace('&ndash;', '-', $product_name)." - ID: ".$product_id."");
+			$printer->add_text_line(filterHTML($product_name." - ID: ".$product_id.""));
 			$printer->cancel_text_emphasized();
 			
 			
@@ -156,7 +178,7 @@
 			foreach ($meta as $meta_key => $meta_item)
 			{
 				// Don't use display_key and display_value, because those are formatted as html
-				$printer->add_text_line(" ".$meta_item->key.": ".$meta_item->value);
+				$printer->add_text_line(filterHTML(" ".$meta_item->key.": ".$meta_item->value));
 			}
 			
 			$printer->add_text_line(star_cloudprnt_get_column_separated_data(array(" Qty: ".
@@ -233,10 +255,14 @@
 	{
 
 		$order = wc_get_order($order_id);
+		$order_number = $order->get_order_number();			// Displayed order number may be different to order_id when using some plugins
 		$shipping_items = @array_shift($order->get_items('shipping'));
 		$order_meta = get_post_meta($order_id);
 		
 		$meta_data = $order->get_meta_data();
+		
+		$date_format = get_option( 'date_format' );
+		$time_format = get_option( 'time_format' );
 		
 		if ($selectedPrinter['format'] == "txt") {
 			$printer = new Star_CloudPRNT_Text_Plain_Job($selectedPrinter, $file);
@@ -266,12 +292,18 @@
 		$printer->cancel_text_emphasized();
 		$printer->set_font_magnification(1, 1);
 		$printer->add_new_line(1);
-		$printer->add_text_line(star_cloudprnt_get_column_separated_data(array("Order #".$order_id, date("d-m-y H:i:s", time())), $selectedPrinter['columns']));
+		//$printer->add_text_line(star_cloudprnt_get_column_separated_data(array("Order #".$order_id, date("d-m-y H:i:s", time())), $selectedPrinter['columns']));
+		//$printer->add_text_line(star_cloudprnt_get_column_separated_data(array("Order #".$order_number, date("d-m-y H:i:s", time())), $selectedPrinter['columns']));
+		$printer->add_text_line(star_cloudprnt_get_column_separated_data(array("Order #".$order_number, date("{$date_format} {$time_format}", current_time('timestamp'))), $selectedPrinter['columns']));
+		
 		$printer->add_new_line(1);
 		//$printer->add_text_line("Order Status: ".star_cloudprnt_parse_order_status($order->post->post_status));
 		$printer->add_text_line("Order Status: ".$order->get_status());
 		//$printer->add_text_line("Order Date: ".$order->order_date);
-		$printer->add_text_line("Order Date: ".$order->get_date_created());
+		//$printer->add_text_line("Order Date: ".$order->get_date_created());
+		$order_date = date("{$date_format} {$time_format}", $order->get_date_created()->getOffsetTimestamp());
+		$printer->add_text_line("Order Date: {$order_date}");	
+		
 		if (isset($shipping_items['name']))
 		{
 			$printer->add_new_line(1);
