@@ -8,7 +8,8 @@
 		if ($total_columns == 1) return $columns[0];
 		if ($total_columns == 2)
 		{
-			$total_characters = strlen($columns[0])+strlen($columns[1]);
+			//$total_characters = strlen($columns[0])+strlen($columns[1]);
+			$total_characters = mb_strwidth($columns[0]) + mb_strwidth($columns[1]);
 			$total_whitespace = $max_chars - $total_characters;
 			if ($total_whitespace < 0) return "";
 			return $columns[0].str_repeat(" ", $total_whitespace).$columns[1];
