@@ -14,20 +14,15 @@
 		
 		add_settings_field("star-cloudprnt-printer-encoding-select", "Text Encoding", "star_cloudprnt_printer_encoding_select_display", "star_cloudprnt_setup", "star_cloudprnt_setup_section");
 		
-		add_settings_field("star-cloudprnt-print-order-meta-cb", "Additional Order Fields", "star_cloudprnt_print_order_meta_cb_display", "star_cloudprnt_setup", "star_cloudprnt_setup_section");  
+		//add_settings_field("star-cloudprnt-print-order-meta-cb", "Additional Order Fields", "star_cloudprnt_print_order_meta_cb_display", "star_cloudprnt_setup", "star_cloudprnt_setup_section");  
 		
 		add_settings_field("star-cloudprnt-print-copies-input", "Copies", "star_cloudprnt_print_copies_input_display", "star_cloudprnt_setup", "star_cloudprnt_setup_section");  
 		
-		add_settings_section("star_cloudprnt_print_logo_settings_section", "Printer Logo Settings", "star_cloudprnt_printer_logo_settings_header", "star_cloudprnt_setup");
-		add_settings_field("star-cloudprnt-print-logo-top-cb", "Print Logo (Top of Receipt)", 
-			"star_cloudprnt_print_logo_top_display", "star_cloudprnt_setup", "star_cloudprnt_print_logo_settings_section");  		
-		add_settings_field("star-cloudprnt-print-logo-top-input", "Top Logo Key Code", 
-			"star_cloudprnt_print_logo_top_input_display", "star_cloudprnt_setup", "star_cloudprnt_print_logo_settings_section");  		
-		add_settings_field("star-cloudprnt-print-logo-bottom-cb", "Print Logo (Bottom of Receipt)", 
-			"star_cloudprnt_print_logo_bottom_display", "star_cloudprnt_setup", "star_cloudprnt_print_logo_settings_section");  		
-		add_settings_field("star-cloudprnt-print-logo-bottom-input", "Bottom Logo Key Code", 
-			"star_cloudprnt_print_logo_bottom_input_display", "star_cloudprnt_setup", "star_cloudprnt_print_logo_settings_section"); 
-		
+		add_settings_section("star_cloudprnt_design_section", "Print Job Design Options", "star_cloudprnt_design_header", "star_cloudprnt_setup");
+		add_settings_field("star-cloudprnt-order-fields", "Additional Order Fields", "star_cloudPRNT_order_fields_display", "star_cloudprnt_setup", "star_cloudprnt_design_section");
+		add_settings_field("star-cloudprnt-logo", "Logo", "star_cloudPRNT_print_logo_display", "star_cloudprnt_setup", "star_cloudprnt_design_section");
+
+
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-select");
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-printer-select");
 		
@@ -62,13 +57,6 @@
 	   <?php
 	}
 	
-	function star_cloudprnt_printer_logo_settings_header()
-	{
-		?>
-		<p>Logos should be writtent to printer FlashROM memory, using a suitable tool, such as the
-		   StarPRNT Software for Windows, which can be downloaded from the <a href="http://starmicronics.com/support/Default.aspx">Star global downlad site</a>.
-		<?php
-	}
 	
 	function star_cloudprnt_printer_encoding_select_display()
 	{
@@ -79,16 +67,6 @@
 		</select>
 		<label>UTF-8 mode is recommended for mC-Print or TSP650II printer models.</label>
 	   <?php
-	}
-
-	function star_cloudprnt_print_order_meta_cb_display()
-	{
-		?>
-			<!-- <input type='hidden' value='off' name='star-cloudprnt-print-order-meta-cb'>-->
-			<input type="checkbox" name="star-cloudprnt-print-order-meta-cb" value="on" <?php checked(get_option('star-cloudprnt-print-order-meta-cb'), 'on', true) ?> >
-			<label>Print additional order meta-data, such as custom fields.</label>
-		<?php
-
 	}
 	
 	function star_cloudprnt_print_copies_input_display()
@@ -131,33 +109,49 @@
 		}
 	}
 	
-	function star_cloudprnt_print_logo_top_display()
-	{
-		echo '<input type="checkbox" name="star-cloudprnt-print-logo-top-cb" '.checked(get_option('star-cloudprnt-print-logo-top-cb'), 'on', false).' onclick="document.getElementById(\'star-cloudprnt-top-logo-input\').disabled = !this.checked;">';
-	}
 	
+	function star_cloudprnt_design_header()
+	{
+		?>
+		<?php
+	}
 
-	function star_cloudprnt_print_logo_top_input_display()
+	function star_cloudPRNT_order_fields_display()
 	{
-		$option_value = '01';
-		if (get_option('star-cloudprnt-print-logo-top-input')) $option_value = esc_attr(get_option('star-cloudprnt-print-logo-top-input'));
-		$disabled = (get_option('star-cloudprnt-print-logo-top-cb') === 'on') ? "" : " disabled";
-		echo '<input type="text" style="width: 30px;" id="star-cloudprnt-top-logo-input" name="star-cloudprnt-print-logo-top-input" value="'.$option_value.'"'.$disabled.'>';
+		?>
+			<input type="checkbox" name="star-cloudprnt-print-order-meta-cb" value="on" <?php checked(get_option('star-cloudprnt-print-order-meta-cb'), 'on', true) ?> >
+			<label>Print additional order meta-data, such as custom fields.</label>
+		<?php
 	}
-	
-	function star_cloudprnt_print_logo_bottom_display()
+
+	function star_cloudPRNT_print_logo_display()
 	{
-		echo '<input type="checkbox" name="star-cloudprnt-print-logo-bottom-cb" '.checked(get_option('star-cloudprnt-print-logo-bottom-cb'), 'on', false).' onclick="document.getElementById(\'star-cloudprnt-bottom-logo-input\').disabled = !this.checked;">';
+		$top_option_value = '01';
+		$top_disabled = (get_option('star-cloudprnt-print-logo-top-cb') === 'on') ? "" : " disabled";
+		if (get_option('star-cloudprnt-print-logo-top-input')) $top_option_value = esc_attr(get_option('star-cloudprnt-print-logo-top-input'));
+		
+		$end_option_value = '01';
+		$end_disabled = (get_option('star-cloudprnt-print-logo-bottom-cb') === 'on') ? "" : " disabled";
+		if (get_option('star-cloudprnt-print-logo-bottom-input')) $end_option_value = esc_attr(get_option('star-cloudprnt-print-logo-bottom-input'));
+		
+		?>
+			<!--<label>Top of page:</label> -->
+			<input type="checkbox" name="star-cloudprnt-print-logo-top-cb" <?= checked(get_option('star-cloudprnt-print-logo-top-cb'), 'on', false); ?> onclick='document.getElementById("star-cloudprnt-top-logo-input").disabled = !this.checked;'>
+			<label>Print at top of page</label>
+			<input type="text" style="width: 15mm;" id="star-cloudprnt-top-logo-input" name="star-cloudprnt-print-logo-top-input" value="<?= $top_option_value ?>" <?= $top_disabled ?> >
+			<label>Keycode</label><br/>
+			
+			<!--<label>End of page:</label> -->
+			<input type="checkbox" name="star-cloudprnt-print-logo-bottom-cb" <?= checked(get_option('star-cloudprnt-print-logo-bottom-cb'), 'on', false); ?> onclick='document.getElementById("star-cloudprnt-bottom-logo-input").disabled = !this.checked;'>
+			<label>Print at end of page</label>
+			<input type="text" style="width: 15mm;" id="star-cloudprnt-bottom-logo-input" name="star-cloudprnt-print-logo-bottom-input" value="<?= $end_option_value ?>" <?= $end_disabled ?> >
+			<label>Keycode</label><br/>
+			<p><strong>Note:</strong> logos should be written to printer FlashROM memory, using a suitable tool, such as the
+		   StarPRNT Software for Windows, which can be downloaded from the <a href="http://starmicronics.com/support/Default.aspx">Star global downlad site</p>
+			
+		<?php
 	}
-	
-	function star_cloudprnt_print_logo_bottom_input_display()
-	{
-		$option_value = '01';
-		if (get_option('star-cloudprnt-print-logo-bottom-input')) $option_value = esc_attr(get_option('star-cloudprnt-print-logo-bottom-input'));
-		$disabled = (get_option('star-cloudprnt-print-logo-bottom-cb') === 'on') ? "" : " disabled";
-		echo '<input type="text" style="width: 30px;" id="star-cloudprnt-bottom-logo-input" name="star-cloudprnt-print-logo-bottom-input" value="'.$option_value.'"'.$disabled.'>';
-	}
-	
+
 	function star_cloudprnt_show_settings_page()
 	{
 		echo '<form method="post" action="options.php">';

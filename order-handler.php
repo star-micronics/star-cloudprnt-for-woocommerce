@@ -1,7 +1,37 @@
 <?php
+	mb_internal_encoding('utf-8');
+
+	function star_mb_str_pad($str, $pad_len, $pad_str = ' ', $dir = STR_PAD_RIGHT) {
+    $str_len = mb_strlen($str);
+    $pad_str_len = mb_strlen($pad_str);
+    if (!$str_len && ($dir == STR_PAD_RIGHT || $dir == STR_PAD_LEFT)) {
+        $str_len = 1; // @debug
+    }
+    if (!$pad_len || !$pad_str_len || $pad_len <= $str_len) {
+        return $str;
+    }
+   
+    $result = null;
+    $repeat = ceil($str_len - $pad_str_len + $pad_len);
+    if ($dir == STR_PAD_RIGHT) {
+        $result = $str . str_repeat($pad_str, $repeat);
+        $result = mb_substr($result, 0, $pad_len);
+    } else if ($dir == STR_PAD_LEFT) {
+        $result = str_repeat($pad_str, $repeat) . $str;
+        $result = mb_substr($result, -$pad_len);
+    } else if ($dir == STR_PAD_BOTH) {
+        $length = ($pad_len - $str_len) / 2;
+        $repeat = ceil($length / $pad_str_len);
+        $result = mb_substr(str_repeat($pad_str, $repeat), 0, floor($length))
+                    . $str
+                       . mb_substr(str_repeat($pad_str, $repeat), 0, ceil($length));
+    }
+   
+    return $result;
+	}
+
 	function star_cloudprnt_get_column_separated_data($columns, $max_chars)
 	{
-		//$max_chars = STAR_CLOUDPRNT_MAX_CHARACTERS_TWO_INCH;
 		$total_columns = count($columns);
 		
 		if ($total_columns == 0) return "";
@@ -151,7 +181,10 @@
 			$product_name = $item_data['name'];
 			$product_id = $item_data['product_id'];
 			$variation_id = $item_data['variation_id'];
-			
+			$product = wc_get_product($product_id);
+
+			$altname = $product->get_attribute( 'star_cp_print_name' );				// Custome attribute can be used to override the product name on receipt
+
 			$item_qty = wc_get_order_item_meta($item_id, "_qty", true);
 			
 			$item_total_price = floatval(wc_get_order_item_meta($item_id, "_line_total", true))
@@ -165,6 +198,9 @@
 				$product_variation = new WC_Product_Variation( $variation_id );
 				$product_name = $product_variation->get_title();
 			}
+
+			if ($altname != "")
+				$product_name = $altname;
 			
 			$formatted_item_price = number_format($item_price, 2, '.', '');
 			$formatted_total_price = number_format($item_total_price, 2, '.', '');
@@ -181,6 +217,12 @@
 				// Don't use display_key and display_value, because those are formatted as html
 				$printer->add_text_line(filterHTML(" ".$meta_item->key.": ".$meta_item->value));
 			}
+
+			// $product = wc_get_product($product_id);
+			// $altname = $product->get_attribute( 'star_cp_print_name' );
+			
+			//$altname = get_post_meta($product_id, '_print_name', true);
+			// $printer->add_text_line("Alt Name (pid: ".$product_id. "): " . $altname);
 			
 			$printer->add_text_line(star_cloudprnt_get_column_separated_data(array(" Qty: ".
 						$item_qty." x Cost: ".$currencyHex.$formatted_item_price,
