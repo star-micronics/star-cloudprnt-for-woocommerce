@@ -8,14 +8,23 @@
 
 	function star_cloudprnt_settings()
 	{
+
+		/* Attempt to set the default print job trigger to "status_processing" for new installs, but "thankyou" for sites that have
+		   already been running with the plugin - to avoid potentially breaking thos sites after upgrading the plugin, since some sites use
+			 other plugins to change the default order status.
+			 */
+		$trigger_default = "status_processing";						// Recommended default for new sites, at which time users can choose another option if preferred
+		if(get_option('star-cloudprnt-select') != "")
+			$trigger_default = "thankyou";
+		
 		add_settings_section("star_cloudprnt_setup_section", "CloudPRNT Setup", "star_cloudprnt_setup_section_info", "star_cloudprnt_setup");
 		add_settings_field("star-cloudprnt-select", "CloudPRNT", "star_cloudprnt_select_display", "star_cloudprnt_setup", "star_cloudprnt_setup_section");  
 		add_settings_field("star-cloudprnt-printer-select", "Selected Printer", "star_cloudprnt_printer_select_display", "star_cloudprnt_setup", "star_cloudprnt_setup_section"); 
 		
 		add_settings_field("star-cloudprnt-printer-encoding-select", "Text Encoding", "star_cloudprnt_printer_encoding_select_display", "star_cloudprnt_setup", "star_cloudprnt_setup_section");
-		
-		//add_settings_field("star-cloudprnt-print-order-meta-cb", "Additional Order Fields", "star_cloudprnt_print_order_meta_cb_display", "star_cloudprnt_setup", "star_cloudprnt_setup_section");  
-		
+
+		add_settings_field("star-cloudprnt-trigger", "Printing Trigger", "star_cloudprnt_trigger_display", "star_cloudprnt_setup", "star_cloudprnt_setup_section");
+
 		add_settings_field("star-cloudprnt-print-copies-input", "Copies", "star_cloudprnt_print_copies_input_display", "star_cloudprnt_setup", "star_cloudprnt_setup_section");  
 		
 		add_settings_section("star_cloudprnt_design_section", "Print Job Design Options", "star_cloudprnt_design_header", "star_cloudprnt_setup");
@@ -29,6 +38,8 @@
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-printer-encoding-select");
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-order-meta-cb");
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-copies-input");
+
+		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-trigger", array("default" => $trigger_default));
 		
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-logo-top-cb");
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-logo-top-input");
@@ -50,10 +61,10 @@
 	function star_cloudprnt_select_display()
 	{
 	   ?>
-		<select name="star-cloudprnt-select">
-			<option value="disable" <?php selected(get_option('star-cloudprnt-select'), "disable"); ?>>DISABLE</option>
-			<option value="enable" <?php selected(get_option('star-cloudprnt-select'), "enable"); ?>>ENABLE</option>
-		</select>
+			<select name="star-cloudprnt-select">
+				<option value="disable" <?php selected(get_option('star-cloudprnt-select'), "disable"); ?>>DISABLE</option>
+				<option value="enable" <?php selected(get_option('star-cloudprnt-select'), "enable"); ?>>ENABLE</option>
+			</select>
 	   <?php
 	}
 	
@@ -61,11 +72,11 @@
 	function star_cloudprnt_printer_encoding_select_display()
 	{
 	   ?>
-		<select name="star-cloudprnt-printer-encoding-select">
-			<option value="UTF-8" <?php selected(get_option('star-cloudprnt-printer-encoding-select'), "utf-8"); ?>>UTF-8</option>
-			<option value="1252" <?php selected(get_option('star-cloudprnt-printer-encoding-select'), "1252"); ?>>1252</option>
-		</select>
-		<label>UTF-8 mode is recommended for mC-Print or TSP650II printer models.</label>
+			<select name="star-cloudprnt-printer-encoding-select">
+				<option value="UTF-8" <?php selected(get_option('star-cloudprnt-printer-encoding-select'), "utf-8"); ?>>UTF-8</option>
+				<option value="1252" <?php selected(get_option('star-cloudprnt-printer-encoding-select'), "1252"); ?>>1252</option>
+			</select>
+			<label>UTF-8 mode is recommended for mC-Print or TSP650II printer models.</label>
 	   <?php
 	}
 	
@@ -109,6 +120,20 @@
 		}
 	}
 	
+	function star_cloudprnt_trigger_display()
+	{
+		?>
+			<input type="radio" name="star-cloudprnt-trigger" value="status_processing" <?php checked(get_option('star-cloudprnt-trigger'), 'status_processing', true) ?>>
+			<label>When an order is assigned the "processing" status (recommended for most sites)</label><br>
+			<input type="radio" name="star-cloudprnt-trigger" value="status_completed" <?php checked(get_option('star-cloudprnt-trigger'), 'status_completed', true) ?>>
+			<label>When an order is assigned the "completed" status</label><br>
+			<input type="radio" name="star-cloudprnt-trigger" value="thankyou" <?php checked(get_option('star-cloudprnt-trigger'), 'thankyou', true) ?>>
+			<label><span class="star_cp_caution">&#x26a0;</span> When WooCommerce "Thank You" message is displayed (legacy option, not recommended)</label><br>
+			<input type="radio" name="star-cloudprnt-trigger" value="none" <?php checked(get_option('star-cloudprnt-trigger'), 'none', true) ?>>
+			<label>Disable automatic printing</label><br>
+		<?php
+	}
+
 	
 	function star_cloudprnt_design_header()
 	{
@@ -163,6 +188,16 @@
 
 	function star_cloudprnt_page()
 	{
+		?>
+			<style>
+				.star_cp_caution {
+					color: orange;
+					font-size: larger;
+					font-weight: bolder;
+				}, 
+			</style>
+		<?php
+
 		echo '<div class="wrap">';
 			echo '<img src="'.plugins_url('images/logo.png', __FILE__).'">';
 				echo '<h1>Star CloudPRNT for WooCommerce Settings</h1>';

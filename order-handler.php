@@ -274,6 +274,7 @@
 			$fname = $order_meta['_billing_first_name'][0];
 			$lname = $order_meta['_billing_last_name'][0];
 			$a1 = $order_meta['_billing_address_1'][0];
+		
 			$a2 = $order_meta['_billing_address_2'][0];
 			$city = $order_meta['_billing_city'][0];
 			$state = $order_meta['_billing_state'][0];
@@ -384,7 +385,6 @@
 		if (get_option('star-cloudprnt-print-logo-bottom-input')) $printer->add_nv_logo(esc_attr(get_option('star-cloudprnt-print-logo-bottom-input')));
 		
 		$copies=intval(get_option("star-cloudprnt-print-copies-input"));
-		//$copies = intval($copies);
 		if($copies < 1) $copies = 1;
 		
 		$printer->printjob($copies);
@@ -476,8 +476,16 @@
 		{
 			add_action( 'woocommerce_order_actions', 'star_cloudprnt_order_reprint_action' );
 			
-			//add_action('woocommerce_thankyou', 'star_cloudprnt_trigger_print', 1, 1);
-			add_action('woocommerce_order_status_processing', 'star_cloudprnt_trigger_print', 1, 1);
+			
+			$trigger = get_option('star-cloudprnt-trigger');
+			if($trigger === 'thankyou') {
+				add_action('woocommerce_thankyou', 'star_cloudprnt_trigger_print', 1, 1);
+			} elseif ($trigger === 'status_processing') {
+				add_action('woocommerce_order_status_processing', 'star_cloudprnt_trigger_print', 1, 1);
+			} elseif ($trigger === 'status_completed') {
+				add_action('woocommerce_order_status_completed', 'star_cloudprnt_trigger_print', 1, 1);
+			}
+
 			add_action('woocommerce_order_action_star_cloudprnt_reprint_action', 'star_cloudprnt_reprint', 1, 1 );
 		}
 	}
