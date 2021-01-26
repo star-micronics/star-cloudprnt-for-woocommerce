@@ -99,22 +99,6 @@
 		$symbol = get_woocommerce_currency_symbol();
 
 		return filterHTML($symbol);
-
-		if ($encoding === "UTF-8") {
-			if ($symbol === "&pound;") return "£"; // £ pound
-			else if ($symbol === "&#36;") return "$"; // $ dollar
-			else if ($symbol === "&euro;") return "€"; // € euro
-		} elseif ($encoding == "1252"){
-			if ($symbol === "&pound;") return "\xA3"; // £ pound
-			else if ($symbol === "&#36;") return "\x24"; // $ dollar
-			else if ($symbol === "&euro;") return "\x80"; // € euro
-		} else {
-			if ($symbol === "&pound;") return "GBP"; // £ pound
-			else if ($symbol === "&#36;") return ""; // $ dollar
-			else if ($symbol === "&euro;") return "EUR"; // € euro
-		}
-		
-		return ""; // return blank by default
 	}
 	
 	function star_cloudprnt_get_formatted_variation($variation, $order, $item_id) 
@@ -157,33 +141,6 @@
 		/* Filter known html key words, convert to printer appropriate commands */
 		
 		$encoding = get_option('star-cloudprnt-printer-encoding-select');
-		// $ukp = "£";
-		// $euro = "€";
-
-		// $trade = "™";
-		// $copy = "©";
-		
-		// if ($encoding == "1252"){
-		// 	$ukp = "\xA3"; 		// £ pound
-		// 	$euro = "\x80"; 	// € Euro
-
-		// 	$trade = "\x99";			// ™ Trademark
-		// 	$copy = "\xA9";				// © Copyright
-		// }
-		
-		// $data = str_replace("£", $ukp, $data);				// convert any UTF8 '£' to a codepage normalised '£'
-		// $data = str_replace("&pound;", $ukp, $data);
-		// $data = str_replace("€", $euro, $data);				// Normalise euro
-		// $data = str_replace("&euro;", $euro, $data);
-		
-		// $data = str_replace('&ndash;', '-', $data);
-		// $data = str_replace('&gt;', '>', $data);
-		// $data = str_replace('&lt;', '<', $data);
-		// $data = str_replace('&amp;', '&', $data);
-		// $data = str_replace('&quot;', '"', $data);
-		// $data = str_replace('&apos;', "'", $data);
-		// $data = str_replace('&trade;', $trade, $data);
-		// $data = str_replace('&copy;', $copy, $data);
 		
 		$phpenc = "UTF-8";
 
@@ -235,7 +192,6 @@
 			$formatted_total_price = number_format($item_total_price, 2, '.', '');
 			
 			$printer->set_text_emphasized();
-			//$printer->add_text_line(str_replace('&ndash;', '-', $product_name)." - ID: ".$product_id."");
 			$printer->add_text_line(filterHTML($product_name." - ID: ".$product_id.""));
 			$printer->cancel_text_emphasized();
 			
@@ -243,8 +199,7 @@
 
 			foreach ($meta as $meta_key => $meta_item)
 			{
-				// Don't use display_key and display_value, because those are formatted as html
-				//$printer->add_text_line(filterHTML(" ".$meta_item->key.": ".$meta_item->value));
+				// Use $meta_item->key for the raw (non display formatted) key name
 				$printer->add_text_line(filterHTML(" ".$meta_item->display_key.": ".$meta_item->display_value));
 			}
 			
@@ -260,9 +215,17 @@
 			return;
 		
 		$is_printed = false;
+
+		$print_hidden = get_option('star-cloudprnt-print-order-meta-hidden') == "on";
 		
 		foreach ($meta_data as $item_id => $meta_data_item)
 		{
+			$item_data = $meta_data_item->get_data();
+
+			// Skip hidden fields (any field whose key begins with a "_", by convention)
+			if(!$print_hidden && mb_substr($item_data["key"], 0, 1) == "_")
+				continue;
+
 			if(! $is_printed)
 			{
 				$is_printed = true;
@@ -270,9 +233,8 @@
 				$printer->add_text_line("Additional Order Information");
 				$printer->cancel_text_emphasized();
 			}
-			
-			$item_data = $meta_data_item->get_data();
-			$printer->add_text_line($item_data["key"].": ".$item_data["value"]);
+
+			$printer->add_text_line(filterHTML($item_data["key"]) . ": " . filterHTML($item_data["value"]));
 		}
 		
 		if($is_printed)	$printer->add_text_line("");
@@ -281,7 +243,6 @@
 
 	function star_cloudprnt_create_address($order, $order_meta, &$printer)
 	{
-		return;
 		$fname = $order_meta['_shipping_first_name'][0];
 		$lname = $order_meta['_shipping_last_name'][0];
 		$a1 = $order_meta['_shipping_address_1'][0];
@@ -384,7 +345,7 @@
 		$printer->add_text_line(star_cloudprnt_get_seperator($selectedPrinter['columns']));
 		
 		star_cloudprnt_create_receipt_items($order, $printer, $selectedPrinter['columns']);
-		
+
 		$printer->add_new_line(1);
 		$printer->set_text_right_align();
 		$formatted_overall_total_price = number_format($order_meta['_order_total'][0], 2, '.', '');
@@ -497,7 +458,7 @@
 
 	function star_cloudprnt_setup_order_handler()
 	{
-		if (selected(get_option('star-cloudprnt-select'), "enable", false) !== "" && star_cloudprnt_is_woo_activated())
+		if (selected(get_option('star-cloudprnt-select'), "enable", false) !== "")
 		{
 			add_action( 'woocommerce_order_actions', 'star_cloudprnt_order_reprint_action' );
 			

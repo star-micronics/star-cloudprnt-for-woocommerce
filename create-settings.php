@@ -36,10 +36,12 @@
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-printer-select");
 		
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-printer-encoding-select");
-		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-order-meta-cb");
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-copies-input");
 
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-trigger", array("default" => $trigger_default));
+
+		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-order-meta-cb");
+		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-order-meta-hidden", array("default" => "off"));
 		
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-logo-top-cb");
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-logo-top-input");
@@ -146,6 +148,10 @@
 		?>
 			<input type="checkbox" name="star-cloudprnt-print-order-meta-cb" value="on" <?php checked(get_option('star-cloudprnt-print-order-meta-cb'), 'on', true) ?> >
 			<label>Print additional order meta-data, such as custom fields.</label>
+			<div style="padding-left: 7mm">
+				<input type="checkbox" name="star-cloudprnt-print-order-meta-hidden" value="on" <?php checked(get_option('star-cloudprnt-print-order-meta-hidden'), 'on', true) ?> >
+				<label>Include hidden fields</label>
+			</div>
 		<?php
 	}
 
