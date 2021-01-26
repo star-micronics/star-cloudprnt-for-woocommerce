@@ -23,8 +23,8 @@
         $length = ($pad_len - $str_len) / 2;
         $repeat = ceil($length / $pad_str_len);
         $result = mb_substr(str_repeat($pad_str, $repeat), 0, floor($length))
-                    . $str
-                       . mb_substr(str_repeat($pad_str, $repeat), 0, ceil($length));
+                  	. $str
+                    . mb_substr(str_repeat($pad_str, $repeat), 0, ceil($length));
     }
    
     return $result;
@@ -98,6 +98,8 @@
 		$encoding = get_option('star-cloudprnt-printer-encoding-select');
 		$symbol = get_woocommerce_currency_symbol();
 
+		return filterHTML($symbol);
+
 		if ($encoding === "UTF-8") {
 			if ($symbol === "&pound;") return "£"; // £ pound
 			else if ($symbol === "&#36;") return "$"; // $ dollar
@@ -155,20 +157,47 @@
 		/* Filter known html key words, convert to printer appropriate commands */
 		
 		$encoding = get_option('star-cloudprnt-printer-encoding-select');
-		$ukp = "£";
+		// $ukp = "£";
+		// $euro = "€";
+
+		// $trade = "™";
+		// $copy = "©";
 		
-		if ($encoding == "1252"){
-			$ukp = "\xA3"; // £ pound
-		}
+		// if ($encoding == "1252"){
+		// 	$ukp = "\xA3"; 		// £ pound
+		// 	$euro = "\x80"; 	// € Euro
+
+		// 	$trade = "\x99";			// ™ Trademark
+		// 	$copy = "\xA9";				// © Copyright
+		// }
 		
-		$data = str_replace("£", $ukp, $data);				// convert any UTF8 '£' to a codepage normalised '£'
-		$data = str_replace("&pound;", $ukp, $data);
+		// $data = str_replace("£", $ukp, $data);				// convert any UTF8 '£' to a codepage normalised '£'
+		// $data = str_replace("&pound;", $ukp, $data);
+		// $data = str_replace("€", $euro, $data);				// Normalise euro
+		// $data = str_replace("&euro;", $euro, $data);
 		
-		$data = str_replace('&ndash;', '-', $data);
-		$data = str_replace('&gt;', '>', $data);
-		$data = str_replace('&lt;', '<', $data);
+		// $data = str_replace('&ndash;', '-', $data);
+		// $data = str_replace('&gt;', '>', $data);
+		// $data = str_replace('&lt;', '<', $data);
+		// $data = str_replace('&amp;', '&', $data);
+		// $data = str_replace('&quot;', '"', $data);
+		// $data = str_replace('&apos;', "'", $data);
+		// $data = str_replace('&trade;', $trade, $data);
+		// $data = str_replace('&copy;', $copy, $data);
 		
-		return $data;
+		$phpenc = "UTF-8";
+
+		if($encoding == "1252")
+			$phpenc="cp1252";
+
+		$data = html_entity_decode($data, ENT_QUOTES, "UTF-8");
+
+		if($phpenc !== "UFT-8")
+			$data = mb_convert_encoding($data, $phpenc, "UTF-8");
+
+		$data = str_replace(array("\r", "\n"), '', $data);				// Strip newlines
+
+		return strip_tags($data);
 	}
 
 	function star_cloudprnt_create_receipt_items($order, &$printer, $max_chars)
@@ -183,7 +212,7 @@
 			$variation_id = $item_data['variation_id'];
 			$product = wc_get_product($product_id);
 
-			$altname = $product->get_attribute( 'star_cp_print_name' );				// Custome attribute can be used to override the product name on receipt
+			$altname = $product->get_attribute( 'star_cp_print_name' );				// Custom attribute can be used to override the product name on receipt
 
 			$item_qty = wc_get_order_item_meta($item_id, "_qty", true);
 			
@@ -210,19 +239,14 @@
 			$printer->add_text_line(filterHTML($product_name." - ID: ".$product_id.""));
 			$printer->cancel_text_emphasized();
 			
-			
 			$meta = $item_data->get_formatted_meta_data("_", TRUE);
+
 			foreach ($meta as $meta_key => $meta_item)
 			{
 				// Don't use display_key and display_value, because those are formatted as html
-				$printer->add_text_line(filterHTML(" ".$meta_item->key.": ".$meta_item->value));
+				//$printer->add_text_line(filterHTML(" ".$meta_item->key.": ".$meta_item->value));
+				$printer->add_text_line(filterHTML(" ".$meta_item->display_key.": ".$meta_item->display_value));
 			}
-
-			// $product = wc_get_product($product_id);
-			// $altname = $product->get_attribute( 'star_cp_print_name' );
-			
-			//$altname = get_post_meta($product_id, '_print_name', true);
-			// $printer->add_text_line("Alt Name (pid: ".$product_id. "): " . $altname);
 			
 			$printer->add_text_line(star_cloudprnt_get_column_separated_data(array(" Qty: ".
 						$item_qty." x Cost: ".$currencyHex.$formatted_item_price,
@@ -232,7 +256,7 @@
 	
 	function star_cloudprnt_create_receipt_order_meta_data($meta_data, &$printer, $max_chars)
 	{
-		if(get_option('star-cloudprnt-print-order-meta-cb') != on)
+		if(get_option('star-cloudprnt-print-order-meta-cb') != "on")
 			return;
 		
 		$is_printed = false;
@@ -257,6 +281,7 @@
 
 	function star_cloudprnt_create_address($order, $order_meta, &$printer)
 	{
+		return;
 		$fname = $order_meta['_shipping_first_name'][0];
 		$lname = $order_meta['_shipping_last_name'][0];
 		$a1 = $order_meta['_shipping_address_1'][0];
