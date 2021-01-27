@@ -217,10 +217,15 @@
 		$is_printed = false;
 
 		$print_hidden = get_option('star-cloudprnt-print-order-meta-hidden') == "on";
-		
+		$excluded_keys = array_map('trim', explode(',', get_option('star-cloudprnt-print-order-meta-exclusions')));
+
 		foreach ($meta_data as $item_id => $meta_data_item)
 		{
 			$item_data = $meta_data_item->get_data();
+
+			// Skip any keys in the exclusion list
+			if(in_array($item_data["key"], $excluded_keys))
+				continue;
 
 			// Skip hidden fields (any field whose key begins with a "_", by convention)
 			if(!$print_hidden && mb_substr($item_data["key"], 0, 1) == "_")
@@ -240,31 +245,38 @@
 		if($is_printed)	$printer->add_text_line("");
 	}
 
-
 	function star_cloudprnt_create_address($order, $order_meta, &$printer)
 	{
-		$fname = $order_meta['_shipping_first_name'][0];
-		$lname = $order_meta['_shipping_last_name'][0];
-		$a1 = $order_meta['_shipping_address_1'][0];
-		$a2 = $order_meta['_shipping_address_2'][0];
-		$city = $order_meta['_shipping_city'][0];
-		$state = $order_meta['_shipping_state'][0];
-		$postcode = $order_meta['_shipping_postcode'][0];
-		$tel = $order_meta['_billing_phone'][0];
+		// function to get address values if they exist or return an empty string
+		$gkv = function($key) use ($order_meta) {
+			if(array_key_exists($key, $order_meta))
+				return $order_meta[$key][0];
+
+			return "";
+		};
+
+		$fname = $gkv('_shipping_first_name');
+		$lname = $gkv('_shipping_last_name');
+		$a1 = $gkv('_shipping_address_1');
+		$a2 = $gkv('_shipping_address_2');
+		$city = $gkv('_shipping_citye', $order_meta);
+		$state = $gkv('_shipping_state');
+		$postcode = $gkv('_shipping_postcode');
+		$tel = $gkv('_billing_phone');
 		
 		$printer->set_text_emphasized();
 		if ($a1 == '')
 		{
 			$printer->add_text_line("Billing Address:");
 			$printer->cancel_text_emphasized();
-			$fname = $order_meta['_billing_first_name'][0];
-			$lname = $order_meta['_billing_last_name'][0];
-			$a1 = $order_meta['_billing_address_1'][0];
+			$fname = $gkv('_billing_first_name');
+			$lname = $gkv('_billing_last_name');
+			$a1 = $gkv('_billing_address_1');
 		
-			$a2 = $order_meta['_billing_address_2'][0];
-			$city = $order_meta['_billing_city'][0];
-			$state = $order_meta['_billing_state'][0];
-			$postcode = $order_meta['_billing_postcode'][0];
+			$a2 = $gkv('_billing_address_2');
+			$city = $gkv('_billing_city');
+			$state = $gkv('_billing_state');
+			$postcode = $gkv('_billing_postcode');
 		}
 		else
 		{
@@ -278,6 +290,7 @@
 		if ($city != '') $printer->add_text_line($city);
 		if ($state != '') $printer->add_text_line($state);
 		if ($postcode != '') $printer->add_text_line($postcode);
+
 		$printer->add_text_line("Tel: ".$tel);
 	}
 	

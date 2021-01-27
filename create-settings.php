@@ -42,7 +42,8 @@
 
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-order-meta-cb");
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-order-meta-hidden", array("default" => "off"));
-		
+		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-order-meta-exclusions", array("default" => "is_vat_exempt,"));
+
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-logo-top-cb");
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-logo-top-input");
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-logo-bottom-cb");
@@ -130,7 +131,7 @@
 			<input type="radio" name="star-cloudprnt-trigger" value="status_completed" <?php checked(get_option('star-cloudprnt-trigger'), 'status_completed', true) ?>>
 			<label>When an order is assigned the "completed" status</label><br>
 			<input type="radio" name="star-cloudprnt-trigger" value="thankyou" <?php checked(get_option('star-cloudprnt-trigger'), 'thankyou', true) ?>>
-			<label><span class="star_cp_caution">&#x26a0;</span> When WooCommerce "Thank You" message is displayed (legacy option, not recommended)</label><br>
+			<label>When WooCommerce "Thank You" message is displayed (<span class="star_cp_caution">&#x26a0;</span> legacy option, not recommended)</label><br>
 			<input type="radio" name="star-cloudprnt-trigger" value="none" <?php checked(get_option('star-cloudprnt-trigger'), 'none', true) ?>>
 			<label>Disable automatic printing</label><br>
 		<?php
@@ -150,7 +151,10 @@
 			<label>Print additional order meta-data, such as custom fields.</label>
 			<div style="padding-left: 7mm">
 				<input type="checkbox" name="star-cloudprnt-print-order-meta-hidden" value="on" <?php checked(get_option('star-cloudprnt-print-order-meta-hidden'), 'on', true) ?> >
-				<label>Include hidden fields</label>
+				<label>Include hidden fields</label><br/>
+				<br/><label>Exclude items with these key names (',' separated)</label><br/>
+				<input type="text" name="star-cloudprnt-print-order-meta-exclusions" size=60 value="<?php echo get_option('star-cloudprnt-print-order-meta-exclusions') ?>">
+				
 			</div>
 		<?php
 	}
