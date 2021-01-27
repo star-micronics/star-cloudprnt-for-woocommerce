@@ -66,7 +66,6 @@
 	
 	function star_cloudprnt_get_seperator($max_chars)
 	{
-		//$max_chars = STAR_CLOUDPRNT_MAX_CHARACTERS_TWO_INCH;
 		return str_repeat('_', $max_chars);
 	}
 	
@@ -98,7 +97,7 @@
 		$encoding = get_option('star-cloudprnt-printer-encoding-select');
 		$symbol = get_woocommerce_currency_symbol();
 
-		return filterHTML($symbol);
+		return star_cloudprnt_filter_html($symbol);
 	}
 	
 	function star_cloudprnt_get_formatted_variation($variation, $order, $item_id) 
@@ -136,9 +135,9 @@
 		return $return;
 	}
 	
-	function filterHTML($data)
+	function star_cloudprnt_filter_html($data)
 	{
-		/* Filter known html key words, convert to printer appropriate commands */
+		/* Filter known html key words, convert to printer appropriate commands and encoding */
 		
 		$encoding = get_option('star-cloudprnt-printer-encoding-select');
 		
@@ -192,7 +191,7 @@
 			$formatted_total_price = number_format($item_total_price, 2, '.', '');
 			
 			$printer->set_text_emphasized();
-			$printer->add_text_line(filterHTML($product_name." - ID: ".$product_id.""));
+			$printer->add_text_line(star_cloudprnt_filter_html($product_name." - ID: ".$product_id.""));
 			$printer->cancel_text_emphasized();
 			
 			$meta = $item_data->get_formatted_meta_data("_", TRUE);
@@ -200,7 +199,7 @@
 			foreach ($meta as $meta_key => $meta_item)
 			{
 				// Use $meta_item->key for the raw (non display formatted) key name
-				$printer->add_text_line(filterHTML(" ".$meta_item->display_key.": ".$meta_item->display_value));
+				$printer->add_text_line(star_cloudprnt_filter_html(" ".$meta_item->display_key.": ".$meta_item->display_value));
 			}
 			
 			$printer->add_text_line(star_cloudprnt_get_column_separated_data(array(" Qty: ".
@@ -239,7 +238,7 @@
 				$printer->cancel_text_emphasized();
 			}
 
-			$printer->add_text_line(filterHTML($item_data["key"]) . ": " . filterHTML($item_data["value"]));
+			$printer->add_text_line(star_cloudprnt_filter_html($item_data["key"]) . ": " . star_cloudprnt_filter_html($item_data["value"]));
 		}
 		
 		if($is_printed)	$printer->add_text_line("");
