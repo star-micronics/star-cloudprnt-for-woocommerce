@@ -27,4 +27,13 @@
 	// Run page setup and woo commerce hooks
 	star_cloudprnt_create_settings_page();
 	star_cloudprnt_setup_order_handler();
+
+	// Add a settings link on the plugins page
+	function my_plugin_settings_link($links) { 
+		$settings_link = '<a href="options-general.php?page=star-cloudprnt-settings-admin">Settings</a>'; 
+		array_unshift($links, $settings_link); 
+		return $links; 
+	}
+	$plugin = plugin_basename(__FILE__); 
+	add_filter("plugin_action_links_$plugin", 'my_plugin_settings_link' );
 ?>
