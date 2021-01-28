@@ -392,7 +392,8 @@
 		// Send the print job to the spooling folder, ready to be connected by the printer and printed.
 		$printer->printjob($copies);
 	}
-	
+
+	// Get printer compatibility information and print
 	function star_cloudprnt_trigger_print($order_id)
 	{
 
@@ -449,8 +450,6 @@
 			if ($selectedPrinter['ClientType'] == "Star mC-Print2") {
 				$columns = STAR_CLOUDPRNT_MAX_CHARACTERS_TWO_INCH;
 			}
-			//var_dump($selectedPrinter);
-			//print("Chosen Print Format:".$extension.", Columns:".$columns. "<br/>");
 			
 			$selectedPrinter['format'] = $extension;
 			$selectedPrinter['columns'] = $columns;
@@ -461,6 +460,7 @@
 		}
 	}
 	
+	// Insert the "Reprint vis Star CloudPRNT" order action to the list
 	function star_cloudprnt_order_reprint_action( $actions ) {
 		global $theorder;
 
@@ -468,18 +468,78 @@
 		return $actions;
 	}
 
+	// Handle print requests issues with WC_Order object (used for the reprinting order action)
 	function star_cloudprnt_reprint($order)
 	{
 		star_cloudprnt_trigger_print($order->get_id());
+	}
+
+	// Register a meta box on the edit order sidebar
+	function star_cloudprnt_order_meta_boxes()
+	{
+    add_meta_box(
+        'woocommerce-order-star-cloudprnt',
+        __( 'Star CloudPRNT' ),
+        'star_cloudprnt_order_meta_box_content',
+        'shop_order',
+        'side',
+        'default'
+    );
+	}
+
+	// Render the sidebar metabox on the Edit Order page
+	function star_cloudprnt_order_meta_box_content()
+	{
+		?>
+			<script type="text/javascript" >
+				function star_cloudprnt_trigger($) {
+
+					var data = {
+						'action': 'star_cloudprnt_reprint_action',
+						'order_id': '<?= $_GET["post"] ?>'
+					};
+
+					jQuery.post(ajaxurl, data, function(response) {
+						//alert('Got this from the server: ' + response);
+						jQuery("#star_cp_job_sent").show();
+						setTimeout(() => {
+							jQuery("#star_cp_job_sent").hide();
+						}, 2000);
+					});
+				}
+
+			</script>
+
+			<a href="javascript: star_cloudprnt_trigger();"><span>Print with Star CloudPRNT</span></a> <span id="star_cp_job_sent" style="display:none">✔</span>
+
+		<?php
+	}
+
+	// Handle the ajax reprint action
+	function star_cloudprnt_reprint_button_callback()
+	{
+		star_cloudprnt_trigger_print($_POST["order_id"]);
+		wp_die();
 	}
 
 	function star_cloudprnt_setup_order_handler()
 	{
 		if (selected(get_option('star-cloudprnt-select'), "enable", false) !== "")
 		{
+			// Add reprint order action
 			add_action( 'woocommerce_order_actions', 'star_cloudprnt_order_reprint_action' );
+
+			// Register handler for ajax reprint request action (used by the "Print with Star CloudPRNT" button in the sidebar metabox)
+			add_action( 'wp_ajax_star_cloudprnt_reprint_action', 'star_cloudprnt_reprint_button_callback' );
+
+			// Register a sidebar metabox to be displayed on the Edit Order page, used to host a "print" button.
+			add_action( 'add_meta_boxes', 'star_cloudprnt_order_meta_boxes' );
+
+			// Register handler for the order action reprint request
+			add_action('woocommerce_order_action_star_cloudprnt_reprint_action', 'star_cloudprnt_reprint', 1, 1 );
 			
-			
+
+			// Register the automatic order printing trigger, depending on config
 			$trigger = get_option('star-cloudprnt-trigger');
 			if($trigger === 'thankyou') {
 				add_action('woocommerce_thankyou', 'star_cloudprnt_trigger_print', 1, 1);
@@ -489,7 +549,7 @@
 				add_action('woocommerce_order_status_completed', 'star_cloudprnt_trigger_print', 1, 1);
 			}
 
-			add_action('woocommerce_order_action_star_cloudprnt_reprint_action', 'star_cloudprnt_reprint', 1, 1 );
+			
 		}
 	}
 ?>
