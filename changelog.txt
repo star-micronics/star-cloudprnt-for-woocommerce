@@ -1,0 +1,27 @@
+= 1.1.2 =
+* Work around an issue that prevents printing to thermal printer models with HIX Connect interface that has earlier firmware. In this situation, the plugin will now follow the same logic as 1.0.x plugin releases.
+
+= 1.1.1 =
+* Add support for WordPress 5.4.X
+
+= 1.1.0 =
+* Support mC-Print31 and mC-Print21 printer models
+* Enable Unicode characters sets on supported printer models (TSP654II, mC-Print31, mC-Print21)
+* Support character magnification
+* Tested with WordPress up to version 5.3.2 and WooCommerce 4.0.X
+
+= 1.0.3 =
+* Replaced HTTP DELETE requests with HTTP GET requests, due to some servers not supporting this method.
+* Fixed bug where print job is lost after failed HTTP GET request.
+* Added support for Wordpress 4.9.X (tested up to 4.9.6).
+* Changed recommended printer interface firmware to 1.4 or greater.
+
+= 1.0.2 =
+* Added order history feature to log printed orders.
+* Added support for WordPress 4.8.0 and WooCommerce 3.0.X.
+
+= 1.0.1 =
+* Bug fixes.
+
+= 1.0.0 =
+* Initial release.
