@@ -83,8 +83,8 @@
 
 		$is_printed = false;
 
-		$print_hidden = get_option('star-cloudprnt-print-order-meta-hidden') == "on";
-		$excluded_keys = array_map('trim', explode(',', get_option('star-cloudprnt-print-order-meta-exclusions')));
+		$print_hidden = get_option('star-cloudprnt-print-order-meta-hidden') == 'on';
+		$excluded_keys = array_map('trim', explode(',', esc_attr(get_option('star-cloudprnt-print-order-meta-exclusions'))));
 
 		foreach ($meta_data as $item_id => $meta_data_item)
 		{
@@ -106,7 +106,11 @@
 				$printer->cancel_text_emphasized();
 			}
 
-			$printer->add_text_line(star_cloudprnt_filter_html($item_data["key"]) . ": " . star_cloudprnt_filter_html($item_data["value"]));
+			$formatted_key = $item_data["key"];
+			if(get_option('star-cloudprnt-print-order-meta-reformat-keys') == 'on')
+				$formatted_key = mb_convert_case(mb_ereg_replace("_", " ", $formatted_key), MB_CASE_TITLE);
+
+			$printer->add_text_line(star_cloudprnt_filter_html($formatted_key) . ": " . star_cloudprnt_filter_html($item_data["value"]));
 		}
 		
 		if($is_printed)	$printer->add_text_line("");
@@ -175,7 +179,7 @@
 			$printer->add_nv_logo(esc_attr(get_option('star-cloudprnt-print-logo-top-input')));
 
 		// Top of page Title
-		$title_text = "ORDER NOTIFICATION";
+		$title_text = get_option('star-cloudprnt-print-header-title');
 
 		// Set formatting for title
 		$printer->set_text_emphasized();
@@ -233,7 +237,7 @@
 	// Print info below items list
 	function star_cloudprnt_print_items_footer(&$printer, &$selectedPrinter, &$order, &$order_meta)
 	{
-		$item_footer_message = "All prices are inclusive of tax (if applicable).";
+		$item_footer_message = get_option('star-cloudprnt-print-items-footer-message');
 
 		$printer->add_new_line(1);
 		$printer->add_text_line(wordwrap($item_footer_message, $selectedPrinter['columns'], "\n", true));

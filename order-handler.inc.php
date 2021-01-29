@@ -5,7 +5,8 @@
    */
 
   mb_internal_encoding('utf-8');
-  
+	mb_regex_encoding("UTF-8");
+	
   function star_mb_str_pad($str, $pad_len, $pad_str = ' ', $dir = STR_PAD_RIGHT) {
     $str_len = mb_strlen($str);
     $pad_str_len = mb_strlen($pad_str);
@@ -34,6 +35,7 @@
    
     return $result;
 	}
+
 
   // Pad strings with spaces so that they column align across the indicated $max_chars characters
   // Note: recommended for 2 column layout only, since column padding is recalculated per line.
@@ -235,7 +237,8 @@
 
 			</script>
 
-			<a href="javascript: star_cloudprnt_trigger();"><span>Print with Star CloudPRNT</span></a> <span id="star_cp_job_sent" style="display:none">✔</span>
+			<a href="javascript: star_cloudprnt_trigger();"><span><span class="dashicons dashicons-printer"></span> Print with Star CloudPRNT</span></a>
+      <span id="star_cp_job_sent" style="display:none"><span class="dashicons dashicons-yes"></span></span>
 
 		<?php
 	}

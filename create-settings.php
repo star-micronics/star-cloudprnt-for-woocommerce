@@ -28,6 +28,8 @@
 		add_settings_field("star-cloudprnt-print-copies-input", "Copies", "star_cloudprnt_print_copies_input_display", "star_cloudprnt_setup", "star_cloudprnt_setup_section");  
 		
 		add_settings_section("star_cloudprnt_design_section", "Print Job Design Options", "star_cloudprnt_design_header", "star_cloudprnt_setup");
+		add_settings_field("star-cloudprnt-header", "Header", "star_cloudPRNT_header_settings_display", "star_cloudprnt_setup", "star_cloudprnt_design_section");
+		add_settings_field("star-cloudprnt-items", "Item List", "star_cloudPRNT_item_settings_display", "star_cloudprnt_setup", "star_cloudprnt_design_section");
 		add_settings_field("star-cloudprnt-order-fields", "Additional Order Fields", "star_cloudPRNT_order_fields_display", "star_cloudprnt_setup", "star_cloudprnt_design_section");
 		add_settings_field("star-cloudprnt-logo", "Logo", "star_cloudPRNT_print_logo_display", "star_cloudprnt_setup", "star_cloudprnt_design_section");
 
@@ -40,7 +42,12 @@
 
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-trigger", array("default" => $trigger_default));
 
+		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-header-title", array("default" => "ORDER NOTIFICATION"));
+
+		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-items-footer-message", array("default" => "All prices are inclusive of tax (if applicable)."));
+
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-order-meta-cb");
+		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-order-meta-reformat-keys", array("default" => "on"));
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-order-meta-hidden", array("default" => "off"));
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-order-meta-exclusions", array("default" => "is_vat_exempt,"));
 
@@ -144,12 +151,31 @@
 		<?php
 	}
 
+	function star_cloudPRNT_header_settings_display()
+	{
+		?>
+			<label>Receipt Title</label><br/>
+			<input type="text" name="star-cloudprnt-print-header-title" size=60 value="<?php echo get_option('star-cloudprnt-print-header-title') ?>">
+		<?php
+	}
+
+	function star_cloudPRNT_item_settings_display()
+	{
+		?>
+			<label>Item list footer message</label><br/>
+			<textarea type="text" name="star-cloudprnt-print-items-footer-message" cols=60 rows=4><?php echo get_option('star-cloudprnt-print-items-footer-message') ?></textarea>
+		<?php
+	}
+
+
 	function star_cloudPRNT_order_fields_display()
 	{
 		?>
 			<input type="checkbox" name="star-cloudprnt-print-order-meta-cb" value="on" <?php checked(get_option('star-cloudprnt-print-order-meta-cb'), 'on', true) ?> >
 			<label>Print additional order meta-data, such as custom fields.</label>
 			<div style="padding-left: 7mm">
+				<input type="checkbox" name="star-cloudprnt-print-order-meta-reformat-keys" value="on" <?php checked(get_option('star-cloudprnt-print-order-meta-reformat-keys'), 'on', true) ?> >
+				<label>Re-format key names (e.g. print "delivery_time" as "Delivery Time")</label><br/>
 				<input type="checkbox" name="star-cloudprnt-print-order-meta-hidden" value="on" <?php checked(get_option('star-cloudprnt-print-order-meta-hidden'), 'on', true) ?> >
 				<label>Include hidden fields</label><br/>
 				<br/><label>Exclude items with these key names (',' separated)</label><br/>
