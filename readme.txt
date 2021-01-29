@@ -53,6 +53,8 @@ Supported printer models are:
 * Star TSP800II with HIX interface (currently limited to 80mm paper width support)
 * Star SP700 with HIX interface
 
+Version 3.0 firmware or later is recommended for mC-Print printer models.
+
 = Can I print my local language characters? =
 
 Yes, you can enable UTF-8 text encoding if you have a compatible printer model to resolve typical language specific character issues.
@@ -60,6 +62,9 @@ Please use the plugin settings page to enable UTB-8 mode.
 
 Models with UTF-8 support are the TSP650II, mC-Print3 and mC-Print2. 
 These printers cover most Latin, Cyrilic, Greek and CJK characters, although not all characters can be supported by all device models and for TSP654II a firmware update may be required. Please talk with Star for advice if necessary.
+Support for full-width CJK characters is partial. They are supported but there may be page formatting and word wrapping errors.
+
+There is currently no support for printing right-to-left languages in this plugin. If this is required, please talkw with Star about alternative integration options.
 
 = Can I modify the print job design/layout? =
 
