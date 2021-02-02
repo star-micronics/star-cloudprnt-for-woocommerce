@@ -212,9 +212,9 @@
 	}
 	
 	// Setup document headers, these headers apply for all requests.
-	header("Cache-Control: no-cache, no-store, must-revalidate");
+	header("Cache-Control: max-age=0, no-cache, no-store, must-revalidate");
 	header("Pragma: no-cache");
-	header("Expires: 0");
+	header("Expires: Thu, 01 Jan 1970 00:00:00 GMT");
 	
 	if (!is_dir(STAR_CLOUDPRNT_DATA_FOLDER_PATH)) mkdir(STAR_CLOUDPRNT_DATA_FOLDER_PATH, 0755);
 	if (!is_dir(STAR_CLOUDPRNT_PRINTER_PENDING_SAVE_PATH)) mkdir(STAR_CLOUDPRNT_PRINTER_PENDING_SAVE_PATH, 0755);
