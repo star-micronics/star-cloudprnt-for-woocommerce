@@ -118,6 +118,7 @@ This means that you printer is unable to connect with your server, and can have 
 * Add a settings link to the plugins WordPress plugins page
 * Add support for printing order item metadata - compatible with many Add-Ons plugins
 * Add support for printing order metadata - compatible with many delivery scheduling plugins and others that append fields to an order
+* Add a setting to support multiple copies
 * Display a warning when WooCommerce can not be detected, instead of refusing to work completely, because the detection can fail in case of some custom WooCommerce installs.
 * Improve Timestamp display to match the site formatting local and site timezone - instead of server timezone
 * Refactor the source, to make it more approachable to developers who fork the project
