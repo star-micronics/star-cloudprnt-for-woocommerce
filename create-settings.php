@@ -127,6 +127,7 @@
 			echo '</select>';
 			
 			echo '<a href="javascript: void(0);" onclick="star_cloudprnt_load_printer_settings()" style="margin-left: 10px">Edit</a>';
+			
 		}
 	}
 	
@@ -234,10 +235,13 @@
 			</style>
 		<?php
 
+		$plugin_data = get_plugin_data(plugin_dir_path(__FILE__).star_cloudprnt_get_os_path('star-cloudprnt-for-woocommerce.php'));
+
 		echo '<div class="wrap">';
 			echo '<img src="'.plugins_url('images/logo.png', __FILE__).'">';
 				echo '<h1>Star CloudPRNT for WooCommerce Settings</h1>';
-
+				echo '<h2>Version ' . $plugin_data['Version'] . '</h2>';
+				
 				if (!star_cloudprnt_is_woo_activated())
 				{
 					echo '<br><span style="color: red"><span class="dashicons dashicons-no"></span>Warning: Unable to detect WooCommerce plugin.<br/>This can sometimes occur, if the plugin has been installed to a custom folder. If you are certain that WooCommerce is installed and functioning, then you can safely ignore this warning</span>';

@@ -113,12 +113,13 @@ This means that you printer is unable to connect with your server, and can have 
 = 2.0.0 =
 * Make printing trigger method user configurable
 * Clean-up settings page design
-* Added a setting to list custom fields that should be excluded from printing
+* Add a setting to list custom fields that should be excluded from printing
 * Add a "Print with Star CloudPRNT" button to the Edit Order page sidebar
 * Add a settings link to the plugins WordPress plugins page
 * Add support for printing order item metadata - compatible with many Add-Ons plugins
 * Add support for printing order metadata - compatible with many delivery scheduling plugins and others that append fields to an order
 * Add a setting to support multiple copies
+* Add support for setting an alterntaive print name for products by adding a "star_cp_print_name" attribute
 * Display a warning when WooCommerce can not be detected, instead of refusing to work completely, because the detection can fail in case of some custom WooCommerce installs.
 * Improve Timestamp display to match the site formatting local and site timezone - instead of server timezone
 * Refactor the source, to make it more approachable to developers who fork the project
