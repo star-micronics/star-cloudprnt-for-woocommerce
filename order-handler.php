@@ -39,7 +39,6 @@
 				+floatval(wc_get_order_item_meta($item_id, "_line_tax", true));
 			
 			$item_price = floatval($item_total_price) / intval($item_qty);
-			$currencyHex = star_cloudprnt_get_codepage_currency_symbol();
 			
 			if ($variation_id != 0)
 			{
@@ -50,8 +49,8 @@
 			if ($alt_name != "")
 				$product_name = $alt_name;
 			
-			$formatted_item_price = number_format($item_price, 2, '.', '');
-			$formatted_total_price = number_format($item_total_price, 2, '.', '');
+			$formatted_item_price = star_cloudprnt_format_currency($item_price);
+			$formatted_total_price = star_cloudprnt_format_currency($item_total_price);
 			
 			$printer->set_text_emphasized();
 			$printer->add_text_line(star_cloudprnt_filter_html($product_name." - ID: ".$product_id.""));
@@ -66,8 +65,8 @@
 			}
 			
 			$printer->add_text_line(star_cloudprnt_get_column_separated_data(array(" Qty: ".
-						$item_qty." x Cost: ".$currencyHex.$formatted_item_price,
-						$currencyHex.$formatted_total_price), $max_chars));
+						$item_qty." x Cost: ".$formatted_item_price,
+						$formatted_total_price), $max_chars));
 		}
 	}
 	
@@ -227,10 +226,24 @@
 	// Print totals
 	function star_cloudprnt_print_item_totals(&$printer, &$selectedPrinter, &$order, &$order_meta)
 	{
+
+		// Annonymous helper function used to format the total lines
+		$ft = function($text, $value) use ($printer) {
+			$formatted_value = star_cloudprnt_format_currency($value);
+			$printer->add_text_line(
+				star_mb_str_pad($text, 15)
+				. star_mb_str_pad($formatted_value, 10, " ", STR_PAD_LEFT)
+				);
+		};
+
 		$printer->add_new_line(1);
 		$printer->set_text_right_align();
-		$formatted_overall_total_price = number_format($order_meta['_order_total'][0], 2, '.', '');
-		$printer->add_text_line("TOTAL     ".star_cloudprnt_get_codepage_currency_symbol().$formatted_overall_total_price);
+
+		if($order_meta['_cart_discount'][0] != 0)
+			$ft("DISCOUNT", -$order_meta['_cart_discount'][0]);
+
+		$ft("TOTAL", $order_meta['_order_total'][0]);
+
 		$printer->set_text_left_align();
 	}
 

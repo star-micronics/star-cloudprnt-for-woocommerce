@@ -97,6 +97,12 @@
 		return star_cloudprnt_filter_html($symbol);
 	}
 	
+	// Format a float value as a currency string
+	function star_cloudprnt_format_currency($value)
+	{
+		return star_cloudprnt_get_codepage_currency_symbol() . number_format($value, 2, '.', '');
+	}
+
   // Convert html data to printer ready text. Note that this preserves no formatting, all tags are stripped
   // and newlines removed, it is intended for printing field names/values.
 	function star_cloudprnt_filter_html($data)
