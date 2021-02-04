@@ -70,6 +70,39 @@
 		}
 	}
 	
+	// Print information about any used coupons
+	function star_cloudprnt_print_coupon_info(&$printer, &$selectedPrinter, &$order, &$order_meta)
+	{
+		$max_chars = $selectedPrinter['columns'];
+		$coupons = $order->get_coupon_codes();
+
+		if(empty($coupons))
+			return;
+
+		$printer->add_text_line("");
+
+		foreach($coupons as $coupon_code)
+		{
+			$coupon = new WC_Coupon($coupon_code);
+			$coupon_type = $coupon->get_discount_type();
+			$coupon_value = "";
+
+			error_log("Coupon Type: " . $coupon_type);
+
+			if($coupon_type == "fixed_cart")
+				$coupon_value = star_cloudprnt_get_codepage_currency_symbol() . number_format(-$coupon->get_amount(), 2, '.', '');
+			elseif ($coupon_type == "percent")
+				$coupon_value = '-' . $coupon->get_amount() . '%';
+
+			$printer->add_text_line(
+				star_cloudprnt_get_column_separated_data(
+					array("Coupon: " . $coupon_code,
+					$coupon_value), 
+				$max_chars));
+		}
+		
+	}
+
 	// Generate the Additional Order info section, which prints extra fields that are attached to the order
 	// Such as delivery times etc.
 	function star_cloudprnt_print_additional_order_info(&$printer, &$selectedPrinter, &$order, &$order_meta)
@@ -305,6 +338,7 @@
 		
 		star_cloudprnt_print_items_header($printer, $selectedPrinter, $order, $order_meta);
 		star_cloudprnt_print_items($printer, $selectedPrinter, $order, $order_meta);
+		star_cloudprnt_print_coupon_info($printer, $selectedPrinter, $order, $order_meta);
 		star_cloudprnt_print_item_totals($printer, $selectedPrinter, $order, $order_meta);
 		star_cloudprnt_print_items_footer($printer, $selectedPrinter, $order, $order_meta);
 		
