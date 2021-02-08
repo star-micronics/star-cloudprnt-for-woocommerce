@@ -275,6 +275,9 @@
 		if($order_meta['_cart_discount'][0] != 0)
 			$ft("DISCOUNT", -$order_meta['_cart_discount'][0]);
 
+		if(array_key_exists("_wpslash_tip", $order_meta))
+			$ft("TIP", $order_meta['_wpslash_tip'][0]);
+
 		$ft("TOTAL", $order_meta['_order_total'][0]);
 
 		$printer->set_text_left_align();
