@@ -87,8 +87,6 @@
 			$coupon_type = $coupon->get_discount_type();
 			$coupon_value = "";
 
-			error_log("Coupon Type: " . $coupon_type);
-
 			if($coupon_type == "fixed_cart")
 				$coupon_value = star_cloudprnt_get_codepage_currency_symbol() . number_format(-$coupon->get_amount(), 2, '.', '');
 			elseif ($coupon_type == "percent")
@@ -331,8 +329,12 @@
 		// Get the correct object for building commands for the selected printer
 		$printer = star_cloudprnt_command_generator($selectedPrinter, $file);
 		
-		// Ask the priter to use the correct text encoding
+		// Ask the printer to use the correct text encoding
 		$printer->set_codepage(get_option('star-cloudprnt-printer-encoding-select'));
+
+		// Sound a buzzer if it is connected - for 500ms
+		if(get_option("star-cloudprnt-buzzer-start") == "on")
+			$printer->sound_buzzer(1, 500, 100);
 
 		/*
 		 *		Generate printer receipt/ticket data
@@ -350,6 +352,12 @@
 		star_cloudprnt_print_customer_notes($printer, $selectedPrinter, $order, $order_meta);
 
 		star_cloudprnt_print_receipt_footer($printer, $selectedPrinter, $order, $order_meta);
+
+		$printer->cut();
+
+		// Sound a buzzer if it is connected - for 500ms
+		if(get_option("star-cloudprnt-buzzer-end") == "on")
+			$printer->sound_buzzer(1, 500, 100);
 
 		// Get the number of copies from the settings
 		$copies=intval(get_option("star-cloudprnt-print-copies-input"));

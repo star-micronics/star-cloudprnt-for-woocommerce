@@ -127,11 +127,34 @@
 			}
 		}
 		
+		public function sound_buzzer($circuit, $pulse_ms, $delay_ms)
+		{
+			$circuit = intval($circuit);
+			if($circuit < 1) $circuit = 1;
+			if($circuit > 2) $circuit = 2;
+			
+			$pulse_param = $pulse_ms / 20;
+			$delay_param = $delay_ms / 20;
+			
+			if($pulse_param <= 0) $pulse_param = 0;
+			if($pulse_param >= 255) $pulse_param = 255;
+			
+			if($delay_param <= 0) $delay_param = 0;
+			if($delay_param >= 255) $pulse_param = 255;
+			
+			$command = sprintf("1B1D07%02X%02X%02X", $circuit, $pulse_param, $delay_param);
+			$this->printJobBuilder .= $command;
+		}
+		
+		public function cut()
+		{
+			$this->printJobBuilder .= self::SLM_FEED_PARTIAL_CUT_HEX;
+		}
+
 		public function printjob($copies)
 		{
 			$fh = fopen($this->tempFilePath, 'w');
-			fwrite($fh, hex2bin($this->printJobBuilder.self::SLM_FEED_PARTIAL_CUT_HEX));
-			//fwrite($fh, hex2bin($this->printJobBuilder));
+			fwrite($fh, hex2bin($this->printJobBuilder));
 			fclose($fh);
 			star_cloudprnt_queue_add_print_job($this->printerMac, $this->tempFilePath, $copies);
 			unlink($this->tempFilePath);

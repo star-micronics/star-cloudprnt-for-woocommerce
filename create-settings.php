@@ -27,6 +27,8 @@
 
 		add_settings_field("star-cloudprnt-print-copies-input", "Copies", "star_cloudprnt_print_copies_input_display", "star_cloudprnt_setup", "star_cloudprnt_setup_section");  
 		
+		add_settings_field("star-cloudprnt-buzzer", "Buzzer", "star_cloudprnt_buzzer_display", "star_cloudprnt_setup", "star_cloudprnt_setup_section");
+
 		add_settings_section("star_cloudprnt_design_section", "Print Job Design Options", "star_cloudprnt_design_header", "star_cloudprnt_setup");
 		add_settings_field("star-cloudprnt-header", "Header", "star_cloudPRNT_header_settings_display", "star_cloudprnt_setup", "star_cloudprnt_design_section");
 		add_settings_field("star-cloudprnt-items", "Item List", "star_cloudPRNT_item_settings_display", "star_cloudprnt_setup", "star_cloudprnt_design_section");
@@ -55,6 +57,9 @@
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-logo-top-input");
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-logo-bottom-cb");
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-logo-bottom-input");
+
+		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-buzzer-start", array("default" => ""));
+		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-buzzer-end", array("default" => ""));
 	}
 	
 	function star_cloudprnt_menu_item()
@@ -211,6 +216,16 @@
 			<p><strong>Note:</strong> logos should be written to printer FlashROM memory, using a suitable tool, such as the
 		   StarPRNT Software for Windows, which can be downloaded from the <a href="http://starmicronics.com/support/Default.aspx">Star global downlad site</p>
 			
+		<?php
+	}
+
+	function star_cloudprnt_buzzer_display()
+	{
+		?>
+			<input type="checkbox" name="star-cloudprnt-buzzer-start" value="on" <?php checked(get_option('star-cloudprnt-buzzer-start'), 'on', true) ?> >
+			<label>Sound  external buzzer before printing</label><br/>
+			<input type="checkbox" name="star-cloudprnt-buzzer-end" value="on" <?php checked(get_option('star-cloudprnt-buzzer-end'), 'on', true) ?> >
+			<label>Sound  external buzzer after printing</label><br/>
 		<?php
 	}
 
