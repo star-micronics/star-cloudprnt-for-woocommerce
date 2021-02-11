@@ -35,7 +35,7 @@ https://www.youtube.com/watch?v=2O3pZJ-kfqk
 = Minimum Requirements =
 * PHP 7.2 or greater.
 * WordPress 5.0.x, 5.1.x, 5.3.x, 5.4.x, 5.5.x or 5.6.0.
-* WooCommerce plugin 4.0.X, 4.1.x, 4.2.x, 4.3.x, 4.4.x, 4.5.x, 4.6.x, 4.7.x, 4.8.x or 4.9.x.
+* WooCommerce plugin 4.0.X, 4.1.x, 4.2.x, 4.3.x, 4.4.x, 4.5.x, 4.6.x, 4.7.x, 4.8.x, 4.9.x, 5.0.x
 * Star TSP650II, TSP700II, TSP800II or SP700 series printer with a IFBD-HI01X/HI02X interface. Printer interface firmware 1.6 or later recommended.
 * Star mC-Print3 or mC-Print2 series printer, firmware version 3.0 or later recommended.
 

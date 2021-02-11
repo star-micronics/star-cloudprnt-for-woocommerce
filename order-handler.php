@@ -162,7 +162,7 @@
 		$lname = $gkv('_shipping_last_name');
 		$a1 = $gkv('_shipping_address_1');
 		$a2 = $gkv('_shipping_address_2');
-		$city = $gkv('_shipping_citye', $order_meta);
+		$city = $gkv('_shipping_city');
 		$state = $gkv('_shipping_state');
 		$postcode = $gkv('_shipping_postcode');
 		$tel = $gkv('_billing_phone');
