@@ -1,8 +1,8 @@
 === Star CloudPRNT for WooCommerce ===
 Contributors: lawrenceowen, athompson1, gcubero, fmahmood
 Tags: star, printing, printers, automated, e-commerce, store, sales, downloadable, downloads, woocommerce, restaurant, order, receipt
-Requires at least: 5.0.0
-Tested up to: 5.6.0
+Requires at least: 5.0
+Tested up to: 5.6
 Requires PHP: 7.2
 Stable tag: 2.0.0
 License: MIT
