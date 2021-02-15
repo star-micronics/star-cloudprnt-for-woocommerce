@@ -1,6 +1,28 @@
 <?php
 	include_once('cloudprnt_conf.inc.php');
 	
+	// Generate the correct printer dcommand driver class for the specified job format
+	function star_cloudprnt_command_generator(&$selectedPrinter, &$file)
+	{
+		$printer = NULL;
+		$format = $selectedPrinter['format'];
+		
+		if ($format == "txt") {	
+			$printer = new Star_CloudPRNT_Text_Plain_Job($selectedPrinter, $file);					// Plain text output only
+		} else if ($format == "slt") {
+			$printer = new Star_CloudPRNT_Star_Line_Mode_Job($selectedPrinter, $file);			// Star Line Mode for Thermal Printers
+		} else if ($format == "slm") {
+			$printer = new Star_CloudPRNT_Star_Line_Mode_Job($selectedPrinter, $file);			// Star Line Mode for Dot-Matrix printers
+		} else if ($format == "spt") {
+			$printer = new Star_CloudPRNT_Star_Prnt_Job($selectedPrinter, $file);						// StarPRNT
+			
+		} else {
+			$printer = new Star_CloudPRNT_Text_Plain_Job($selectedPrinter, $file);					// Fall back to plain text
+		}
+
+		return $printer;
+	}	
+
 	// Returns file friendly name for the printer mac address
 	function star_cloudprnt_get_printer_folder($printerMac)
 	{

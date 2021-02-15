@@ -1,12 +1,11 @@
 === Star CloudPRNT for WooCommerce ===
 Contributors: lawrenceowen, athompson1, gcubero, fmahmood
 Tags: star, printing, printers, automated, e-commerce, store, sales, downloadable, downloads, woocommerce, restaurant, order, receipt
-Requires at least: 5.0.0
-Tested up to: 5.5.1
+Requires at least: 5.0
+Tested up to: 5.6
 Requires PHP: 7.2
-Stable tag: 1.2.0
+Stable tag: 2.0.0
 License: MIT
-License URI:
 
 Star CloudPRNT for WooCommerce enables Cloud printing technology with your Star Receipt printer.
 
@@ -35,12 +34,11 @@ https://www.youtube.com/watch?v=2O3pZJ-kfqk
 
 = Minimum Requirements =
 * PHP 7.2 or greater.
-* WordPress 5.0.x, 5.1.x, 5.3.x, 5.4.x or 5.5.x.
-* WooCommerce plugin 4.0.X, 4.1.x, 4.2.x, 4.3.x, 4.4.x or 4.5.x.
+* WordPress 5.0.x, 5.1.x, 5.3.x, 5.4.x, 5.5.x or 5.6.0.
+* WooCommerce plugin 4.0.X, 4.1.x, 4.2.x, 4.3.x, 4.4.x, 4.5.x, 4.6.x, 4.7.x, 4.8.x, 4.9.x, 5.0.x
 * Star TSP650II, TSP700II, TSP800II or SP700 series printer with a IFBD-HI01X/HI02X interface. Printer interface firmware 1.6 or later recommended.
 * Star mC-Print3 or mC-Print2 series printer, firmware version 3.0 or later recommended.
-* Now display a warning when WooCommerce can not be detected, instead of refusing to work completely, because the detection can fail in case of some Custom WooCommerce installs.
-* Improve Timestamp display to match the site formatting local and site timezone (instead of server timezone)
+
 
 == Frequently Asked Questions ==
  
@@ -55,6 +53,8 @@ Supported printer models are:
 * Star TSP800II with HIX interface (currently limited to 80mm paper width support)
 * Star SP700 with HIX interface
 
+Version 3.0 firmware or later is recommended for mC-Print printer models.
+
 = Can I print my local language characters? =
 
 Yes, you can enable UTF-8 text encoding if you have a compatible printer model to resolve typical language specific character issues.
@@ -62,10 +62,13 @@ Please use the plugin settings page to enable UTB-8 mode.
 
 Models with UTF-8 support are the TSP650II, mC-Print3 and mC-Print2. 
 These printers cover most Latin, Cyrilic, Greek and CJK characters, although not all characters can be supported by all device models and for TSP654II a firmware update may be required. Please talk with Star for advice if necessary.
+Support for full-width CJK characters is partial. They are supported but there may be page formatting and word wrapping errors.
+
+There is currently no support for printing right-to-left languages in this plugin. If this is required, please talkw with Star about alternative integration options.
 
 = Can I modify the print job design/layout? =
 
-At this time, modifying the print job layout is possible only by directly editing the plugin PHP source code. This is entirely permitted by the GPLv3 license terms.
+At this time, modifying the print job layout is possible only by directly editing the plugin PHP source code. This is entirely permitted by the license terms.
 Your local Star Micronics support contact may be able to offer some assistance.
 
 = How can I add an image to the top or end of my print? =
@@ -73,50 +76,54 @@ Your local Star Micronics support contact may be able to offer some assistance.
 Images must be pre-stored inside the printer FlashROM memory in order to be printed bu this plugin. Once stored, they will have logo number/id, which can be input into the "Printer Logo Settings" settings area to enable top and/or bottom logo printing.
 Storing images inside the Print FlashROM is possible with a software utility provided by Star Micronics, included with the standard indows driver package. These can be downloaded from the Star Micronics web site.
 
+= Sometimes orders do not print, or print later than expected =
+
+Please make sure that you update your plugin version to 2.0.0 or later, and ensure that your printing trigger is not set to "Thank You", this method of detecting new orders is not considered to be reliable, and included only for compatibility with existing sites using older versions of the plugin.
+If issues continue, then please check the quality of your printers internet connection so that it can communicatw with your site. Star printers have a disconection message print option that can sometimes help to diagnose network connectivity issues. Please talk with your local Star Micronics support office if assistance is needed.
+
+= My printer does not appear on the "Selected Printer" dropdown list =
+
+This means that you printer is unable to connect with your server, and can have many potential causes:
+
+# As a first step, if you are using an mC-Print2 or mC-Print3 model printer, the please update your printer firmware to version 3.0 or later to ensure compatibility with web hosts that have stronger TLS encryption.
+  Firmware can be updated using the Star "mC-Print Utility" app, available via Google Play, or Apple App stores.
+
+# Check that the printer has a working outgoing internet connection. Star tech support may be able to help with this if needed.
+
+# Ensure that your your hosting does not have a traffic filter that may be blocking the printer from connecting to your web site or aggressively caching responses to your sites CloudPRNT URL. It may be necessary to ask your hosting provided to set up a rule to allow your printer to connect to your sites CloudPRNT URL. They must allow at least GET and POST requests without caching responses.
+
+
 == Screenshots ==
 1. Star CloudPRNT settings page.
 2. Printer management page.
 
 == Upgrade Notice ==
 
-= 1.2.0 =
-* Change print job trigger to the "Order Status Processing" event, instead of the "Thank You" event
+= 2.0.0 =
+* Make printing trigger method user configurable - can improve reliability
+* Support order and item metadata/custom field printing (Add-ons, delivery times etc.)
+* Extended receipt configuration
+* Print button on the edit order page
+
+= 1.1.0 = 
+* Add Support for Star mC-Print3 and mC-Print2 printer ranges
+
+== Changelog ==
+
+= 2.0.0 =
+* Make printing trigger method user configurable
+* Clean-up settings page design
+* Add a setting to list custom fields that should be excluded from printing
+* Add a "Print with Star CloudPRNT" button to the Edit Order page sidebar
+* Add a settings link to the plugins WordPress plugins page
 * Add support for printing order item metadata - compatible with many Add-Ons plugins
-* Add support for printing order metadata - compatible with some delivery scheduling plugins and others that append data to an order
+* Add support for printing order metadata - compatible with many delivery scheduling plugins and others that append fields to an order
+* Add a setting to support multiple copies
+* Add support for setting an alterntaive print name for products by adding a "star_cp_print_name" attribute
+* Display a warning when WooCommerce can not be detected, instead of refusing to work completely, because the detection can fail in case of some custom WooCommerce installs.
+* Improve Timestamp display to match the site formatting local and site timezone - instead of server timezone
+* Refactor the source, to make it more approachable to developers who fork the project
 * Drop support for WordPress versions earlier than 5.x.x
 * Drop support for WooCommerce verions earlier than 4.x.x
 * Drop support for PHP verions earlier than 7.2
 
-= 1.1.0 = 
-* Add Support for Star mC-Print3 and mC-Print2 printer ranges
-* Add support for UTF-8 text encoding
-* Enable text magnification.
-
-== Changelog ==
-1.1.2 - 2020-04-14
-- Work around an issue that prevents printing to thermal printer models with HIX Connect interface that has earlier firmware. In this situation, the plugin will now follow the same logic as 1.0.x plugin releases.
-
-1.1.1 - 2020-04-06
-- Add support for WordPress 5.4.X
-
-1.1.0 - 2020-03-26
-- Support mC-Print31 and mC-Print21 printer models
-- Enable Unicode characters sets on supported printer models (TSP654II, mC-Print31, mC-Print21)
-- Support character magnification
-- Tested with WordPress up to version 5.3.2 and WooCommerce 4.0.X
-
-1.0.3 - 2018-06-19
-- Replaced HTTP DELETE requests with HTTP GET requests, due to some servers not supporting this method.
-- Fixed bug where print job is lost after failed HTTP GET request.
-- Added support for Wordpress 4.9.X (tested up to 4.9.6).
-- Changed recommended printer interface firmware to 1.4 or greater.
-
-1.0.2 - 2017-06-27
-- Added order history feature to log printed orders.
-- Added support for WordPress 4.8.0 and WooCommerce 3.0.X.
-
-1.0.1 - 2017-04-28
-- Bug fixes.
-
-1.0.0 - 2017-04-06
-- Initial release.
