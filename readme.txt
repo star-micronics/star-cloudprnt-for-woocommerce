@@ -4,7 +4,7 @@ Tags: star, printing, printers, automated, e-commerce, store, sales, downloadabl
 Requires at least: 5.0
 Tested up to: 5.6
 Requires PHP: 7.2
-Stable tag: 2.0.0
+Stable tag: 2.0.1
 License: MIT
 
 Star CloudPRNT for WooCommerce enables Cloud printing technology with your Star Receipt printer.
@@ -85,12 +85,12 @@ If issues continue, then please check the quality of your printers internet conn
 
 This means that you printer is unable to connect with your server, and can have many potential causes:
 
-# As a first step, if you are using an mC-Print2 or mC-Print3 model printer, the please update your printer firmware to version 3.0 or later to ensure compatibility with web hosts that have stronger TLS encryption.
+  As a first step, if you are using an mC-Print2 or mC-Print3 model printer, the please update your printer firmware to version 3.0 or later to ensure compatibility with web hosts that have stronger TLS encryption.
   Firmware can be updated using the Star "mC-Print Utility" app, available via Google Play, or Apple App stores.
 
-# Check that the printer has a working outgoing internet connection. Star tech support may be able to help with this if needed.
+  Check that the printer has a working outgoing internet connection. Star tech support may be able to help with this if needed.
 
-# Ensure that your your hosting does not have a traffic filter that may be blocking the printer from connecting to your web site or aggressively caching responses to your sites CloudPRNT URL. It may be necessary to ask your hosting provided to set up a rule to allow your printer to connect to your sites CloudPRNT URL. They must allow at least GET and POST requests without caching responses.
+  Ensure that your your hosting does not have a traffic filter that may be blocking the printer from connecting to your web site or aggressively caching responses to your sites CloudPRNT URL. It may be necessary to ask your hosting provided to set up a rule to allow your printer to connect to your sites CloudPRNT URL. They must allow at least GET and POST requests without caching responses.
 
 
 == Screenshots ==
@@ -109,6 +109,12 @@ This means that you printer is unable to connect with your server, and can have 
 * Add Support for Star mC-Print3 and mC-Print2 printer ranges
 
 == Changelog ==
+
+= 2.0.1 =
+* Do not print any blank lines if the items footer text is empty
+* Add some mailchimp metadata key names to the defailt exclusions list
+* Change the timing for registering settings, to avoid reported issue with accessing settings with their default value.
+* Remove all settings when uninstalled
 
 = 2.0.0 =
 * Make printing trigger method user configurable

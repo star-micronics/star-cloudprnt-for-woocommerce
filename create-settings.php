@@ -8,14 +8,6 @@
 
 	function star_cloudprnt_settings()
 	{
-
-		/* Attempt to set the default print job trigger to "status_processing" for new installs, but "thankyou" for sites that have
-		   already been running with the plugin - to avoid potentially breaking thos sites after upgrading the plugin, since some sites use
-			 other plugins to change the default order status.
-			 */
-		$trigger_default = "status_processing";						// Recommended default for new sites, at which time users can choose another option if preferred
-		if(get_option('star-cloudprnt-select') != "")
-			$trigger_default = "thankyou";
 		
 		add_settings_section("star_cloudprnt_setup_section", "CloudPRNT Setup", "star_cloudprnt_setup_section_info", "star_cloudprnt_setup");
 		add_settings_field("star-cloudprnt-select", "CloudPRNT", "star_cloudprnt_select_display", "star_cloudprnt_setup", "star_cloudprnt_setup_section");  
@@ -35,6 +27,17 @@
 		add_settings_field("star-cloudprnt-order-fields", "Additional Order Fields", "star_cloudPRNT_order_fields_display", "star_cloudprnt_setup", "star_cloudprnt_design_section");
 		add_settings_field("star-cloudprnt-logo", "Logo", "star_cloudPRNT_print_logo_display", "star_cloudprnt_setup", "star_cloudprnt_design_section");
 
+	}
+	
+	function star_cloudprnt_register_settings()
+	{
+		/* Attempt to set the default print job trigger to "status_processing" for new installs, but "thankyou" for sites that have
+		   already been running with the plugin - to avoid potentially breaking thos sites after upgrading the plugin, since some sites use
+			 other plugins to change the default order status.
+			 */
+			$trigger_default = "status_processing";						// Recommended default for new sites, at which time users can choose another option if preferred
+			if(get_option('star-cloudprnt-select') != false)
+				$trigger_default = "thankyou";
 
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-select");
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-printer-select");
@@ -51,7 +54,7 @@
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-order-meta-cb");
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-order-meta-reformat-keys", array("default" => "on"));
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-order-meta-hidden", array("default" => "off"));
-		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-order-meta-exclusions", array("default" => "is_vat_exempt,"));
+		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-order-meta-exclusions", array("default" => "is_vat_exempt, mailchimp_woocommerce_campaign_id, mailchimp_woocommerce_landing_site"));
 
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-logo-top-cb");
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-logo-top-input");
@@ -61,7 +64,8 @@
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-buzzer-start", array("default" => ""));
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-buzzer-end", array("default" => ""));
 	}
-	
+
+
 	function star_cloudprnt_menu_item()
 	{
 		add_submenu_page("options-general.php", "Star CloudPRNT for WooCommerce", "Star CloudPRNT for WooCommerce", "manage_options", "star-cloudprnt-settings-admin", "star_cloudprnt_page"); 

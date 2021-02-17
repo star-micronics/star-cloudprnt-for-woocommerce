@@ -167,6 +167,8 @@
 		$postcode = $gkv('_shipping_postcode');
 		$tel = $gkv('_billing_phone');
 		
+		$printer->add_new_line(1);
+
 		$printer->set_text_emphasized();
 		if ($a1 == '')
 		{
@@ -286,9 +288,12 @@
 	{
 		$item_footer_message = get_option('star-cloudprnt-print-items-footer-message');
 
+		if(empty($item_footer_message))
+			return;
+
 		$printer->add_new_line(1);
 		$printer->add_text_line(wordwrap($item_footer_message, $selectedPrinter['columns'], "\n", true));
-		$printer->add_new_line(1);
+		
 	}
 
 	// Print info below items list
