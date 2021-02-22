@@ -28,4 +28,23 @@
 	delete_option('star-cloudprnt-print-logo-top-input');
 	delete_option('star-cloudprnt-print-logo-bottom-cb');
 	delete_option('star-cloudprnt-print-logo-bottom-input');
+
+	delete_option("star-cloudprnt-printer-encoding-select");
+	delete_option("star-cloudprnt-print-copies-input");
+
+	delete_option("star-cloudprnt-trigger");
+
+	delete_option("star-cloudprnt-print-header-title");
+
+	delete_option("star-cloudprnt-print-items-footer-message");
+
+	delete_option("star_cloudprnt_setup_section");
+	delete_option("star-cloudprnt-print-order-meta-reformat-keys");
+	delete_option("star-cloudprnt-print-order-meta-hidden");
+	delete_option("star-cloudprnt-print-order-meta-exclusions");
+
+	delete_option("star-cloudprnt-buzzer-start");
+	delete_option( "star-cloudprnt-buzzer-end");
+
+
 ?>
