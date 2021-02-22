@@ -111,7 +111,7 @@ This means that you printer is unable to connect with your server, and can have 
 == Changelog ==
 
 = 2.0.1 =
-* Do not print any blank lines if the items footer text is empty
+* Do not print any blank lines when the title, or item footer text is empty
 * Add some mailchimp metadata key names to the defailt exclusions list
 * Change the timing for registering settings, to avoid reported issue with accessing settings with their default value.
 * Remove all settings when uninstalled

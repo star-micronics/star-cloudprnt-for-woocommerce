@@ -131,6 +131,7 @@
 			if(! $is_printed)
 			{
 				$is_printed = true;
+				$printer->add_text_line("");
 				$printer->set_text_emphasized();
 				$printer->add_text_line("Additional Order Information");
 				$printer->cancel_text_emphasized();
@@ -143,7 +144,7 @@
 			$printer->add_text_line(star_cloudprnt_filter_html($formatted_key) . ": " . star_cloudprnt_filter_html($item_data["value"]));
 		}
 		
-		if($is_printed)	$printer->add_text_line("");
+		//if($is_printed)	$printer->add_text_line("");
 	}
 
 	// Print the address secion - currently this prints the shipping address if present, otherwise
@@ -213,21 +214,25 @@
 		// Top of page Title
 		$title_text = get_option('star-cloudprnt-print-header-title');
 
-		// Set formatting for title
-		$printer->set_text_emphasized();
-		$printer->set_text_center_align();
-		$printer->set_font_magnification(2, 2);
+		if(!empty($title_text))
+		{
+			// Set formatting for title
+			$printer->set_text_emphasized();
+			$printer->set_text_center_align();
+			$printer->set_font_magnification(2, 2);
 
-		// Printthe title - word wrapped (NOTE - php wordwrap() is not multi-byte aware, and definitely not half/full width character aware)
-		$printer->add_text_line(wordwrap($title_text, $selectedPrinter['columns']/2, "\n", true)); // Columns are divided by 2 because we are using double width characters.
+			// Printthe title - word wrapped (NOTE - php wordwrap() is not multi-byte aware, and definitely not half/full width character aware)
+			$printer->add_text_line(wordwrap($title_text, $selectedPrinter['columns']/2, "\n", true)); // Columns are divided by 2 because we are using double width characters.
 
-		// Reset text formatting
-		$printer->set_text_left_align();
-		$printer->cancel_text_emphasized();
-		$printer->set_font_magnification(1, 1);
+			// Reset text formatting
+			$printer->set_text_left_align();
+			$printer->cancel_text_emphasized();
+			$printer->set_font_magnification(1, 1);
+
+			$printer->add_new_line(1);
+		}
 
 		// Print sub-header
-		$printer->add_new_line(1);
 		$printer->add_text_line(star_cloudprnt_get_column_separated_data(
 			array(
 				"Order #".$order_number, 
