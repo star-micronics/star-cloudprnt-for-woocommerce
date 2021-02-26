@@ -142,7 +142,13 @@
 			if($delay_param <= 0) $delay_param = 0;
 			if($delay_param >= 255) $pulse_param = 255;
 			
-			$command = sprintf("1B1D07%02X%02X%02X", $circuit, $pulse_param, $delay_param);
+			//$command = sprintf("1B1D07%02X%02X%02X", $circuit, $pulse_param, $delay_param);
+
+			$command = sprintf("1B1D1911%02X%02X%02X", $circuit, $pulse_param, $delay_param)
+			 						. sprintf("1B1D1912%02X0100", $circuit);
+
+			//error_log("Command -> " . $command);
+
 			$this->printJobBuilder .= $command;
 		}
 		
