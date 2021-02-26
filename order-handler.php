@@ -204,6 +204,7 @@
 	function star_cloudprnt_print_receipt_header(&$printer, &$selectedPrinter, &$order, &$order_meta)
 	{
 		$order_number = $order->get_order_number();			// Displayed order number may be different to order_id when using some plugins
+		$shipping_items = @array_shift($order->get_items('shipping'));
 		$date_format = get_option( 'date_format' );
 		$time_format = get_option( 'time_format' );
 
@@ -244,10 +245,10 @@
 		$printer->add_text_line("Order Status: ".$order->get_status());
 		$order_date = date("{$date_format} {$time_format}", $order->get_date_created()->getOffsetTimestamp());
 		$printer->add_text_line("Order Date: {$order_date}");	
-		
+
+		$printer->add_new_line(1);
 		if (isset($shipping_items['name']))
 		{
-			$printer->add_new_line(1);
 			$printer->add_text_line("Shipping Method: ".$shipping_items['name']);
 		}
 		$printer->add_text_line("Payment Method: ".$order_meta['_payment_method_title'][0]);
