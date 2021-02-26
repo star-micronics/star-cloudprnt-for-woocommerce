@@ -204,6 +204,7 @@
 	function star_cloudprnt_print_receipt_header(&$printer, &$selectedPrinter, &$order, &$order_meta)
 	{
 		$order_number = $order->get_order_number();			// Displayed order number may be different to order_id when using some plugins
+		$shipping_items = @array_shift($order->get_items('shipping'));
 		$date_format = get_option( 'date_format' );
 		$time_format = get_option( 'time_format' );
 
