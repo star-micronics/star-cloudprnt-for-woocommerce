@@ -245,10 +245,10 @@
 		$printer->add_text_line("Order Status: ".$order->get_status());
 		$order_date = date("{$date_format} {$time_format}", $order->get_date_created()->getOffsetTimestamp());
 		$printer->add_text_line("Order Date: {$order_date}");	
-		
+
+		$printer->add_new_line(1);
 		if (isset($shipping_items['name']))
 		{
-			$printer->add_new_line(1);
 			$printer->add_text_line("Shipping Method: ".$shipping_items['name']);
 		}
 		$printer->add_text_line("Payment Method: ".$order_meta['_payment_method_title'][0]);

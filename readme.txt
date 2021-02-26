@@ -4,7 +4,7 @@ Tags: star, printing, printers, automated, e-commerce, store, sales, downloadabl
 Requires at least: 5.0
 Tested up to: 5.6
 Requires PHP: 7.2
-Stable tag: 2.0.1
+Stable tag: 2.0.2
 License: MIT
 
 Star CloudPRNT for WooCommerce enables Cloud printing technology with your Star Receipt printer.
@@ -109,6 +109,9 @@ This means that you printer is unable to connect with your server, and can have 
 * Add Support for Star mC-Print3 and mC-Print2 printer ranges
 
 == Changelog ==
+
+= 2.0.2 =
+* Fix missing "Shipping Method" from the receipt header.
 
 = 2.0.1 =
 * Do not print any blank lines when the title, or item footer text is empty
