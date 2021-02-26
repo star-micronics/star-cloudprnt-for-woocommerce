@@ -128,11 +128,11 @@ This means that you printer is unable to connect with your server, and can have 
 * Add support for printing order item metadata - compatible with many Add-Ons plugins
 * Add support for printing order metadata - compatible with many delivery scheduling plugins and others that append fields to an order
 * Add a setting to support multiple copies
-* Add support for setting an alterntaive print name for products by adding a "star_cp_print_name" attribute
+* Add support for setting an alternative print name for products by adding a "star_cp_print_name" attribute
 * Display a warning when WooCommerce can not be detected, instead of refusing to work completely, because the detection can fail in case of some custom WooCommerce installs.
 * Improve Timestamp display to match the site formatting local and site timezone - instead of server timezone
 * Refactor the source, to make it more approachable to developers who fork the project
 * Drop support for WordPress versions earlier than 5.x.x
-* Drop support for WooCommerce verions earlier than 4.x.x
-* Drop support for PHP verions earlier than 7.2
+* Drop support for WooCommerce versions earlier than 4.x.x
+* Drop support for PHP versions earlier than 7.2
 
