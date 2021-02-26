@@ -110,6 +110,9 @@ This means that you printer is unable to connect with your server, and can have 
 
 == Changelog ==
 
+= 2.0.3 =
+* Improve buzzer compatibility with mC-Print models.
+
 = 2.0.2 =
 * Fix missing "Shipping Method" from the receipt header.
 
