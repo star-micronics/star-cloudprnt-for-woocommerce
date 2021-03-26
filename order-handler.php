@@ -31,21 +31,25 @@
 			$variation_id = $item_data['variation_id'];
 			$product = wc_get_product($product_id);
 
+			$sku = $product->get_sku();
+
 			$alt_name = $product->get_attribute( 'star_cp_print_name' );				// Custom attribute can be used to override the product name on receipt
 
 			$item_qty = wc_get_order_item_meta($item_id, "_qty", true);
 			
 			$item_total_price = floatval(wc_get_order_item_meta($item_id, "_line_total", true))
 				+floatval(wc_get_order_item_meta($item_id, "_line_tax", true));
-			
-			$item_price = floatval($item_total_price) / intval($item_qty);
+
+			$item_price = $product->get_price();
 			
 			if ($variation_id != 0)
 			{
 				$product_variation = new WC_Product_Variation( $variation_id );
 				$product_name = $product_variation->get_title();
+				$sku = $product_variation->get_sku();
+				$item_price = $product_variation->get_price();
 			}
-
+			
 			if ($alt_name != "")
 				$product_name = $alt_name;
 			
