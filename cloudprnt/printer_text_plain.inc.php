@@ -107,6 +107,14 @@
 		{
 		}
 		
+		public function set_text_highlight()
+		{
+		}
+		
+		public function cancel_text_highlight()
+		{
+		}
+
 		public function add_qr_code($error_correction, $cell_size, $data)
 		{
 		}

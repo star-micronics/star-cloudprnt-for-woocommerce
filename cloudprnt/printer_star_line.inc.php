@@ -145,6 +145,16 @@
 			$this->printJobBuilder .= $command;
 		}
 		
+		public function set_text_highlight()
+		{
+			$this->printJobBuilder .= "1B34";
+		}
+		
+		public function cancel_text_highlight()
+		{
+			$this->printJobBuilder .= "1B35";
+		}
+
 		public function add_qr_code($error_correction, $cell_size, $data)
 		{
 			$model = 2;
