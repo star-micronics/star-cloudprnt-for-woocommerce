@@ -145,6 +145,29 @@
 			$this->printJobBuilder .= $command;
 		}
 		
+		public function add_qr_code($error_correction, $cell_size, $data)
+		{
+			$model = 2;
+			if($error_correction < 0) $error_correction = 0;
+			if($error_correction > 3) $error_correction = 3;
+      if($cell_size < 1) $cell_size = 1;
+			if($cell_size > 8) $cell_size = 8;
+			$data_length = strlen($data);
+
+			$set_model = sprintf("1B1D795330%02X", $model);
+			$set_error_level = sprintf("1B1D795331%02X", $error_correction);
+			$set_cell_size = sprintf("1B1D795332%02X", $cell_size);
+			$set_data_prefix = sprintf("1B1D79443100%02X%02X", fmod($data_length, 256), intval($data_length / 256));
+			$print = "1B1D7950";
+
+			$this->printJobBuilder .= $set_model
+															. $set_error_level
+															. $set_cell_size
+															. $set_data_prefix
+															. $this->str_to_hex($data)
+															. $print;
+		}
+
 		public function cut()
 		{
 			$this->printJobBuilder .= self::SLM_FEED_PARTIAL_CUT_HEX;

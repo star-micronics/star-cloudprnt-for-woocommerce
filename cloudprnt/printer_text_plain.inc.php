@@ -107,6 +107,10 @@
 		{
 		}
 		
+		public function add_qr_code($error_correction, $cell_size, $data)
+		{
+		}
+
 		public function cut()
 		{
 		}
