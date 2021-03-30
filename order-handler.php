@@ -56,8 +56,18 @@
 			$formatted_item_price = star_cloudprnt_format_currency($item_price);
 			$formatted_total_price = star_cloudprnt_format_currency($item_total_price);
 			
+			$product_info = "";
+			if(get_option('star-cloudprnt-print-items-print-id') == "on")
+				$product_info .= " - ID: " . $product_id;
+			if(get_option('star-cloudprnt-print-items-print-sku') == "on" && (! empty($sku)))
+				$product_info .= " - SKU: " . $sku;
+
+			//$product_info .= " Tax Class: " . $item_data->get_tax_class();
+
+			$product_line = star_cloudprnt_filter_html($product_name . $product_info);
+
 			$printer->set_text_emphasized();
-			$printer->add_text_line(star_cloudprnt_filter_html($product_name." - ID: ".$product_id.""));
+			$printer->add_text_line(wordwrap($product_line, $selectedPrinter['columns'], "\n", true));
 			$printer->cancel_text_emphasized();
 			
 			$meta = $item_data->get_formatted_meta_data("_", TRUE);

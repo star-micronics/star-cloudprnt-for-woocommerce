@@ -49,6 +49,9 @@
 
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-header-title", array("default" => "ORDER NOTIFICATION"));
 
+		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-items-print-id", array("default" => "on"));
+		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-items-print-sku", array("default" => "off"));
+
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-items-footer-message", array("default" => "All prices are inclusive of tax (if applicable)."));
 
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-order-meta-cb");
@@ -172,6 +175,13 @@
 	function star_cloudPRNT_item_settings_display()
 	{
 		?>
+			<input type="checkbox" name="star-cloudprnt-print-items-print-id" value="on" <?php checked(get_option('star-cloudprnt-print-items-print-id'), 'on', true) ?> >
+			<label>Include Item ID</label><br/>
+
+			<input type="checkbox" name="star-cloudprnt-print-items-print-sku" value="on" <?php checked(get_option('star-cloudprnt-print-items-print-sku'), 'on', true) ?> >
+			<label>Include Item SKU</label><br/>
+
+			<br/>
 			<label>Item list footer message</label><br/>
 			<textarea type="text" name="star-cloudprnt-print-items-footer-message" cols=60 rows=4><?php echo get_option('star-cloudprnt-print-items-footer-message') ?></textarea>
 		<?php
