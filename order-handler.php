@@ -265,7 +265,6 @@
 
 		// Print header info area
 		$printer->add_new_line(1);
-		//$printer->add_text_line("Order Status: ".$order->get_status());
 		$pw("Order Status: ".$order->get_status());
 		$order_date = date("{$date_format} {$time_format}", $order->get_date_created()->getOffsetTimestamp());
 		$pw("Order Date: {$order_date}");	

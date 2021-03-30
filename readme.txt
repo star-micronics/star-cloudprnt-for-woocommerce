@@ -117,6 +117,8 @@ This means that you printer is unable to connect with your server, and can have 
 * Enable word-wrapping when printing items, in case of very long item names
 * Enable Word-wrapping when printing header section fields, in case of long information on 58mm/2" paper
 * Format the sub-heading order number and print timestamp on tow lines, in case they can not fit side by side
+* Add (potentially not final) Qr Code, and Barcode printing methods to the printer command generation classes.
+  Not currently exposed as features but may be useful to anyone forking/modifying the plugin.
 
 = 2.0.2 =
 * Fix missing "Shipping Method" from the receipt header.
