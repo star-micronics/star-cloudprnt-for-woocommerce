@@ -143,13 +143,15 @@
 		}
 	}
 	
-	function star_cloudprnt_trigger_display()
+	function star_cloudprnt_trigger_display()  
 	{
 		?>
 			<input type="radio" name="star-cloudprnt-trigger" value="status_processing" <?php checked(get_option('star-cloudprnt-trigger'), 'status_processing', true) ?>>
 			<label>When an order is assigned the "processing" status (recommended for most sites)</label><br>
 			<input type="radio" name="star-cloudprnt-trigger" value="status_completed" <?php checked(get_option('star-cloudprnt-trigger'), 'status_completed', true) ?>>
 			<label>When an order is assigned the "completed" status</label><br>
+			<input type="radio" name="star-cloudprnt-trigger" value="status_on-hold" <?php checked(get_option('star-cloudprnt-trigger'), 'status_on-hold', true) ?>>
+			<label>When an order is assigned the "on hold" status</label><br>
 			<input type="radio" name="star-cloudprnt-trigger" value="thankyou" <?php checked(get_option('star-cloudprnt-trigger'), 'thankyou', true) ?>>
 			<label>When WooCommerce "Thank You" message is displayed (<span class="star_cp_caution">&#x26a0;</span> legacy option, not recommended)</label><br>
 			<input type="radio" name="star-cloudprnt-trigger" value="none" <?php checked(get_option('star-cloudprnt-trigger'), 'none', true) ?>>

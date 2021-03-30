@@ -282,7 +282,9 @@
 				add_action('woocommerce_order_status_processing', 'star_cloudprnt_trigger_print', 1, 1);
 			} elseif ($trigger === 'status_completed') {
 				add_action('woocommerce_order_status_completed', 'star_cloudprnt_trigger_print', 1, 1);
-			} 
+			} elseif ($trigger == "status_on-hold") {
+				add_action('woocommerce_order_status_on-hold', 'star_cloudprnt_trigger_print', 1, 1);
+			}
 
 		}
 	}
