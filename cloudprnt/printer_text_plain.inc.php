@@ -25,8 +25,6 @@
 			$this->tempFilePath = $tempFilePath;
 			$printJobBuilder = "";
 			
-			//print("<h4>Text Print Job ".$this->printerMac."</h4>");
-			
 		}
 		
 		private function str_to_hex($string)
@@ -43,37 +41,30 @@
 		
 		public function set_text_emphasized()
 		{
-			//$this->printJobBuilder .= self::SLM_SET_EMPHASIZED_HEX;
 		}
 		
 		public function cancel_text_emphasized()
 		{
-			//$this->printJobBuilder .= self::SLM_CANCEL_EMPHASIZED_HEX;
 		}
 		
 		public function set_text_left_align()
 		{
-			//$this->printJobBuilder .= self::SLM_SET_LEFT_ALIGNMENT_HEX;
 		}
 		
 		public function set_text_center_align()
 		{
-			//$this->printJobBuilder .= self::SLM_SET_CENTER_ALIGNMENT_HEX;
 		}
 		
 		public function set_text_right_align()
 		{
-			//$this->printJobBuilder .= self::SLM_SET_RIGHT_ALIGNMENT_HEX;
 		}
 		
 		public function set_codepage($codepage)
 		{
-			//$this->printJobBuilder .= self::SLM_CODEPAGE_HEX.$codepage;
 		}
 		
 		public function add_nv_logo($keycode)
 		{
-			//$this->printJobBuilder .= "1B1C70".$keycode."00".self::SLM_NEW_LINE_HEX;
 		}
 		
 		public function set_font_magnification($width, $height)
@@ -116,6 +107,10 @@
 		}
 
 		public function add_qr_code($error_correction, $cell_size, $data)
+		{
+		}
+
+		public function add_barcode($type, $module, $hri, $height, $data)
 		{
 		}
 
