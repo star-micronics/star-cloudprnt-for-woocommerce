@@ -112,6 +112,11 @@ This means that you printer is unable to connect with your server, and can have 
 
 = 2.0.3 =
 * Improve buzzer compatibility with mC-Print models.
+* Add option to print ID and or SKU on item lines
+* Add option to trigger printing when and order is assigned on-hold status
+* Enable word-wrapping when printing items, in case of very long item names
+* Enable Word-wrapping when printing header section fields, in case of long information on 58mm/2" paper
+* Format the sub-heading order number and print timestamp on tow lines, in case they can not fit side by side
 
 = 2.0.2 =
 * Fix missing "Shipping Method" from the receipt header.
