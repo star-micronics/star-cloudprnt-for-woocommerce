@@ -20,7 +20,7 @@
 	
 
 	// iterate through the order line items, rendering each one
-	function star_cloudprnt_print_items($printer, $selectedPrinter, $order, $order_meta)
+	function star_cloudprnt_print_items(&$printer, &$selectedPrinter, &$order, &$order_meta)
 	{
 		$max_chars = $selectedPrinter['columns'];
 		$order_items = $order->get_items();
@@ -163,7 +163,7 @@
 
 	// Print the address secion - currently this prints the shipping address if present, otherwise
 	// falls back to the billing address
-	function star_cloudprnt_print_address($printer, $selectedPrinter, $order, $order_meta)
+	function star_cloudprnt_print_address(&$printer, &$selectedPrinter, &$order, &$order_meta)
 	{
 		// function to get address values if they exist or return an empty string
 		$gkv = function($key) use ($order_meta) {
@@ -222,6 +222,11 @@
 		$date_format = get_option( 'date_format' );
 		$time_format = get_option( 'time_format' );
 
+		// Annonymous "Print wrapped" helper function used to print wrapped line
+		$pw = function($text) use ($printer, $selectedPrinter) {
+			$printer->add_text_line(wordwrap($text, $selectedPrinter['columns'], "\n", true));
+		};
+
 		// Print a top logo if configured
 		if (get_option('star-cloudprnt-print-logo-top-input'))
 			$printer->add_nv_logo(esc_attr(get_option('star-cloudprnt-print-logo-top-input')));
@@ -236,7 +241,7 @@
 			$printer->set_text_center_align();
 			$printer->set_font_magnification(2, 2);
 
-			// Printthe title - word wrapped (NOTE - php wordwrap() is not multi-byte aware, and definitely not half/full width character aware)
+			// Print the title - word wrapped (NOTE - php wordwrap() is not multi-byte aware, and definitely not half/full width character aware)
 			$printer->add_text_line(wordwrap($title_text, $selectedPrinter['columns']/2, "\n", true)); // Columns are divided by 2 because we are using double width characters.
 
 			// Reset text formatting
@@ -248,24 +253,29 @@
 		}
 
 		// Print sub-header
-		$printer->add_text_line(star_cloudprnt_get_column_separated_data(
-			array(
-				"Order #".$order_number, 
-				date("{$date_format} {$time_format}", current_time('timestamp'))), 
-				$selectedPrinter['columns']));
+		$o_num = "Order #".$order_number;			// Order number text to print
+		$p_time = date("{$date_format} {$time_format}", current_time('timestamp'));			// TIme of printing text
+		$sub_header = star_cloudprnt_get_column_separated_data(array($o_num, $p_time), $selectedPrinter['columns']);
+		if(!empty($sub_header)) {
+			$printer->add_text_line($sub_header);
+		} else {
+			$pw($p_time);
+			$pw($o_num);
+		}
 
 		// Print header info area
 		$printer->add_new_line(1);
-		$printer->add_text_line("Order Status: ".$order->get_status());
+		//$printer->add_text_line("Order Status: ".$order->get_status());
+		$pw("Order Status: ".$order->get_status());
 		$order_date = date("{$date_format} {$time_format}", $order->get_date_created()->getOffsetTimestamp());
-		$printer->add_text_line("Order Date: {$order_date}");	
+		$pw("Order Date: {$order_date}");	
 
 		$printer->add_new_line(1);
 		if (isset($shipping_items['name']))
 		{
-			$printer->add_text_line("Shipping Method: ".$shipping_items['name']);
+			$pw("Shipping Method: ".$shipping_items['name']);
 		}
-		$printer->add_text_line("Payment Method: ".$order_meta['_payment_method_title'][0]);
+		$pw("Payment Method: ".$order_meta['_payment_method_title'][0]);
 	}
 
 	// Print heading above the items list
