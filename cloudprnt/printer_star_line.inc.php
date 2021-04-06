@@ -145,6 +145,76 @@
 			$this->printJobBuilder .= $command;
 		}
 		
+		public function set_text_highlight()
+		{
+			$this->printJobBuilder .= "1B34";
+		}
+		
+		public function cancel_text_highlight()
+		{
+			$this->printJobBuilder .= "1B35";
+		}
+
+		public function add_qr_code($error_correction, $cell_size, $data)
+		{
+			$model = 2;
+			if($error_correction < 0) $error_correction = 0;
+			if($error_correction > 3) $error_correction = 3;
+      if($cell_size < 1) $cell_size = 1;
+			if($cell_size > 8) $cell_size = 8;
+			$data_length = strlen($data);
+
+			$set_model = sprintf("1B1D795330%02X", $model);
+			$set_error_level = sprintf("1B1D795331%02X", $error_correction);
+			$set_cell_size = sprintf("1B1D795332%02X", $cell_size);
+			$set_data_prefix = sprintf("1B1D79443100%02X%02X", fmod($data_length, 256), intval($data_length / 256));
+			$print = "1B1D7950";
+
+			$this->printJobBuilder .= $set_model
+															. $set_error_level
+															. $set_cell_size
+															. $set_data_prefix
+															. $this->str_to_hex($data)
+															. $print;
+		}
+
+		public function add_barcode($type, $module, $hri, $height, $data)
+		{
+			$n2 = 1; 
+			$n3 = 1;
+
+			if($type < 0 || $type > 13)	return;							// Invalid barcode type
+			if($hri) $n2 = 2;																// Print human-readable characters under the bacrode
+			
+			if($type == 0 || $type == 1 || $type == 3 || $type == 4 || $type == 6 || $type == 7)		// UPC-E, UPC-A, JAN/EAN8, JAN/EAN13, Code128, Code 93
+			{
+				$n3 = $module - 1;
+				if($n3 < 1) $n3 = 1;
+				if($n3 > 3) $n3 = 3;
+			}
+			elseif ($type == 4 || $type == 5 || $type == 8)		// Code 93, ITF, NW-7
+			{
+				$n3 = $module;
+				if($n3 < 1) $n3 = 1;
+				if($n3 > 9) $n3 = 9;
+			}
+			elseif ($type >= 9 && $type <= 13)		// GS1-128, GS1 DataBar
+			{
+				$n3 = $module;
+				if($n3 < 1) $n3 = 1;
+				if($n3 > 6) $n3 = 6;
+			}
+
+			if($height < 8) $height = 8;					// Minimum 1mm height
+			if($height > 255) $height = 255;			// Max 32mm height
+
+			$print_bc = sprintf("1B62%02X%02X%02X%02X", $type, $n2, $n3, $height)
+									. $this->str_to_hex($data)
+									. "1E";
+
+			$this->printJobBuilder .= $print_bc;
+		}
+
 		public function cut()
 		{
 			$this->printJobBuilder .= self::SLM_FEED_PARTIAL_CUT_HEX;

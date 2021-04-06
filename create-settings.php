@@ -49,6 +49,9 @@
 
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-header-title", array("default" => "ORDER NOTIFICATION"));
 
+		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-items-print-id", array("default" => "on"));
+		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-items-print-sku", array("default" => "off"));
+
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-items-footer-message", array("default" => "All prices are inclusive of tax (if applicable)."));
 
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-order-meta-cb");
@@ -140,13 +143,15 @@
 		}
 	}
 	
-	function star_cloudprnt_trigger_display()
+	function star_cloudprnt_trigger_display()  
 	{
 		?>
 			<input type="radio" name="star-cloudprnt-trigger" value="status_processing" <?php checked(get_option('star-cloudprnt-trigger'), 'status_processing', true) ?>>
 			<label>When an order is assigned the "processing" status (recommended for most sites)</label><br>
 			<input type="radio" name="star-cloudprnt-trigger" value="status_completed" <?php checked(get_option('star-cloudprnt-trigger'), 'status_completed', true) ?>>
 			<label>When an order is assigned the "completed" status</label><br>
+			<input type="radio" name="star-cloudprnt-trigger" value="status_on-hold" <?php checked(get_option('star-cloudprnt-trigger'), 'status_on-hold', true) ?>>
+			<label>When an order is assigned the "on hold" status</label><br>
 			<input type="radio" name="star-cloudprnt-trigger" value="thankyou" <?php checked(get_option('star-cloudprnt-trigger'), 'thankyou', true) ?>>
 			<label>When WooCommerce "Thank You" message is displayed (<span class="star_cp_caution">&#x26a0;</span> legacy option, not recommended)</label><br>
 			<input type="radio" name="star-cloudprnt-trigger" value="none" <?php checked(get_option('star-cloudprnt-trigger'), 'none', true) ?>>
@@ -172,6 +177,13 @@
 	function star_cloudPRNT_item_settings_display()
 	{
 		?>
+			<input type="checkbox" name="star-cloudprnt-print-items-print-id" value="on" <?php checked(get_option('star-cloudprnt-print-items-print-id'), 'on', true) ?> >
+			<label>Include Item ID</label><br/>
+
+			<input type="checkbox" name="star-cloudprnt-print-items-print-sku" value="on" <?php checked(get_option('star-cloudprnt-print-items-print-sku'), 'on', true) ?> >
+			<label>Include Item SKU</label><br/>
+
+			<br/>
 			<label>Item list footer message</label><br/>
 			<textarea type="text" name="star-cloudprnt-print-items-footer-message" cols=60 rows=4><?php echo get_option('star-cloudprnt-print-items-footer-message') ?></textarea>
 		<?php

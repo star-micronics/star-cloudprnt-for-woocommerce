@@ -36,6 +36,8 @@
 
 	delete_option("star-cloudprnt-print-header-title");
 
+	delete_option("star-cloudprnt-print-items-print-id");
+	delete_option("star-cloudprnt-print-items-print-sku");
 	delete_option("star-cloudprnt-print-items-footer-message");
 
 	delete_option("star_cloudprnt_setup_section");

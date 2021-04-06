@@ -4,7 +4,7 @@ Tags: star, printing, printers, automated, e-commerce, store, sales, downloadabl
 Requires at least: 5.0
 Tested up to: 5.6
 Requires PHP: 7.2
-Stable tag: 2.0.2
+Stable tag: 2.0.3
 License: MIT
 
 Star CloudPRNT for WooCommerce enables Cloud printing technology with your Star Receipt printer.
@@ -34,8 +34,8 @@ https://www.youtube.com/watch?v=2O3pZJ-kfqk
 
 = Minimum Requirements =
 * PHP 7.2 or greater.
-* WordPress 5.0.x, 5.1.x, 5.3.x, 5.4.x, 5.5.x or 5.6.0.
-* WooCommerce plugin 4.0.X, 4.1.x, 4.2.x, 4.3.x, 4.4.x, 4.5.x, 4.6.x, 4.7.x, 4.8.x, 4.9.x, 5.0.x
+* WordPress 5.0, 5.1, 5.3, 5.4, 5.5, 5.6, 5.7
+* WooCommerce plugin 4.0, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9, 5.0, 5.1
 * Star TSP650II, TSP700II, TSP800II or SP700 series printer with a IFBD-HI01X/HI02X interface. Printer interface firmware 1.6 or later recommended.
 * Star mC-Print3 or mC-Print2 series printer, firmware version 3.0 or later recommended.
 
@@ -109,6 +109,16 @@ This means that you printer is unable to connect with your server, and can have 
 * Add Support for Star mC-Print3 and mC-Print2 printer ranges
 
 == Changelog ==
+
+= 2.0.3 =
+* Improve buzzer compatibility with mC-Print models.
+* Add option to print ID and or SKU on item lines
+* Add option to trigger printing when and order is assigned on-hold status
+* Enable word-wrapping when printing items, in case of very long item names
+* Enable Word-wrapping when printing header section fields, in case of long information on 58mm/2" paper
+* Format the sub-heading order number and print timestamp on tow lines, in case they can not fit side by side
+* Add printer control class methods for text highlighting, Qr Code, and Barcode printing methods to the printer command generation classes.
+  Not currently exposed as features but may be useful to anyone forking/modifying the plugin.
 
 = 2.0.2 =
 * Fix missing "Shipping Method" from the receipt header.
