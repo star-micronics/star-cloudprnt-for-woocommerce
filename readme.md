@@ -32,7 +32,7 @@ This plugin will create a `star-cloudprnt` folder inside your sites `wp-content`
 It is therefore essential that your WordPress sites web server has full read/write/delete access to the `wp-content` folder (this is usually a requirement for any WordPress site, to manage plugins, media library, etc.)
 
 
-#### Generating pring jobs - order-handler.php and the $printer object
+#### Generating print jobs - order-handler.php and the $printer object
 
 The most common reason to modify this plugin is to modify the print job design, remove unwanted information or to extend it with support for other plugins.
 
@@ -49,7 +49,7 @@ Next, the `star_cloudprnt_command_generator()` function is used to create the `$
 Typically, print jobs are triggered via user configurable action hooks that are set-up by `star_cloudprnt_setup_order_handler()` that can be found in [order-handler.inc.php](order-handler.inc.php).
 
 ##### Triggering a print from your own code
-In each case, these actions are handled by calling `star_cloudprnt_trigger_print($order_id)`, passing in the order id to be printed. Third party plugins can potentially cann this function directly to trigger printing.
+In each case, these actions are handled by calling `star_cloudprnt_trigger_print($order_id)`, passing in the order id to be printed. Third party plugins can potentially call this function directly to trigger printing.
 
 ##### Triggering a print from your own code by AJAX
 
