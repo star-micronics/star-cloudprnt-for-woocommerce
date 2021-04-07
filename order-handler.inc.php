@@ -233,7 +233,6 @@
 					};
 
 					jQuery.post(ajaxurl, data, function(response) {
-						//alert('Got this from the server: ' + response);
 						jQuery("#star_cp_job_sent").show();
 						setTimeout(() => {
 							jQuery("#star_cp_job_sent").hide();

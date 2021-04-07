@@ -307,6 +307,8 @@
 		if(array_key_exists("_wpslash_tip", $order_meta))
 			$ft("TIP", $order_meta['_wpslash_tip'][0]);
 
+		//$ft("TAX", $order->get_total_tax());
+
 		$ft("TOTAL", $order_meta['_order_total'][0]);
 
 		$printer->set_text_left_align();
