@@ -13,7 +13,7 @@
 
 
 	// Return the text data used as a separator/horizontal line on the page 
-	function star_cloudprnt_get_seperator($max_chars)
+	function star_cloudprnt_get_separator($max_chars)
 	{
 		return str_repeat('_', $max_chars);
 	}
@@ -62,7 +62,7 @@
 			if(get_option('star-cloudprnt-print-items-print-sku') == "on" && (! empty($sku)))
 				$product_info .= " - SKU: " . $sku;
 
-			//$product_info .= " Tax Class: " . $item_data->get_tax_class();
+			// $product_info .= " Tax Class: " . $item_data->get_tax_class();
 
 			$product_line = star_cloudprnt_filter_html($product_name . $product_info);
 
@@ -161,7 +161,7 @@
 		//if($is_printed)	$printer->add_text_line("");
 	}
 
-	// Print the address secion - currently this prints the shipping address if present, otherwise
+	// Print the address section - currently this prints the shipping address if present, otherwise
 	// falls back to the billing address
 	function star_cloudprnt_print_address(&$printer, &$selectedPrinter, &$order, &$order_meta)
 	{
@@ -222,7 +222,7 @@
 		$date_format = get_option( 'date_format' );
 		$time_format = get_option( 'time_format' );
 
-		// Annonymous "Print wrapped" helper function used to print wrapped line
+		// Anonymous "Print wrapped" helper function used to print wrapped line
 		$pw = function($text) use ($printer, $selectedPrinter) {
 			$printer->add_text_line(wordwrap($text, $selectedPrinter['columns'], "\n", true));
 		};
@@ -282,14 +282,13 @@
 	{
 		$printer->add_new_line(1);
 		$printer->add_text_line(star_cloudprnt_get_column_separated_data(array('ITEM', 'TOTAL'), $selectedPrinter['columns']));
-		$printer->add_text_line(star_cloudprnt_get_seperator($selectedPrinter['columns']));
+		$printer->add_text_line(star_cloudprnt_get_separator($selectedPrinter['columns']));
 	}
 
 	// Print totals
 	function star_cloudprnt_print_item_totals(&$printer, &$selectedPrinter, &$order, &$order_meta)
 	{
-
-		// Annonymous helper function used to format the total lines
+		// Anonymous helper function used to format the total lines
 		$ft = function($text, $value) use ($printer) {
 			$formatted_value = star_cloudprnt_format_currency($value);
 			$printer->add_text_line(
@@ -308,6 +307,11 @@
 			$ft("TIP", $order_meta['_wpslash_tip'][0]);
 
 		//$ft("TAX", $order->get_total_tax());
+		// $taxes = $order->get_tax_totals();
+		// foreach ($taxes as $tax)
+		// {
+		// 	$ft("TAX: " . $tax->label, $tax->amount);
+		// }
 
 		$ft("TOTAL", $order_meta['_order_total'][0]);
 
