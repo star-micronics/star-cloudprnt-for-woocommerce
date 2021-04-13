@@ -1,3 +1,4 @@
+![](images/logo.png)
 # Star CloudPRNT for WooCommerce
 
 Star CloudPRNT for WooCommerce is a WordPress extension to enable automated order ticket/receipt printing each time a customer places an order on your WooCommerce based eCommerce website.
