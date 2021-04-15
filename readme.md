@@ -16,6 +16,8 @@ This project has been developed primarily by the Star Micronics EMEA office in t
 
 ## Getting Support
 
+Please consult the [common questions and issues](common_issues.md) page as the first step to resolving any difficulties.
+
 ### End User Support
 
 Star Micronics EMEA customers are entitled to direct support within the Europe, Middle East, Africa, India and Russia regions. It is recommended to contact the office directly via the [online contact form](https://star-emea.com/contact/).
