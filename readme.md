@@ -10,9 +10,13 @@ This plugin can only be used alongside the WooCommerce WordPress plugin.  For mo
 
 ## Star Labs
 
-The *star-cloudprnt-for-woocommerce* plugin is a Star Labs project, this means that it is created and released, under an open source license, by Star Micronics employees or subsidiaries, but is not an official Star Micronics software project and not subject to the same guarantees, support or testing requirements form Star Micronics Co, Jp. As a result, quality, reliability and global support availability will vary between Star labs projects, please check the project specific support information for details.
+The *Star Cloudprnt for WooCommerce* plugin is a Star Labs project, this means that it is created and released, under an open source license, by Star Micronics employees or subsidiaries, but is not an official Star Micronics software product and not subject to the same guarantees, support or testing requirements from Star Micronics Co Ltd, Japan. As a result, quality, reliability and global support availability will vary between Star Labs projects, please check the project specific support information for details.
+
+### Star Labs Project Status
 
 This project has been developed primarily by the Star Micronics EMEA office in the UK, with assistance from Star Micronics America.
+
+It is considered to be safe to use in production, with active support in the EMEA region, and community support offered elsewhere. However the wide variety of WordPress/WooCommerce site installations and configuration mean that compatibility with all sites, and all plugins can not be guaranteed, and testing is advised.
 
 ## Getting Support
 
@@ -30,7 +34,7 @@ Developers who wish to modify/extend this plugin, or require support integrating
 
 Contributions and pull requests are welcome, but will only be merged in to the mainline release branches cautiously, due to a need for Star to maintain stability and be able to support existing customers.
 
-If you intend to implement any large changes, then consider talking with the developers, and reviewing the project boards first to ensure that this does not conflict with Stars development plans, or you may wish to maintain a separate fork instead.
+If you intend to implement any large changes, then consider talking with the developers, and reviewing the project boards first to ensure that this does not conflict with any existing development plans, or you may wish to maintain a separate fork instead.
 
 ## Installation
 
