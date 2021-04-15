@@ -1,14 +1,38 @@
-![](images/logo.png)
-# Star CloudPRNT for WooCommerce
+![Logo](images/logo.png)
+
+# Star CloudPRNT for WooCommerce - from Star Labs
 
 Star CloudPRNT for WooCommerce is a WordPress extension to enable automated order ticket/receipt printing each time a customer places an order on your WooCommerce based eCommerce website.
+
 This can be used to quickly create a remote order/receipt printing solution for restaurants, take-aways, bakeries and similar sites, with minimal set-up time or cost.
 
-This plugin can only be used alongside the WooCommerce WordPress plugin.  For more information on the WooCommerce plugin please visit www.woocommerce.com
+This plugin can only be used alongside the WooCommerce WordPress plugin.  For more information on WooCommerce please visit www.woocommerce.com
+
+## Star Labs
+
+The *star-cloudprnt-for-woocommerce* plugin is a Star Labs project, this means that it is created and released, under an open source license, by Star Micronics employees or subsidiaries, but is not an official Star Micronics software project and not subject to the same guarantees, support or testing requirements form Star Micronics Co, Jp. As a result, quality, reliability and global support availability will vary between Star labs projects, please check the project specific support information for details.
+
+This project has been developed primarily by the Star Micronics EMEA office in the UK, with assistance from Star Micronics America.
+
+## Getting Support
+
+### End User Support
+
+Star Micronics EMEA customers are entitled to direct support within the Europe, Middle East, Africa, India and Russia regions. It is recommended to contact the office directly via the [online contact form](https://star-emea.com/contact/).
+
+Star Customers in other regions should contact their local Star Micronics office for general support with their Star product. Issues specifically with this plugin are primarily community supported via the [WordPress forum](https://wordpress.org/support/plugin/star-cloudprnt-for-woocommerce/), which is regularly monitored by Star Micronics employees.
+
+### Developers
+
+Developers who wish to modify/extend this plugin, or require support integrating their own plugins or themes should use the GitHub issue tracker.
+
+Contributions and pull requests are welcome, but will only be merged in to the mainline release branches cautiously, due to a need for Star to maintain stability and be able to support existing customers.
+
+If you intend to implement any large changes, then consider talking with the developers, and reviewing the project boards first to ensure that this does not conflict with Stars development plans, or you may wish to maintain a separate fork instead.
 
 ## Installation
 
-For most live sites, this plugin should be installed to a WordPress site via the WordPress plugin repository from their site admin page.
+For most live sites, the latest stable release should be installed via the WordPress plugin repository from the site admin page.
 Users requiring a specific version, can also download the plugin as a zip package, which can also be installed via that admin page of their site.
 
 Developers can checkout or copy the `star-cloudprnt-for-woocommerce` folder into the `wp-content/plugins/` folder of their site.
@@ -18,40 +42,6 @@ Developers can checkout or copy the `star-cloudprnt-for-woocommerce` folder into
 Each WordPress site that installs and enables this plugin will expose a Star CloudPRNT compatible endpoint that must be installed into a compatible device to connect it with your site.
 Please refer to the [user documentation](readme.txt) for details, or [video walk-through](https://www.youtube.com/watch?v=2O3pZJ-kfqk).
 
-## Development Guide
+## Development
 
-Users and plugin developers are welcome to adapt this extension to suit their requirements or to integrate with their plugins. For any significant work, it is recommended to wait for the coming 2.1 version, which will add several action and filter hooks to make it easier to extend.
-
-### Overview
-
-Several aspects of this plugin are necessarily a little different to typical WordPress extensions, in order to implement a print job spooler within a WordPress site, and to generate print jobs using the printer native commands (HTML printing is not supported).
-
-#### Custom Folder Structure
-
-This plugin will create a `star-cloudprnt` folder inside your sites `wp-content` folder. This is used to store information about each printer that connects to your site, each device status and information, and manage the pending print jobs for each device.
-
-It is therefore essential that your WordPress sites web server has full read/write/delete access to the `wp-content` folder (this is usually a requirement for any WordPress site, to manage plugins, media library, etc.)
-
-
-#### Generating print jobs - order-handler.php and the $printer object
-
-The most common reason to modify this plugin is to modify the print job design, remove unwanted information or to extend it with support for other plugins.
-
-It is important for developers to recognise that this plugin must generate print jobs using the printer control language (either Star Line Mode, or StarPRNT, depending on model).
-
-Print jobs are generated by the [order-handler.php](order-handler.php) code, using a job builder API defined by [cloudprnt/printer_star_line.inc.php](cloudprnt/printer_star_line.inc.php), [cloudprnt/printer_star_prnt.inc.php](cloudprnt/printer_star_prnt.inc.php) and [cloudprnt/printer_text_plain.inc.php](cloudprnt/printer_text_plain.inc.php)
-
-Whenever a new print job is required the function `star_cloudprnt_print_order_summary()` in `order-handler.php` is called, passing in information about the target printer (such as target command set and number of text columns that can fit on the page), a temporary filename that the print job data should be written to, and the id of the order to print.
-
-Next, the `star_cloudprnt_command_generator()` function is used to create the `$printer` object implementing the print job builder API for your target device and file. The remainder of the `order-handler.php` code is responsible for analysing the order, and calling methods on the `$printer` object to build a print job.
-
-#### Triggering Printing
-
-Typically, print jobs are triggered via user configurable action hooks that are set-up by `star_cloudprnt_setup_order_handler()` that can be found in [order-handler.inc.php](order-handler.inc.php).
-
-##### Triggering a print from your own code
-In each case, these actions are handled by calling `star_cloudprnt_trigger_print($order_id)`, passing in the order id to be printed. Third party plugins can potentially call this function directly to trigger printing.
-
-##### Triggering a print from your own code by AJAX
-
-An AJAX action is enabled named `star_cloudprnt_reprint_action` that can be used to trigger printing without forcing a page reload. This is used by the "Print with Star CloudPRNT" button that is included in a meta-box when viewing an order from your site admin pages.
+See the [Development Guide](development.md) for an overview of the plugin design..
