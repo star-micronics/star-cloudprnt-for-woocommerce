@@ -52,4 +52,4 @@ Please refer to the [user documentation](readme.txt) for details, or [video walk
 
 ## Development
 
-See the [Development Guide](development.md) for an overview of the plugin design..
+See the [Development Guide](development.md) for an overview of the plugin design.
