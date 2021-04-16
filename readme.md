@@ -26,6 +26,8 @@ Please consult the [common questions and issues](common_issues.md) page as the f
 
 Star Micronics EMEA customers are entitled to direct support within the Europe, Middle East, Africa, India and Russia regions. It is recommended to contact the office directly via the [online contact form](https://star-emea.com/contact/).
 
+Customers in North America, Canada, Central America, South America and the Caribbean will be supported by Star Micronics America. Customers within these regions should use this [contact form](https://www.starmicronics.com/Supports/SupportTechnical).
+
 Star Customers in other regions should contact their local Star Micronics office for general support with their Star product. Issues specifically with this plugin are primarily community supported via the [WordPress forum](https://wordpress.org/support/plugin/star-cloudprnt-for-woocommerce/), which is regularly monitored by Star Micronics employees.
 
 ### Developers
