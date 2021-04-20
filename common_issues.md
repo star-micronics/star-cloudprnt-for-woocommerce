@@ -18,15 +18,23 @@ Non-developers are limited to the design options provided by the plugin, such as
 
 Developers are free to extend, adapt and fork the plugin as they need. Please see the [Development Guide](development.md) for an overview.
 
+### Is it possible to change the font size?
+
+Currently this is not possible. The plugin is limited to using the fonts built-in to the printer, of which there are typically two (the plugin uses the larger of these two), and these must be scaled horizontally and/or vertically by whole values.
+
+However, this is a regular request, and some level of font size adjustment is being considered for a future update, within the limitations described above.
+
 ### A standard WooCommerce field that I need is missing from the print out, can it be added?
 
-This plugin was initially developed for kitchen order or warehouse picking scenarios. Therefore some fields required to be used as a full receipt in your market may not be printed in the way you would like. Also the receipt requirements will vary between markets and regions, especially concerning how to print tax details.
+This plugin was initially developed for kitchen order or warehouse picking scenarios. Therefore some fields required for a full receipt in your market may not be printed in the way you would like. Also the receipt requirements will vary between markets and regions, especially concerning how to print tax details.
 
 Please let us know, and we will try to incorporate support in a future update if it is possible.
 
-### Extra fields or information from a plug-in that I use is not printed, can it be integrated?
+### Extra fields or information from a plugin that I use are not printed, can it be integrated?
 
-The plugin tries to support common third party plugins, however that are a lot and it is not possible to guarantee support for them all. Currently, you will need support from a developer if the information that you need from a third party plugin is not available.
+The plugin tries to support common third party plugins, however there are a lot and it is not possible to guarantee support for them all. Currently, you will need support from a developer if the information that you need from a third party plugin is not available.
+
+Refer to the [Plugin Compatibility](https://github.com/star-micronics/star-cloudprnt-for-woocommerce/wiki/Plugin-Compatibility) wiki page for some information about the known compatibility of tested plugins.
 
 Future versions of this plugin will allow plugins from other developers to add additional data to the printed order, please contact us for details, or wait for version 2.1 to be made available.
 
