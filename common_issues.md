@@ -4,7 +4,7 @@ The most common user issues and questions along with their solutions where possi
 
 ## Compatibility with your site
 
-WordPress and WooCommerce can exist in an incredible variety of versions, hosting environments, traffic filters, PHP versions, additional plugins and themes etc. The star plugin also must work in some slightly unusual ways, to provide a built-in CloudPRNT print spooling system and to generate documents using Star printer command languages and not HTML (the native page language for WordPress). This means that it is not possible to guarantee compatibility with all sites.
+WordPress and WooCommerce can exist in a very wide variety of versions, hosting environments, traffic filters, PHP versions, additional plugins and themes etc. The star plugin also must work in some slightly unusual ways, to provide a built-in CloudPRNT print spooling system and to generate documents using Star printer command languages and not HTML (the native page language for WordPress). This means that it is not possible to guarantee compatibility with all sites.
 
 > Complete incompatibility with a site is very rare, but if all other options have been exhausted, please talk with your Star Micronics office who may be able to offer alternative methods of integrating your printer with WooCommerce.
 
@@ -46,7 +46,7 @@ Currently no, version 2.1 will include translation support.
 
 This can depend on the printer model that you are using:
 
-- The mC-Print range, supports UTF8 encoded Unicode and will support characters from most languages automatically.
+- The mC-Print range, supports UTF-8 encoded Unicode and will support characters from most languages automatically.
 
 - The TSP650II with HIX interface, also supports UTF-8 printing, but has a more limited character set. It may need some configuration to print the language that you require, if full-width fonts are needed.
 
@@ -56,7 +56,7 @@ This can depend on the printer model that you are using:
 
 ## Common Issues
 
-### Sometimes orders do not print, or print late
+### Sometimes orders do not print, print late, or unexpectedly re-print hours later
 
 This is a known issue when using the WooCommerce "Thank You" action hook for triggering print jobs, which was the method used by earlier versions of the plugin.
 
@@ -70,13 +70,13 @@ In case you have correctly installed the plugin to your site, and configured you
 Please verify that your printer is connected by Lan or WiFi to a network that is able to provide an outgoing internet connection - or at least is able to reach your WordPress site.
 
 - **Polling time**
-Please check your printer CloudPRNT settings, and ensure that the polling time is set to 10s or lower. A very high polling time can make the printer appear to be unresponsive.
+Check your printer CloudPRNT settings, and ensure that the polling time is set to 10s or lower. A very high polling time can make the printer appear to be unresponsive.
 
 - **Printer firmware**
 Ensure that your printer has up-to-date firmware. Most commonly this is required for mC-Print models to connect to certain weh hosts - see TLS/Https Encryption below.
 
 - **TLS/Https Encryption Level (mP-Print models only)**
-Some hosting provides have stricter requirements for the https/TLS encryption required to communicate with them.
+Some hosting providers have stricter requirements for the https/TLS encryption required to communicate with them.
 If using an mC-Print model, then you will need at least version 3.0 firmware to support the latest https cypher suite security levels. You should also check that these are enabled by accessing the printer configuration pages, and checking the **CloudPRNT** ➔ **HTTPS Client Settings** ➔ **Cipher Suites Encryption Level** setting, which should be set to **"High + Medium"** for the best compatibility.
 
 - **Local firewall**
