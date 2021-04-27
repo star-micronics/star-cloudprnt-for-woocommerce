@@ -31,6 +31,23 @@ The default list of receipt sections is (in sequence): `"header", "sub_header", 
 - @param WC_Order - the current order to be printed.
 - @return a filtered array of receipt sections to be printed in sequence.
 
+#### Example
+
+This example, adds a new receipt section named "signature" immediately before the "items_footer" section.
+
+~~~php
+function star_example_filter_sections($sections, $order) {
+  $end_pos = array_search("items_footer", $sections, true);
+  if($end_pos !== false) {
+    array_splice($sections, $end_pos, 0, "signature");
+  }			
+  return $sections;
+}
+add_filter('smcpfw_sections', 'star_example_filter_sections', 10, 2);
+~~~
+
+
+
 ### smcpfw_pre_{$section}
 
 Specify some text data to be printed before a named section of the receipt, where `{$section}` is the name of the section.
@@ -84,6 +101,27 @@ Completely handle the rendering of the named section. Be aware that if fully han
 - @param printer - an object that implements the print job builder API.
 - @param WC_Order - the current order.
 - @return return `true` to indicate that your filter has handled the rendering and prevent the default rendered being called.
+
+#### Example
+
+This example uses the print job builder API to render a custom section named "signature" with an area for a customer to sign.
+
+~~~php
+function star_example_render_signature($banner_items, $printer, $order) {
+  $printer->add_new_line(1);
+  $printer->set_font_magnification(2, 1);
+  $printer->add_text_line("Please Sign");
+  $printer->set_font_magnification(1, 1);
+  $printer->add_text_line(" _____________________________");
+  $printer->add_text_line("|                             |");
+  $printer->add_text_line("|                             |");
+  $printer->add_text_line("|_____________________________|");
+  $printer->add_new_line(1);
+
+  return true;
+}
+add_filter('smcpfw_render_signature', 'star_example_render_signature', 10, 3);
+~~~
 
 ## Header Filters
 
