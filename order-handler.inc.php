@@ -39,7 +39,7 @@
 
   // Pad strings with spaces so that they column align across the indicated $max_chars characters
   // Note: recommended for 2 column layout only, since column padding is recalculated per line.
-  // Note1: This uses mb_strwidth to attampt to handle both full and half width characters, but
+  // Note1: This uses mb_strwidth to attempt to handle both full and half width characters, but
   //        results are not always consistent, so printing full-width (Japanese, Chinese etc.)
   //        is probably better done without column layouts for now - to be investigated.
   function star_cloudprnt_get_column_separated_data($columns, $max_chars)

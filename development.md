@@ -1,8 +1,14 @@
 # Development Guide
 
-Users and plugin developers are welcome to adapt this extension to suit their requirements or to integrate with their plugins. For any significant work, it is recommended to wait for the coming 2.1 version, which will add several action and filter hooks to make it easier to extend.
+Users and plugin developers are welcome to adapt this extension to suit their requirements or to integrate with their plugins.
 
-## Overview
+## Filters
+
+From version 2.1.0 onwards, it is advised not to modify the plugin directly, but to extend or customise it via the many filter hooks that are available. These hooks can be used to configure most aspects of the printed receipt, including handling the rendering directly where needed.
+
+See the [Filters Reference](dev_filters.md) page for details.
+
+## Internal Design Overview
 
 Several aspects of this plugin are necessarily a little different to typical WordPress extensions, in order to implement a print job spooler within a WordPress site, and to generate print jobs using the printer native commands (HTML printing is not supported).
 
