@@ -191,7 +191,7 @@
 			$n3 = 1;
 
 			if($type < 0 || $type > 13)	return;							// Invalid barcode type
-			if($hri) $n2 = 2;																// Print human-readable characters under the bacrode
+			if($hri) $n2 = 2;																// Print human-readable characters under the barcode
 			
 			if($type == 0 || $type == 1 || $type == 3 || $type == 4 || $type == 6 || $type == 7)		// UPC-E, UPC-A, JAN/EAN8, JAN/EAN13, Code128, Code 93
 			{
