@@ -18,11 +18,101 @@
 		return str_repeat('_', $max_chars);
 	}
 	
+	// Generate the receipt header
+	function star_cloudprnt_print_receipt_header(&$printer, &$order)
+	{
+		// Print a top logo if configured
+		if (get_option('star-cloudprnt-print-logo-top-input'))
+		{
+			$top_logo = esc_attr(get_option('star-cloudprnt-print-logo-top-input'));
+			$top_logo = apply_filters('smcpfw_header_logo', $top_logo, $order);
+			if(!empty($top_logo))
+				$printer->add_nv_logo($top_logo);
+		}
+
+		// Top of page Title
+		$title_text = get_option('star-cloudprnt-print-header-title');
+		$title_text = apply_filters('smcpfw_header_title', $title_text, $order);
+
+		if(!empty($title_text))
+		{
+			$result = apply_filters('smcpfw_render_header_title', $title_text, $printer, $order);
+
+			if($result !== true) {
+				// Set formatting for title
+				$printer->set_text_emphasized();
+				$printer->set_text_center_align();
+				$printer->set_font_magnification(2, 2);
+
+				// Print the title
+				$printer->add_word_wrapped_text_line($title_text);
+
+				// Reset text formatting
+				$printer->set_text_left_align();
+				$printer->cancel_text_emphasized();
+				$printer->set_font_magnification(1, 1);
+
+				$printer->add_new_line(1);
+			}
+		}
+	}
+
+	// Generate the receipt sub-header
+	function star_cloudprnt_print_receipt_sub_header(&$printer, &$order)
+	{
+		$order_number = $order->get_order_number();			// Displayed order number may be different to order_id when using some plugins
+		$shipping_items = @array_shift($order->get_items('shipping'));
+		$date_format = get_option( 'date_format' );
+		$time_format = get_option( 'time_format' );
+
+		// Anonymous "Print wrapped" helper function used to print wrapped line
+		$pw = function($key, $value) use ($printer, $order) {
+			$pair = array();
+			$pair["key"] = $key;
+			$pair["value"] = $value;
+
+			$pair = apply_filters('smcpfw_sub_header_info', $pair, $order);
+
+			if(apply_filters('smcpfw_render_sub_header_info', $pair, $printer, $order) !== true){
+				$printer->add_word_wrapped_text_line($pair["key"] . ": " . $pair["value"]);
+			}
+		};
+
+		$banner = array();
+		$banner["left"] = "Order #".$order_number;			// Order number text to print
+		$banner["right"] = date("{$date_format} {$time_format}", current_time('timestamp'));			// TIme of printing text
+
+		$banner = apply_filters('smcpfw_sub_header_banner', $banner, $order);
+		$rendered = apply_filters('smcpfw_render_sub_header_banner', $banner, $printer, $order);
+
+		if($rendered !== true) {
+			$printer->add_two_columns_text_line($banner["left"], $banner["right"]);
+			$printer->add_new_line(1);
+		}
+
+		// Print header info area
+		$pw("Order Status", $order->get_status());
+		$order_date = date("{$date_format} {$time_format}", $order->get_date_created()->getOffsetTimestamp());
+		$pw("Order Date", $order_date);	
+
+		$printer->add_new_line(1);
+		if (isset($shipping_items['name']))
+			$pw("Shipping Method", $shipping_items['name']);
+		
+		$pw("Payment Method", $order->get_payment_method_title());
+	}
+
+	// Print heading above the items list
+	function star_cloudprnt_print_items_header(&$printer, &$order)
+	{
+		$printer->add_new_line(1);
+		$printer->add_two_columns_text_line('ITEM', 'TOTAL');
+		$printer->add_text_line(star_cloudprnt_get_separator($printer->get_text_columns()));
+	}
 
 	// iterate through the order line items, rendering each one
-	function star_cloudprnt_print_items(&$printer, &$selectedPrinter, &$order, &$order_meta)
+	function star_cloudprnt_print_items(&$printer, &$order)
 	{
-		$max_chars = $selectedPrinter['columns'];
 		$order_items = $order->get_items();
 		foreach ($order_items as $item_id => $item_data)
 		{
@@ -67,27 +157,25 @@
 			$product_line = star_cloudprnt_filter_html($product_name . $product_info);
 
 			$printer->set_text_emphasized();
-			$printer->add_text_line(wordwrap($product_line, $selectedPrinter['columns'], "\n", true));
+			$printer->add_word_wrapped_text_line($product_line);
 			$printer->cancel_text_emphasized();
 			
 			$meta = $item_data->get_formatted_meta_data("_", TRUE);
 
 			foreach ($meta as $meta_key => $meta_item)
 			{
-				// Use $meta_item->key for the raw (non display formatted) key name
-				$printer->add_text_line(star_cloudprnt_filter_html(" ".$meta_item->display_key.": ".$meta_item->display_value));
+				$printer->add_word_wrapped_text_line(star_cloudprnt_filter_html(" ".$meta_item->display_key.": ".$meta_item->display_value));
 			}
 			
-			$printer->add_text_line(star_cloudprnt_get_column_separated_data(array(" Qty: ".
-						$item_qty." x Cost: ".$formatted_item_price,
-						$formatted_total_price), $max_chars));
+			$printer->add_two_columns_text_line(
+				$item_qty." x Cost: ".$formatted_item_price,
+				$formatted_total_price);
 		}
 	}
-	
+
 	// Print information about any used coupons
-	function star_cloudprnt_print_coupon_info(&$printer, &$selectedPrinter, &$order, &$order_meta)
+	function star_cloudprnt_print_coupon_info(&$printer, &$order)
 	{
-		$max_chars = $selectedPrinter['columns'];
 		$coupons = $order->get_coupon_codes();
 
 		if(empty($coupons))
@@ -106,23 +194,64 @@
 			elseif ($coupon_type == "percent")
 				$coupon_value = '-' . $coupon->get_amount() . '%';
 
-			$printer->add_text_line(
-				star_cloudprnt_get_column_separated_data(
-					array("Coupon: " . $coupon_code,
-					$coupon_value), 
-				$max_chars));
+			$printer->add_two_columns_text_line("Coupon: " . $coupon_code, $coupon_value);
 		}
 		
 	}
 
+	// Print totals
+	function star_cloudprnt_print_item_totals(&$printer, &$order)
+	{
+		// Anonymous helper function used to format the total lines
+		$ft = function($text, $value) use ($printer) {
+			$formatted_value = star_cloudprnt_format_currency($value);
+			$printer->add_text_line(
+				star_mb_str_pad($text, 15)
+				. star_mb_str_pad($formatted_value, 10, " ", STR_PAD_LEFT)
+				);
+		};
+
+		$printer->add_new_line(1);
+		$printer->set_text_right_align();
+
+		if($order->get_total_discount() > 0)
+			$ft("DISCOUNT", -$order->get_discount_total());
+
+		if($order->meta_exists("_wpslash_tip"))
+			$ft("TIP", $order->get_meta("_wpslash_tip"));
+
+		//$ft("TAX", $order->get_total_tax());
+		// $taxes = $order->get_tax_totals();
+		// foreach ($taxes as $tax)
+		// {
+		// 	$ft("TAX: " . $tax->label, $tax->amount);
+		// }
+
+		$ft("TOTAL", $order->get_total());
+
+		$printer->set_text_left_align();
+	}
+
+	// Print info below items list
+	function star_cloudprnt_print_items_footer(&$printer, &$order)
+	{
+		$item_footer_message = get_option('star-cloudprnt-print-items-footer-message');
+
+		if(empty($item_footer_message))
+			return;
+
+		$printer->add_new_line(1);
+		$printer->add_word_wrapped_text_line($item_footer_message);
+		
+	}
+	
 	// Generate the Additional Order info section, which prints extra fields that are attached to the order
 	// Such as delivery times etc.
-	function star_cloudprnt_print_additional_order_info(&$printer, &$selectedPrinter, &$order, &$order_meta)
+	function star_cloudprnt_print_additional_order_info(&$printer, &$order)
 	{
 		if(get_option('star-cloudprnt-print-order-meta-cb') != "on")
 			return;
 		
-		$max_chars = $selectedPrinter['columns'];
 		$meta_data = $order->get_meta_data();
 
 		$is_printed = false;
@@ -145,7 +274,7 @@
 			if(! $is_printed)
 			{
 				$is_printed = true;
-				$printer->add_text_line("");
+				$printer->add_new_line(1);
 				$printer->set_text_emphasized();
 				$printer->add_text_line("Additional Order Information");
 				$printer->cancel_text_emphasized();
@@ -155,15 +284,17 @@
 			if(get_option('star-cloudprnt-print-order-meta-reformat-keys') == 'on')
 				$formatted_key = mb_convert_case(mb_ereg_replace("_", " ", $formatted_key), MB_CASE_TITLE);
 
-			$printer->add_text_line(star_cloudprnt_filter_html($formatted_key) . ": " . star_cloudprnt_filter_html($item_data["value"]));
+			$printer->add_word_wrapped_text_line(star_cloudprnt_filter_html($formatted_key) . ": " . star_cloudprnt_filter_html($item_data["value"]));
 		}
 		
 	}
 
 	// Print the address section - currently this prints the shipping address if present, otherwise
 	// falls back to the billing address
-	function star_cloudprnt_print_address(&$printer, &$selectedPrinter, &$order, &$order_meta)
+	function star_cloudprnt_print_address(&$printer, &$order)
 	{
+		$order_meta = get_post_meta($order->get_id());
+
 		// function to get address values if they exist or return an empty string
 		$gkv = function($key) use ($order_meta) {
 			if(array_key_exists($key, $order_meta))
@@ -212,154 +343,9 @@
 
 		$printer->add_text_line("Tel: ".$tel);
 	}
-	
-	// Generate the receipt header
-	function star_cloudprnt_print_receipt_header(&$printer, &$selectedPrinter, &$order, &$order_meta)
-	{
-		// Print a top logo if configured
-		if (get_option('star-cloudprnt-print-logo-top-input'))
-		{
-			$top_logo = esc_attr(get_option('star-cloudprnt-print-logo-top-input'));
-			$top_logo = apply_filters('smcpfw_header_logo', $top_logo, $order);
-			if(!empty($top_logo))
-				$printer->add_nv_logo($top_logo);
-		}
-
-		// Top of page Title
-		$title_text = get_option('star-cloudprnt-print-header-title');
-		$title_text = apply_filters('smcpfw_header_title', $title_text, $order);
-
-		if(!empty($title_text))
-		{
-			$result = apply_filters('smcpfw_render_header_title', $title_text, $printer, $order);
-
-			if($result !== true) {
-				// Set formatting for title
-				$printer->set_text_emphasized();
-				$printer->set_text_center_align();
-				$printer->set_font_magnification(2, 2);
-
-				// Print the title - word wrapped (NOTE - php wordwrap() is not multi-byte aware, and definitely not half/full width character aware)
-				$printer->add_text_line(wordwrap($title_text, $selectedPrinter['columns']/2, "\n", true)); // Columns are divided by 2 because we are using double width characters.
-
-				// Reset text formatting
-				$printer->set_text_left_align();
-				$printer->cancel_text_emphasized();
-				$printer->set_font_magnification(1, 1);
-
-				$printer->add_new_line(1);
-			}
-		}
-	}
-
-	// Generate the receipt sub-header
-	function star_cloudprnt_print_receipt_sub_header(&$printer, &$selectedPrinter, &$order)
-	{
-		$order_number = $order->get_order_number();			// Displayed order number may be different to order_id when using some plugins
-		$shipping_items = @array_shift($order->get_items('shipping'));
-		$date_format = get_option( 'date_format' );
-		$time_format = get_option( 'time_format' );
-
-		// Anonymous "Print wrapped" helper function used to print wrapped line
-		$pw = function($key, $value) use ($printer, $selectedPrinter, $order) {
-			$pair = array();
-			$pair["key"] = $key;
-			$pair["value"] = $value;
-
-			$pair = apply_filters('smcpfw_sub_header_info', $pair, $order);
-
-			if(apply_filters('smcpfw_render_sub_header_info', $pair, $printer, $order) !== true)
-				$printer->add_text_line(wordwrap($pair["key"] . ": " . $pair["value"], $selectedPrinter['columns'], "\n", true));
-		};
-
-		$banner = array();
-		$banner["left"] = "Order #".$order_number;			// Order number text to print
-		$banner["right"] = date("{$date_format} {$time_format}", current_time('timestamp'));			// TIme of printing text
-
-		$banner = apply_filters('smcpfw_sub_header_banner', $banner, $order);
-		$rendered = apply_filters('smcpfw_render_sub_header_banner', $banner, $printer, $order);
-
-		if($rendered !== true) {
-			$sub_header = star_cloudprnt_get_column_separated_data(array($banner["left"], $banner["right"]), $selectedPrinter['columns']);
-			if(!empty($sub_header)) {
-				$printer->add_text_line($sub_header);
-			} else {
-				if(!empty($banner["left"]))
-					$pw($banner["left"]);
-				if(!empty($banner["right"]))
-					$pw($banner["right"]);
-			}
-			$printer->add_new_line(1);
-		}
-
-		// Print header info area
-		$pw("Order Status", $order->get_status());
-		$order_date = date("{$date_format} {$time_format}", $order->get_date_created()->getOffsetTimestamp());
-		$pw("Order Date", $order_date);	
-
-		$printer->add_new_line(1);
-		if (isset($shipping_items['name']))
-			$pw("Shipping Method", $shipping_items['name']);
-		
-		$pw("Payment Method", $order->get_payment_method_title());
-	}
-
-	// Print heading above the items list
-	function star_cloudprnt_print_items_header(&$printer, &$selectedPrinter, &$order, &$order_meta)
-	{
-		$printer->add_new_line(1);
-		$printer->add_text_line(star_cloudprnt_get_column_separated_data(array('ITEM', 'TOTAL'), $selectedPrinter['columns']));
-		$printer->add_text_line(star_cloudprnt_get_separator($selectedPrinter['columns']));
-	}
-
-	// Print totals
-	function star_cloudprnt_print_item_totals(&$printer, &$selectedPrinter, &$order, &$order_meta)
-	{
-		// Anonymous helper function used to format the total lines
-		$ft = function($text, $value) use ($printer) {
-			$formatted_value = star_cloudprnt_format_currency($value);
-			$printer->add_text_line(
-				star_mb_str_pad($text, 15)
-				. star_mb_str_pad($formatted_value, 10, " ", STR_PAD_LEFT)
-				);
-		};
-
-		$printer->add_new_line(1);
-		$printer->set_text_right_align();
-
-		if($order_meta['_cart_discount'][0] != 0)
-			$ft("DISCOUNT", -$order_meta['_cart_discount'][0]);
-
-		if(array_key_exists("_wpslash_tip", $order_meta))
-			$ft("TIP", $order_meta['_wpslash_tip'][0]);
-
-		//$ft("TAX", $order->get_total_tax());
-		// $taxes = $order->get_tax_totals();
-		// foreach ($taxes as $tax)
-		// {
-		// 	$ft("TAX: " . $tax->label, $tax->amount);
-		// }
-
-		$ft("TOTAL", $order_meta['_order_total'][0]);
-
-		$printer->set_text_left_align();
-	}
 
 	// Print info below items list
-	function star_cloudprnt_print_items_footer(&$printer, &$selectedPrinter, &$order, &$order_meta)
-	{
-		$item_footer_message = get_option('star-cloudprnt-print-items-footer-message');
-
-		if(empty($item_footer_message))
-			return;
-
-		$printer->add_new_line(1);
-		$printer->add_text_line(wordwrap($item_footer_message, $selectedPrinter['columns'], "\n", true));
-		
-	}
-
-	// Print info below items list
-	function star_cloudprnt_print_customer_notes(&$printer, &$selectedPrinter, &$order, &$order_meta)
+	function star_cloudprnt_print_customer_notes(&$printer, &$order)
 	{
 		$notes = star_cloudprnt_get_wc_order_notes($order->get_id());
 
@@ -371,29 +357,25 @@
 		if(empty($notes))
 			$printer->add_text_line('None');
 		else
-			$printer->add_text_line(wordwrap($notes, $selectedPrinter['columns'], "\n", true));
+			$printer->add_word_wrapped_text_line($notes);
 	}
 
 	// Generate the receipt header
-	function star_cloudprnt_print_receipt_footer(&$printer, &$selectedPrinter, &$order, &$order_meta)
+	function star_cloudprnt_print_receipt_footer(&$printer, &$order)
 	{
 		// Print a bottom logo if configured
 		if (get_option('star-cloudprnt-print-logo-bottom-input'))
 			$printer->add_nv_logo(esc_attr(get_option('star-cloudprnt-print-logo-bottom-input')));
-		
 	}
 
 
 	// Select which sections od the document to print and trigger rendering of each
-	function star_cloudprnt_print_documentSections(&$printer, &$selectedPrinter, &$order)
+	function star_cloudprnt_print_documentSections(&$printer, &$order)
 	{
 		// Default receipt sections
 		$sections = array("header", "sub_header", "items_header", "items", "coupons", "item_totals", "items_footer", "order_info", "address", "notes", "footer", "end");
 		$sections = apply_filters('smcpfw_sections', $sections, $order);
 		
-		// Ideally this should be eliminated, rendering sections should use the WC_Oder API instead of examining the post meta
-		$order_meta = get_post_meta($order->get_id());
-
 		foreach ($sections as $section)
 		{
 			// Check for any pre_section text/data to be printed
@@ -404,7 +386,7 @@
 			{
 				$rendered = apply_filters('smcpfw_render_pre_' . $section, $data, $printer, $order);
 				if($rendered !== true)
-					$printer->add_text_line(wordwrap($data, $selectedPrinter['columns'], "\n", true));
+					$printer->add_word_wrapped_text_line($data);
 			}
 
 			// Render the section body
@@ -412,42 +394,18 @@
 			if($rendered !== true) {
 				// Use internal rendering
 				switch($section) {
-					case "header":
-						star_cloudprnt_print_receipt_header($printer, $selectedPrinter, $order, $order_meta);
-						break;
-					case "sub_header":
-						star_cloudprnt_print_receipt_sub_header($printer, $selectedPrinter, $order);
-						break;
-					case "items_header":
-						star_cloudprnt_print_items_header($printer, $selectedPrinter, $order, $order_meta);
-						break;
-					case "items":
-						star_cloudprnt_print_items($printer, $selectedPrinter, $order, $order_meta);
-						break;
-					case "coupons":
-						star_cloudprnt_print_coupon_info($printer, $selectedPrinter, $order, $order_meta);
-						break;
-					case "item_totals":
-						star_cloudprnt_print_item_totals($printer, $selectedPrinter, $order, $order_meta);
-						break;
-					case "items_footer":
-						star_cloudprnt_print_items_footer($printer, $selectedPrinter, $order, $order_meta);
-						break;
-					case "order_info":
-						star_cloudprnt_print_additional_order_info($printer, $selectedPrinter, $order, $order_meta);
-						break;
-					case "address":
-						star_cloudprnt_print_address($printer, $selectedPrinter, $order, $order_meta);
-						break;
-					case "notes":
-						star_cloudprnt_print_customer_notes($printer, $selectedPrinter, $order, $order_meta);
-						break;
-					case "footer":
-						star_cloudprnt_print_receipt_footer($printer, $selectedPrinter, $order, $order_meta);
-						break;
-					case "end":
-						$printer->cut();
-						break;
+					case "header":				star_cloudprnt_print_receipt_header($printer, $order);						break;
+					case "sub_header":		star_cloudprnt_print_receipt_sub_header($printer, $order);				break;
+					case "items_header":	star_cloudprnt_print_items_header($printer, $order);							break;
+					case "items":					star_cloudprnt_print_items($printer, $order);											break;
+					case "coupons":				star_cloudprnt_print_coupon_info($printer, $order);								break;
+					case "item_totals":		star_cloudprnt_print_item_totals($printer, $order);								break;
+					case "items_footer":	star_cloudprnt_print_items_footer($printer, $order);							break;
+					case "order_info":		star_cloudprnt_print_additional_order_info($printer, $order);			break;
+					case "address":				star_cloudprnt_print_address($printer, $order);										break;
+					case "notes":					star_cloudprnt_print_customer_notes($printer, $order);						break;
+					case "footer":				star_cloudprnt_print_receipt_footer($printer, $order);						break;
+					case "end":						$printer->cut();																									break;
 				}
 			}
 
@@ -458,7 +416,7 @@
 			{
 				$rendered = apply_filters('smcpfw_render_post_' . $section, $data, $printer, $order);
 				if($rendered !== true)
-					$printer->add_text_line(wordwrap($data, $selectedPrinter['columns'], "\n", true));
+					$printer->add_word_wrapped_text_line($data);
 			}
 
 		}
@@ -468,14 +426,8 @@
 
 	function star_cloudprnt_print_order_summary($selectedPrinter, $file, $order_id)
 	{
-
 		$order = wc_get_order($order_id);
-		$order_number = $order->get_order_number();			// Displayed order number may be different to order_id when using some plugins
-		$shipping_items = @array_shift($order->get_items('shipping'));
-		// $order_meta = get_post_meta($order_id);
-		
-		// $meta_data = $order->get_meta_data();
-		
+
 		// Get the correct object for building commands for the selected printer
 		$printer = star_cloudprnt_command_generator($selectedPrinter, $file);
 		
@@ -491,7 +443,7 @@
 
 		// If not rendered externally, then render by section.
 		if($ext_rendered !== true) {
-			star_cloudprnt_print_documentSections($printer, $selectedPrinter, $order);
+			star_cloudprnt_print_documentSections($printer, $order);
 		}
 
 		// Sound a buzzer if it is connected - for 500ms
@@ -503,7 +455,7 @@
 		if($copies < 1) $copies = 1;
 		
 		// Send the print job to the spooling folder, ready to be connected by the printer and printed.
-		$printer->printjob($copies);
+		$printer->printJob($copies);
 	}
 
 

@@ -105,11 +105,12 @@
 				"clientAction" => [array("request" => "GetPollInterval"),
 								   array("request" => "Encodings"),
 								   array("request" => "ClientType"),
-								   array("request" => "ClientVersion")]
+								   array("request" => "ClientVersion"),
+									 array("request" => "PageInfo")]
 				);
 			}
 			// Else if we have a general communication request and we already have additional data about the printer (like the poll interval) then
-			// we will only request the same additioanl data again after a specified interval (to reduce load on the server and printer), this is usually
+			// we will only request the same additional data again after a specified interval (to reduce load on the server and printer), this is usually
 			// set to 60 seconds (stored in the STAR_CLOUDPRNT_ADDITIONAL_DATA_INTERVAL variable).  So if the poll interval was changed, we will always know within 60 seconds
 			else if ((time()-filemtime($printerDir."/additional_communication.json")) > STAR_CLOUDPRNT_ADDITIONAL_DATA_INTERVAL)
 			{
@@ -117,7 +118,8 @@
 				"clientAction" => [array("request" => "GetPollInterval"),
 								   array("request" => "Encodings"),
 								   array("request" => "ClientType"),
-								   array("request" => "ClientVersion")]
+								   array("request" => "ClientVersion"),
+									 array("request" => "PageInfo")]
 				);
 			}
 			// Else if we have a general communication request and no additional data requests are required, then we can check if a new print job

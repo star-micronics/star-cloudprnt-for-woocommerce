@@ -1,7 +1,7 @@
 <?php
 	include_once('cloudprnt_conf.inc.php');
 	
-	// Generate the correct printer dcommand driver class for the specified job format
+	// Generate the correct printer command driver class for the specified job format
 	function star_cloudprnt_command_generator(&$selectedPrinter, &$file)
 	{
 		$printer = NULL;
@@ -29,7 +29,7 @@
 		return str_replace(":", ".", $printerMac);
 	}
 	
-	// Converts file friednly printer mac address to proper printer mac address
+	// Converts file friendly printer mac address to proper printer mac address
 	function star_cloudprnt_get_printer_mac($printerFolder)
 	{
 		return str_replace(".", ":", $printerFolder);

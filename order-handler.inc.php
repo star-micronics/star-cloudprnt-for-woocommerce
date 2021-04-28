@@ -130,8 +130,9 @@
 	{
 
 		$extension = STAR_CLOUDPRNT_SPOOL_FILE_FORMAT;	
-		
-		$selectedPrinterMac = "";
+		$print_width_dots = STAR_CLOUDPRNT_PAPER_SIZE_THREE_INCH;			// Fall back default, just in case the printer has not declared it's print width for some reason
+
+		// $selectedPrinterMac = "";
 		$selectedPrinter = array();
 		$printerList = star_cloudprnt_get_printer_list();
 		if (!empty($printerList))
@@ -142,11 +143,11 @@
 				if (get_option('star-cloudprnt-printer-select') == $printer['name'])
 				{
 					$selectedPrinter = $printer;
-					$selectedPrinterMac = $printer['printerMAC'];
+					// $selectedPrinterMac = $printer['printerMAC'];
 					break;
 				}
 			}
-      
+
       // If no printer has been selected, then choose the first one on the list
 			if (sizeof($selectedPrinter) == 0) {
 				$selectedPrinter = $printerList[0];
@@ -168,11 +169,12 @@
 				*/
 				$extension = "slt";
 			} else if (strpos($encodings, "application/vnd.star.linematrix") !== false) {
+				$print_width_dots = STAR_CLOUDPRNT_PAPER_SIZE_DOT_THREE_INCH;
 				$extension = "slm";
 				$columns = STAR_CLOUDPRNT_MAX_CHARACTERS_DOT_THREE_INCH;
 			} else if (strpos($encodings, "application/vnd.star.line") !== false) {
 				// a second check for Line mode - just in case the above one didn't catch item
-				// and after the "linemodematrix" check, to avoid a false match.
+				// and after the "linematrix" check, to avoid a false match.
 				$extension = "slt";
 			} else if (strpos($encodings, 'application/vnd.star.starprnt') !== false) {
 				$extension = "spt";
@@ -186,6 +188,13 @@
 			
 			$selectedPrinter['format'] = $extension;
 			$selectedPrinter['columns'] = $columns;
+
+			if(array_key_exists("PageInfo", $selectedPrinter)) {
+				$print_width_dots = $selectedPrinter["PageInfo"]["printWidth"] * $selectedPrinter["PageInfo"]["horizontalResolution"];
+			}
+
+			// Store the final determined
+			$selectedPrinter['printWidth'] = $print_width_dots;
 			
 			$file = STAR_CLOUDPRNT_PRINTER_PENDING_SAVE_PATH.star_cloudprnt_get_os_path("/order_".$order_id."_".time().".".$extension);
 
@@ -220,7 +229,7 @@
     );
 	}
 
-	// Render the sidebar metabox on the Edit Order page
+	// Render the sidebar meta box on the Edit Order page
 	function star_cloudprnt_order_meta_box_content()
 	{
 		?>
@@ -263,10 +272,10 @@
 			// Add reprint order action
 			add_action( 'woocommerce_order_actions', 'star_cloudprnt_order_reprint_action' );
 
-			// Register handler for ajax reprint request action (used by the "Print with Star CloudPRNT" button in the sidebar metabox)
+			// Register handler for ajax reprint request action (used by the "Print with Star CloudPRNT" button in the sidebar meta box)
 			add_action( 'wp_ajax_star_cloudprnt_reprint_action', 'star_cloudprnt_reprint_button_callback' );
 
-			// Register a sidebar metabox to be displayed on the Edit Order page, used to host a "print" button.
+			// Register a sidebar meta box to be displayed on the Edit Order page, used to host a "print" button.
 			add_action( 'add_meta_boxes', 'star_cloudprnt_order_meta_boxes' );
 
 			// Register handler for the order action reprint request
