@@ -6,6 +6,29 @@
 		const FONT_A = 0;
 		const FONT_B = 1;
 
+		const QR_ERROR_CORRECTION_LOW			= 0;
+		const QR_ERROR_CORRECTION_MEDIUM  = 1;
+		const QR_ERROR_CORRECTION_QUARTER = 2;
+		const QR_ERROR_CORRECTION_HIGH    = 3;
+
+		const BARCODE_UPC_E								= 0;
+		const BARCODE_UPC_A								= 1;
+		const BARCODE_EAN_8								= 2;
+		const BARCODE_EAN_13							= 3;
+		const BARCODE_CODE_39							= 4;
+		const BARCODE_IFT									= 5;
+		const BARCODE_CODE_128						= 6;
+		const BARCODE_CODE_93							= 7;
+		const BARCODE_NW_7								= 8;
+		const BARCODE_GS1_128							= 9;
+		const BARCODE_GS1_DATA_BAR_OMNI		= 10;
+		const BARCODE_GS1_DATA_BAR_TRUNC	= 11;
+		const BARCODE_GS1_DATA_BAR_LIM		= 12;
+		const BARCODE_GS1_DATA_BAR_EXP		= 13;
+		
+		const DK_CIRCUIT_1								= 1;
+		const DK_CIRCUIT_2                = 2;
+
 		public function get_emulation();
 		public function get_text_columns();
 		public function set_text_emphasized();

@@ -17,7 +17,7 @@ Plugins can also define their own sections if needed. Finally it is also possibl
 Allows plugin to filly take-over rendering the whole receipt. If a plugin handles this filter, then they are responsible for handling the entire rendering and no other filters will be triggered. This is generally not recommended unless very heavy customisation is needed.
 
 - @param bool - default filter value, set to false, but can be ignored.
-- @param printer - an object that implements the print job builder API.
+- @param [Star_CloudPRNT_Document_Builder](dev_document_builder.md) - an object that implements the document builder API.
 - @param WC_Order - the current order to be printed.
 - @return return `true` to indicate that this filter has rendered the receipt, and block the default receipt rendering. Return any other value to allow default rendering to continue.
 
