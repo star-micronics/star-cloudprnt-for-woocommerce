@@ -125,10 +125,13 @@
 
 			$alt_name = $product->get_attribute( 'star_cp_print_name' );				// Custom attribute can be used to override the product name on receipt
 
-			$item_qty = wc_get_order_item_meta($item_id, "_qty", true);
+			$item_qty = $item_data->get_quantity();
 			
 			$item_total_price = floatval(wc_get_order_item_meta($item_id, "_line_total", true))
 				+floatval(wc_get_order_item_meta($item_id, "_line_tax", true));
+
+			// To print without tax
+			//$item_total_price = floatval(wc_get_order_item_meta($item_id, "_line_total", true));
 
 			$item_price = $product->get_price();
 			
@@ -217,15 +220,18 @@
 		if($order->get_total_discount() > 0)
 			$ft("DISCOUNT", -$order->get_discount_total());
 
-		if($order->meta_exists("_wpslash_tip"))
-			$ft("TIP", $order->get_meta("_wpslash_tip"));
+		// Print any fees attached to the order
+		$fees = $order->get_fees();
+		foreach($fees as $fee) {
+			$ft($fee->get_name(), $fee->get_total());
+		}
 
-		//$ft("TAX", $order->get_total_tax());
-		// $taxes = $order->get_tax_totals();
-		// foreach ($taxes as $tax)
-		// {
-		// 	$ft("TAX: " . $tax->label, $tax->amount);
-		// }
+		$taxes = $order->get_tax_totals();
+		foreach ($taxes as $tax)
+		{
+			$ft("TAX ({$tax->label})", $tax->amount);
+		}
+		$ft("TAX TOTAL", $order->get_total_tax());
 
 		$ft("TOTAL", $order->get_total());
 
