@@ -36,6 +36,7 @@
 
 		if(!empty($title_text))
 		{
+			$printer->clear_formatting();
 			$result = apply_filters('smcpfw_render_header_title', $title_text, $printer, $order);
 
 			if($result !== true) {
@@ -48,10 +49,7 @@
 				$printer->add_word_wrapped_text_line($title_text);
 
 				// Reset text formatting
-				$printer->set_text_left_align();
-				$printer->cancel_text_emphasized();
-				$printer->set_font_magnification(1, 1);
-
+				$printer->clear_formatting();
 				$printer->add_new_line(1);
 			}
 		}
@@ -73,6 +71,7 @@
 
 			$pair = apply_filters('smcpfw_sub_header_info', $pair, $order);
 
+			$printer->clear_formatting();
 			if(apply_filters('smcpfw_render_sub_header_info', $pair, $printer, $order) !== true){
 				$printer->add_word_wrapped_text_line($pair["key"] . ": " . $pair["value"]);
 			}
@@ -83,6 +82,8 @@
 		$banner["right"] = date("{$date_format} {$time_format}", current_time('timestamp'));			// TIme of printing text
 
 		$banner = apply_filters('smcpfw_sub_header_banner', $banner, $order);
+
+		$printer->clear_formatting();
 		$rendered = apply_filters('smcpfw_render_sub_header_banner', $banner, $printer, $order);
 
 		if($rendered !== true) {
@@ -390,12 +391,14 @@
 			// If pre-section data exists, then print it
 			if(!empty($data))
 			{
+				$printer->clear_formatting();
 				$rendered = apply_filters('smcpfw_render_pre_' . $section, $data, $printer, $order);
 				if($rendered !== true)
 					$printer->add_word_wrapped_text_line($data);
 			}
 
 			// Render the section body
+			$printer->clear_formatting();
 			$rendered = apply_filters('smcpfw_render_' . $section, false, $printer, $order);
 			if($rendered !== true) {
 				// Use internal rendering
@@ -420,6 +423,7 @@
 			// If post-section data exists, then print it
 			if(!empty($data))
 			{
+				$printer->clear_formatting();
 				$rendered = apply_filters('smcpfw_render_post_' . $section, $data, $printer, $order);
 				if($rendered !== true)
 					$printer->add_word_wrapped_text_line($data);
@@ -439,6 +443,7 @@
 		
 		// Ask the printer to use the correct text encoding
 		$printer->set_codepage(get_option('star-cloudprnt-printer-encoding-select'));
+		$printer->clear_formatting();
 
 		// Sound a buzzer if it is connected - for 500ms
 		if(get_option("star-cloudprnt-buzzer-start") == "on")

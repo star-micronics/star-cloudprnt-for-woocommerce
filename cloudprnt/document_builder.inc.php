@@ -29,10 +29,26 @@
 		const DK_CIRCUIT_1								= 1;
 		const DK_CIRCUIT_2                = 2;
 
+		const LINE_THIN										= 0;
+		const LINE_MEDIUM									= 1;
+		const LINE_HEAVY									= 2;
+		const LINE_DOTS_SMALL             = 3;
+		const LINE_DOTS_MEDIUM            = 4;
+		const LINE_DOTS_HEAVY             = 5;
+		const LINE_DASH_SMALL             = 6;
+		const LINE_DASH_MEDIUM            = 7;
+		const LINE_DASH_HEAVY             = 8;
+		const LINE_DOTS_HEAVY_SHIFT       = 9;
+
 		public function get_emulation();
+		public function clear_formatting();
 		public function get_text_columns();
 		public function set_text_emphasized();
 		public function cancel_text_emphasized();
+		public function set_text_highlight();
+		public function cancel_text_highlight();
+		public function set_text_underlined();
+		public function cancel_text_underlined();
 		public function set_text_left_align();
 		public function set_text_center_align();
 		public function set_text_right_align();
@@ -46,9 +62,9 @@
 		public function add_new_line($quantity);
 		public function add_word_wrapped_text_line($text);
 		public function add_two_columns_text_line($left, $right);
+		public function add_divider($pattern, $percentage);
+		public function add_feed($length);
 		public function sound_buzzer($circuit, $pulse_ms, $delay_ms);
-		public function set_text_highlight();
-		public function cancel_text_highlight();
 		public function add_qr_code($error_correction, $cell_size, $data);
 		public function add_barcode($type, $module, $hri, $height, $data);
 		public function cut();

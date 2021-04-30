@@ -5,6 +5,8 @@
 	{
 		const SLM_SET_EMPHASIZED_HEX = "1B45";
 		const SLM_CANCEL_EMPHASIZED_HEX = "1B46";
+		const SLM_SET_UNDERLINED_HEX = "1B2D01";
+		const SLM_CANCEL_UNDERLINED_HEX = "1B2D00";
 		const SLM_SET_LEFT_ALIGNMENT_HEX = "1B1D6100";
 		const SLM_SET_CENTER_ALIGNMENT_HEX = "1B1D6101";
 		const SLM_SET_RIGHT_ALIGNMENT_HEX = "1B1D6102";
@@ -50,6 +52,16 @@
 			$this->printJobBuilder .= self::SLM_CANCEL_EMPHASIZED_HEX;
 		}
 		
+		public function set_text_underlined()
+		{
+			$this->printJobBuilder .= self::SLM_SET_UNDERLINED_HEX;
+		}
+
+		public function cancel_text_underlined()
+		{
+			$this->printJobBuilder .= self::SLM_CANCEL_UNDERLINED_HEX;
+		}
+
 		public function set_text_left_align()
 		{
 			$this->printJobBuilder .= self::SLM_SET_LEFT_ALIGNMENT_HEX;
@@ -145,6 +157,67 @@
 		public function cancel_text_highlight()
 		{
 			$this->printJobBuilder .= "1B35";
+		}
+
+		public function add_divider($pattern, $percentage)
+		{
+			if($percentage <= 0)
+				return;
+			if($percentage > 100)
+				$percentage = 100;
+
+			$k = intval(($this->printerMeta["printWidth"] / 3) * ($percentage/100));
+
+			$n1 = intval($k % 256);
+			$n2 = intval($k/256);
+
+			$pattern_hex = "8000";
+			$feed = 3;
+
+			switch($pattern) {
+				case self::LINE_THIN:
+					$pattern_hex = "80"; $feed = 3; break;
+				case self::LINE_MEDIUM:
+					$pattern_hex = "C0"; $feed = 6; break;
+				case self::LINE_HEAVY:
+					$pattern_hex = "E0"; $feed = 9; break;
+				case self::LINE_DOTS_SMALL:
+					$pattern_hex = "8000"; $feed = 3; break;
+				case self::LINE_DOTS_MEDIUM:
+					$pattern_hex = "C0C00000"; $feed = 6; break;
+				case self::LINE_DOTS_HEAVY:
+						$pattern_hex = "E0E0E0000000"; $feed = 9; break;			
+				case self::LINE_DASH_SMALL:
+					$pattern_hex = "8080808000000000"; $feed = 3; break;
+				case self::LINE_DASH_MEDIUM:
+						$pattern_hex = "C0C0C0C0C0C0C0C00000000000000000"; $feed = 6; break;
+				case self::LINE_DASH_HEAVY:
+						$pattern_hex = "E0E0E0E0E0E0E0E0E0E0E0E0E0E0E0E000000000000000000000000000000000"; $feed = 6; break;
+				case self::LINE_DOTS_HEAVY_SHIFT:
+							$pattern_hex = "000000E0E0E0"; $feed = 9; break;	
+			}
+
+			$full_seq = str_repeat($pattern_hex, intval($k/(strlen($pattern_hex)/2)) + 1);
+			$full_seq = substr($full_seq, 0, $k * 2);
+
+			$this->add_hex(sprintf("1B4B%02X%02X", $n1, $n2));
+			$this->add_hex($full_seq);
+			$this->add_hex(sprintf("1B49%02X", $feed));
+		}
+
+		function add_feed($length)
+		{
+			if($length <= 0)
+				return;
+
+			$length_dots = intval($length * 8);
+
+			for(; $length_dots > 0; $length_dots -= 255) {
+				if ($length_dots >= 255)
+					$this->add_hex(sprintf("1B49%02X", 255));
+				else
+				$this->add_hex(sprintf("1B49%02X", $length_dots));
+			}
 		}
 
 		public function add_qr_code($error_correction, $cell_size, $data)

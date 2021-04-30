@@ -40,13 +40,11 @@ function star_example_filter_sections($sections, $order) {
   $end_pos = array_search("items_footer", $sections, true);
   if($end_pos !== false) {
     array_splice($sections, $end_pos, 0, "signature");
-  }			
+  }
   return $sections;
 }
 add_filter('smcpfw_sections', 'star_example_filter_sections', 10, 2);
 ~~~
-
-
 
 ### smcpfw_pre_{$section}
 
@@ -107,7 +105,7 @@ Completely handle the rendering of the named section. Be aware that if fully han
 This example uses the print job builder API to render a custom section named "signature" with an area for a customer to sign.
 
 ~~~php
-function star_example_render_signature($banner_items, $printer, $order) {
+function star_example_render_signature($ignore, $printer, $order) {
   $printer->add_new_line(1);
   $printer->set_font_magnification(2, 1);
   $printer->add_text_line("Please Sign");
@@ -174,7 +172,7 @@ function star_example_render_title($title, $printer) {
   $printer->set_text_center_align();
   $printer->set_font_magnification(3, 2);
 
-  $printer->add_text_line(mb_convert_case($title, MB_CASE_UPPER));
+  $printer->add_word_wrapped_text_line(mb_convert_case($title, MB_CASE_UPPER));
 
   $printer->set_text_left_align();
   $printer->set_font_magnification(1, 1);

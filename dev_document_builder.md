@@ -23,6 +23,10 @@ The number of text columns returned will be calculated  based on the currently e
 
 The returned value is based on the standard half-width characters. If you are printing full-width characters (e.g. Japanese, Chinese characters) then these will use the equivalent of two half-width characters.
 
+### clear_formatting()
+
+Resets text formatting to defaults. Including the default, font, magnification, alignment etc.
+
 ### set_text_emphasized()
 
 Enable emphasized (bold) text printing.
@@ -60,6 +64,31 @@ Print a logo stored in printer FlashROM.
 #### Description
 
 Trigger the printing of a graphic that has been pre-stored in your printers flashROM. Images can be stored using the Windows device configuration software for your printer, other methods are available, please contact Technical support at your local Star office if assistance is needed.
+
+### add_feed(`$length`)
+
+Add a vertical space to the document.
+
+- @param `$length` *float* Length, in mm to feed the paper by. This will be matched as closely as possible to the printers feed resolution (1/8mm steps for most models).
+
+### add_divider(`$pattern`, `$percentage`)
+
+Add a horizontal divider bar to the document.
+
+- @param `$pattern` *const* - one of the build in pattern constants, see table below.
+- @param `$percentage` *integer* - percentage of the page width to use for drawing the divider pattern.
+
+Pattern const                                            | Description
+:--------------------------------------------------------|:-----------------------------------
+Star_CloudPRNT_Document_Builder::LINE_THIN               | A thin, solid line
+Star_CloudPRNT_Document_BuilderLINE_MEDIUM               | Medium solid line
+Star_CloudPRNT_Document_BuilderLINE_HEAVY                | Heavy solid line
+Star_CloudPRNT_Document_BuilderLINE_DOTS_SMALL           | Row of small dots
+Star_CloudPRNT_Document_BuilderLINE_DOTS_MEDIUM          | Row of medium size dots
+Star_CloudPRNT_Document_BuilderLINE_DOTS_HEAVY           | Row of large dots
+Star_CloudPRNT_Document_BuilderLINE_DASH_SMALL           | Row of small dashes
+Star_CloudPRNT_Document_BuilderLINE_DASH_MEDIUM          | Row of medium dashes
+Star_CloudPRNT_Document_BuilderLINE_DASH_HEAVY           | Row of heavy dashes
 
 ### set_font(`$font`)
 

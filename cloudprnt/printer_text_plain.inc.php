@@ -21,6 +21,11 @@
 		{
 		}
 		
+		public function set_text_underlined() {}
+		public function cancel_text_underlined() {}
+		public function add_divider($pattern, $percentage) {}
+		public function add_feed($length) {}
+
 		public function set_text_left_align()
 		{
 		}

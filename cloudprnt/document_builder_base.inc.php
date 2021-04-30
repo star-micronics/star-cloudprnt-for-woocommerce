@@ -36,6 +36,16 @@
 			return 0;
 		}
 
+		function clear_formatting()
+		{
+			$this->cancel_text_emphasized();
+			$this->cancel_text_highlight();
+			$this->cancel_text_underlined();
+			$this->set_text_left_align();
+			$this->set_font_magnification(1, 1);
+			$this->set_font(Star_CloudPRNT_Document_Builder::FONT_A);
+		}
+
 		public function add_hex($hex)
 		{
 			$this->printJobBuilder .= $hex;
