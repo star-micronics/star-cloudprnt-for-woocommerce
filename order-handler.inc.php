@@ -6,7 +6,7 @@
 
   mb_internal_encoding('utf-8');
 	mb_regex_encoding("UTF-8");
-	
+
   function star_mb_str_pad($str, $pad_len, $pad_str = ' ', $dir = STR_PAD_RIGHT) {
     $str_len = mb_strlen($str);
     $pad_str_len = mb_strlen($pad_str);
@@ -16,7 +16,7 @@
     if (!$pad_len || !$pad_str_len || $pad_len <= $str_len) {
         return $str;
     }
-   
+
     $result = null;
     $repeat = ceil($str_len - $pad_str_len + $pad_len);
     if ($dir == STR_PAD_RIGHT) {
@@ -32,7 +32,7 @@
                   	. $str
                     . mb_substr(str_repeat($pad_str, $repeat), 0, ceil($length));
     }
-   
+
     return $result;
 	}
 
@@ -45,7 +45,7 @@
   function star_cloudprnt_get_column_separated_data($columns, $max_chars)
 	{
 		$total_columns = count($columns);
-		
+
 		if ($total_columns == 0) return "";
 		if ($total_columns == 1) return $columns[0];
 		if ($total_columns == 2)
@@ -56,7 +56,7 @@
 			if ($total_whitespace < 0) return "";
 			return $columns[0].str_repeat(" ", $total_whitespace).$columns[1];
 		}
-		
+
 		$total_characters = 0;
 		foreach ($columns as $column)
 		{
@@ -72,15 +72,15 @@
 			$result .= $columns[$i].str_repeat(" ", $space_width);
 		}
 		$result .= $columns[$total_columns-1];
-		
+
 		return $result;
   }
-  
+
   // Retrieve order notes text
   function star_cloudprnt_get_wc_order_notes($order_id){
 		//make sure it's a number
 		$order_id = intval($order_id);
-		//get the post 
+		//get the post
 		$post = get_post($order_id);
 		//if there's no post, return as error
 		if (!$post) return false;
@@ -96,7 +96,7 @@
 
 		return star_cloudprnt_filter_html($symbol);
 	}
-	
+
 	// Format a float value as a currency string
 	function star_cloudprnt_format_currency($value)
 	{
@@ -108,7 +108,7 @@
 	function star_cloudprnt_filter_html($data)
 	{
 		/* Filter known html key words, convert to printer appropriate commands and encoding */
-		
+
 		$encoding = get_option('star-cloudprnt-printer-encoding-select');
 
 		$phpenc = "UTF-8";
@@ -129,14 +129,14 @@
 	function star_cloudprnt_trigger_print($order_id)
 	{
 
-		$extension = STAR_CLOUDPRNT_SPOOL_FILE_FORMAT;	
-		
+		$extension = STAR_CLOUDPRNT_SPOOL_FILE_FORMAT;
+
 		$selectedPrinterMac = "";
 		$selectedPrinter = array();
 		$printerList = star_cloudprnt_get_printer_list();
 		if (!empty($printerList))
 		{
-		
+
 			foreach ($printerList as $printer)
 			{
 				if (get_option('star-cloudprnt-printer-select') == $printer['name'])
@@ -146,17 +146,17 @@
 					break;
 				}
 			}
-      
+
       // If no printer has been selected, then choose the first one on the list
 			if (sizeof($selectedPrinter) == 0) {
 				$selectedPrinter = $printerList[0];
 			}
-			
+
 			/* Decide best printer emulation and print width as far as possible
 			   NOTE: this is not the ideal way, but suits the existing
 			   code structure. Will be reviewed.
 			   */
-			
+
 			$encodings = $selectedPrinter['Encodings'];
 			$columns = STAR_CLOUDPRNT_MAX_CHARACTERS_THREE_INCH;
 			if (strpos($encodings, "application/vnd.star.line;") !== false) {
@@ -178,26 +178,26 @@
 				$extension = "spt";
 			} else if (strpos($encodings, "text/plain") !== false) {
 				$extension = "txt";
-			} 
-			
+			}
+
 			if ($selectedPrinter['ClientType'] == "Star mC-Print2") {
 				$columns = STAR_CLOUDPRNT_MAX_CHARACTERS_TWO_INCH;
 			}
-			
+
 			$selectedPrinter['format'] = $extension;
 			$selectedPrinter['columns'] = $columns;
-			
+
 			$file = STAR_CLOUDPRNT_PRINTER_PENDING_SAVE_PATH.star_cloudprnt_get_os_path("/order_".$order_id."_".time().".".$extension);
 
 			if ($selectedPrinter !== "") star_cloudprnt_print_order_summary($selectedPrinter, $file, $order_id);
 		}
 	}
-	
+
 	// Insert the "Reprint vis Star CloudPRNT" order action to the list
 	function star_cloudprnt_order_reprint_action( $actions ) {
 		global $theorder;
 
-		$actions['star_cloudprnt_reprint_action'] = __( 'Print via Star CloudPRNT', 'my-textdomain' );
+		$actions['star_cloudprnt_reprint_action'] = __( 'Print via Star CloudPRNT', 'star-cloudprnt-for-woocommerce' );
 		return $actions;
 	}
 
@@ -212,7 +212,7 @@
 	{
     add_meta_box(
         'woocommerce-order-star-cloudprnt',
-        __( 'Star CloudPRNT' ),
+        __( 'Star CloudPRNT', 'star-cloudprnt-for-woocommerce' ),
         'star_cloudprnt_order_meta_box_content',
         'shop_order',
         'side',
@@ -242,7 +242,7 @@
 
 			</script>
 
-			<a href="javascript: star_cloudprnt_trigger();"><span><span class="dashicons dashicons-printer"></span> Print with Star CloudPRNT</span></a>
+			<a href="javascript: star_cloudprnt_trigger();"><span><span class="dashicons dashicons-printer"></span> <?php _e('Print with Star CloudPRNT', 'star-cloudprnt-for-woocommerce-plus'); ?></span></a>
       <span id="star_cp_job_sent" style="display:none"><span class="dashicons dashicons-yes"></span></span>
 
 		<?php
@@ -271,7 +271,7 @@
 
 			// Register handler for the order action reprint request
 			add_action('woocommerce_order_action_star_cloudprnt_reprint_action', 'star_cloudprnt_reprint', 1, 1 );
-			
+
 
 			// Register the automatic order printing trigger, depending on config
 			$trigger = get_option('star-cloudprnt-trigger');
