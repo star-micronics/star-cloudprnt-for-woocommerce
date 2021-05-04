@@ -58,7 +58,6 @@
 
 			$product_info = "";
 			if(get_option('star-cloudprnt-print-items-print-id') == "on")
-				$product_info .= " - ID: " . $product_id;
 				$product_info .= sprintf(__(" - ID: %d", 'star-cloudprnt-for-woocommerce'), $product_id);
 			if(get_option('star-cloudprnt-print-items-print-sku') == "on" && (! empty($sku)))
 				$product_info .= sprintf(__(" - SKU: %s", 'star-cloudprnt-for-woocommerce'), $sku);

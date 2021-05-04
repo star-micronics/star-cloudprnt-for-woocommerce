@@ -153,7 +153,7 @@
 			<input type="radio" name="star-cloudprnt-trigger" value="status_on-hold" <?php checked(get_option('star-cloudprnt-trigger'), 'status_on-hold', true) ?>>
 			<label><?php esc_html_e('When an order is assigned the "on hold" status', 'star-cloudprnt-for-woocommerce');?></label><br>
 			<input type="radio" name="star-cloudprnt-trigger" value="thankyou" <?php checked(get_option('star-cloudprnt-trigger'), 'thankyou', true) ?>>
-			<label><?php esc_html_e('When WooCommerce "Thank You" message is displayed (<span class="star_cp_caution">&#x26a0;</span> legacy option, not recommended)', 'star-cloudprnt-for-woocommerce');?></label><br>
+			<label><?php printf('%s<span class="star_cp_caution">&#x26a0;</span> %s', esc_html__('When WooCommerce "Thank You" message is displayed (', 'star-cloudprnt-for-woocommerce'), esc_html__('legacy option, not recommended)', 'star-cloudprnt-for-woocommerce'));?></label><br>
 			<input type="radio" name="star-cloudprnt-trigger" value="none" <?php checked(get_option('star-cloudprnt-trigger'), 'none', true) ?>>
 			<label><?php esc_html_e('Disable automatic printing', 'star-cloudprnt-for-woocommerce');?></label><br>
 		<?php
@@ -200,7 +200,7 @@
 				<label><?php esc_html_e('Re-format key names (e.g. print "delivery_time" as "Delivery Time")', 'star-cloudprnt-for-woocommerce');?></label><br/>
 				<input type="checkbox" name="star-cloudprnt-print-order-meta-hidden" value="on" <?php checked(get_option('star-cloudprnt-print-order-meta-hidden'), 'on', true) ?> >
 				<label><?php esc_html_e('Include hidden fields', 'star-cloudprnt-for-woocommerce');?></label><br/>
-				<br/><label><?php esc_html_e('Exclude items with these key names (',' separated)', 'star-cloudprnt-for-woocommerce');?></label><br/>
+				<br/><label><?php esc_html_e("Exclude items with these key names (',' separated)", 'star-cloudprnt-for-woocommerce');?></label><br/>
 				<input type="text" name="star-cloudprnt-print-order-meta-exclusions" size=60 value="<?php echo get_option('star-cloudprnt-print-order-meta-exclusions') ?>">
 
 			</div>
@@ -220,15 +220,15 @@
 		?>
 			<!--<label>Top of page:</label> -->
 			<input type="checkbox" name="star-cloudprnt-print-logo-top-cb" <?= checked(get_option('star-cloudprnt-print-logo-top-cb'), 'on', false); ?> onclick='document.getElementById("star-cloudprnt-top-logo-input").disabled = !this.checked;'>
-			<label><?php esc_html_e('Print at top of page',' separated)', 'star-cloudprnt-for-woocommerce');?></label>
+			<label><?php esc_html_e('Print at top of page', 'star-cloudprnt-for-woocommerce');?></label>
 			<input type="text" style="width: 15mm;" id="star-cloudprnt-top-logo-input" name="star-cloudprnt-print-logo-top-input" value="<?= $top_option_value ?>" <?= $top_disabled ?> >
-			<label><?php esc_html_e('Keycode',' separated)', 'star-cloudprnt-for-woocommerce');?></label><br/>
+			<label><?php esc_html_e('Keycode', 'star-cloudprnt-for-woocommerce');?></label><br/>
 
 			<!--<label>End of page:</label> -->
 			<input type="checkbox" name="star-cloudprnt-print-logo-bottom-cb" <?= checked(get_option('star-cloudprnt-print-logo-bottom-cb'), 'on', false); ?> onclick='document.getElementById("star-cloudprnt-bottom-logo-input").disabled = !this.checked;'>
-			<label><?php esc_html_e('Print at end of page',' separated)', 'star-cloudprnt-for-woocommerce');?></label>
+			<label><?php esc_html_e('Print at end of page', 'star-cloudprnt-for-woocommerce');?></label>
 			<input type="text" style="width: 15mm;" id="star-cloudprnt-bottom-logo-input" name="star-cloudprnt-print-logo-bottom-input" value="<?= $end_option_value ?>" <?= $end_disabled ?> >
-			<label><?php esc_html_e('Keycode',' separated)', 'star-cloudprnt-for-woocommerce');?></label><br/>
+			<label><?php esc_html_e('Keycode', 'star-cloudprnt-for-woocommerce');?></label><br/>
 			<p><?php sprintf('<strong>%s</strong>%s<a href="http://starmicronics.com/support/Default.aspx">%s</a>',
                     esc_html__('Note:', 'star-cloudprnt-for-woocommerce'),
                     esc_html__('logos should be written to printer FlashROM memory, using a suitable tool, such as the StarPRNT Software for Windows, which can be downloaded from the', 'star-cloudprnt-for-woocommerce'),
@@ -241,9 +241,9 @@
 	{
 		?>
 			<input type="checkbox" name="star-cloudprnt-buzzer-start" value="on" <?php checked(get_option('star-cloudprnt-buzzer-start'), 'on', true) ?> >
-			<label><?php esc_html_e('Sound  external buzzer before printing',' separated)', 'star-cloudprnt-for-woocommerce');?></label><br/>
+			<label><?php esc_html_e('Sound  external buzzer before printing', 'star-cloudprnt-for-woocommerce');?></label><br/>
 			<input type="checkbox" name="star-cloudprnt-buzzer-end" value="on" <?php checked(get_option('star-cloudprnt-buzzer-end'), 'on', true) ?> >
-			<label><?php esc_html_e('Sound  external buzzer after printing',' separated)', 'star-cloudprnt-for-woocommerce');?></label><br/>
+			<label><?php esc_html_e('Sound  external buzzer after printing', 'star-cloudprnt-for-woocommerce');?></label><br/>
 		<?php
 	}
 

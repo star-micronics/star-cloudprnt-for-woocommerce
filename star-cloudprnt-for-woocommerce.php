@@ -42,13 +42,4 @@
 	}
 	$plugin = plugin_basename(__FILE__);
 	add_filter("plugin_action_links_$plugin", 'my_plugin_settings_link' );
-
-	function star_cloudprnt_load_textdomain() {
-		load_plugin_textdomain(
-			'star-cloudprnt-for-woocommerce',
-			false,
-			dirname(plugin_basename(__FILE__)).'/languages'
-		);
-	}
-	add_action('plugins_loaded', 'star_cloudprnt_load_textdomain');
 ?>
