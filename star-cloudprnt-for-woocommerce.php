@@ -36,7 +36,7 @@
 
 	// Add a settings link on the plugins page
 	function my_plugin_settings_link($links) {
-		$settings_link = '<a href="options-general.php?page=star-cloudprnt-settings-admin">'.__('Settings').'</a>';
+		$settings_link = '<a href="options-general.php?page=star-cloudprnt-settings-admin">'.esc_html__('Settings', 'star-cloudprnt-for-woocommerce').'</a>';
 		array_unshift($links, $settings_link);
 		return $links;
 	}

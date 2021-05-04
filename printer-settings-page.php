@@ -87,18 +87,18 @@
 
 		?>
 
-        <h2><?php _e('Printer Information'); ?></h2>
+        <h2><?php esc_html_e('Printer Information', 'star-cloudprnt-for-woocommerce'); ?></h2>
 			<script>
 				function showDiv() {
 					if (document.getElementById('editPrinterNameContainer').style.display == "block")
 					{
 						document.getElementById('editPrinterNameContainer').style.display = "none";
-                        document.getElementById('changeNameLabel').innerHTML = "<?php _e('Rename'); ?>";
+                        document.getElementById('changeNameLabel').innerHTML = "<?php esc_html_e('Rename', 'star-cloudprnt-for-woocommerce'); ?>";
 					}
 					else
 					{
 						document.getElementById('editPrinterNameContainer').style.display = "block";
-                        document.getElementById('changeNameLabel').innerHTML = "<?php _e('Hide'); ?>";
+                        document.getElementById('changeNameLabel').innerHTML = "<?php esc_html_e('Hide', 'star-cloudprnt-for-woocommerce'); ?>";
 					}
 				}
 				function savePrinterName()
@@ -108,38 +108,38 @@
 				}
 			</script>
 			<?php
-				$onlineString = '<span style="color: orange">'.__('Unknown').'</span>';
-				if ($printerdata['printerOnline']) $onlineString = '<span style="color: green">'.__('Connected').'</span>';
-				else $onlineString = '<span style="color: red">'.__('Not Connected').'</span>';
+				$onlineString = '<span style="color: orange">'.esc_html__('Unknown', 'star-cloudprnt-for-woocommerce').'</span>';
+				if ($printerdata['printerOnline']) $onlineString = '<span style="color: green">'.esc_html__('Connected', 'star-cloudprnt-for-woocommerce').'</span>';
+				else $onlineString = '<span style="color: red">'.esc_html__('Not Connected', 'star-cloudprnt-for-woocommerce').'</span>';
 				$httpStatus = str_replace("%", " ", $printerdata['statusCode']);
 				$httpStatus = str_replace(" 20", " ", $httpStatus);
 
-				echo "<strong>".__('Name:')."</strong> ".$printerdata['name'].' - <a id="changeNameLabel" href="javascript:void(0);" onclick=\'showDiv()\'>'.__('Rename').'</a><br>';
+				echo "<strong>".esc_html__('Name:', 'star-cloudprnt-for-woocommerce')."</strong> ".$printerdata['name'].' - <a id="changeNameLabel" href="javascript:void(0);" onclick=\'showDiv()\'>'.esc_html__('Rename', 'star-cloudprnt-for-woocommerce').'</a><br>';
 				echo '<div id="editPrinterNameContainer" style="display: none">';
 					echo '<input id="printerName" type="text" name="printer" id="nprinter" placeholder="'.$printerdata['name'].'" value="'.$printerdata['name'].'" autocomplete="off">';
-					echo '<a href="javascript: void(0);" onclick="savePrinterName()" style="padding-left: 10px">'.__('Save').'</a>';
+					echo '<a href="javascript: void(0);" onclick="savePrinterName()" style="padding-left: 10px">'.esc_html__('Save', 'star-cloudprnt-for-woocommerce').'</a>';
 				echo '</div>';
-				if (isset($_GET['errorCode']) && $_GET['errorCode'] == 1) echo '<script type="text/javascript">showDiv()</script><span style="color:red;">'.__('Error: The new printer name must be between 3 and 35 characters long.').'</span><br>';
-				echo "<strong>".__('Poll Interval:')."</strong> ".$printerdata['GetPollInterval']."<br>";
-				echo "<strong>".__('Connectivity:')."</strong> ".$onlineString."<br>";
-				echo "<strong>".__('ASB Status Code:')."</strong> ".$printerdata['status']."<br>";
-				echo "<strong>".__('HTTP Status Code:')."</strong> ".$httpStatus."<br>";
-				echo "<strong>".__('Last Communication:')."</strong> ".date("D j M y - H:i:s", $printerdata['lastActive']);
+				if (isset($_GET['errorCode']) && $_GET['errorCode'] == 1) echo '<script type="text/javascript">showDiv()</script><span style="color:red;">'.esc_html__('Error: The new printer name must be between 3 and 35 characters long.', 'star-cloudprnt-for-woocommerce').'</span><br>';
+				echo "<strong>".esc_html__('Poll Interval:', 'star-cloudprnt-for-woocommerce')."</strong> ".$printerdata['GetPollInterval']."<br>";
+				echo "<strong>".esc_html__('Connectivity:', 'star-cloudprnt-for-woocommerce')."</strong> ".$onlineString."<br>";
+				echo "<strong>".esc_html__('ASB Status Code:', 'star-cloudprnt-for-woocommerce')."</strong> ".$printerdata['status']."<br>";
+				echo "<strong>".esc_html__('HTTP Status Code:', 'star-cloudprnt-for-woocommerce')."</strong> ".$httpStatus."<br>";
+				echo "<strong>".esc_html__('Last Communication:', 'star-cloudprnt-for-woocommerce')."</strong> ".date("D j M y - H:i:s", $printerdata['lastActive']);
 			?>
 
-			<h2><?php _e('Printer Identification'); ?></h2>
+			<h2><?php esc_html_e('Printer Identification', 'star-cloudprnt-for-woocommerce'); ?></h2>
 			<?php
-				echo "<strong>".__('MAC Address:')."</strong> ".strtoupper($printerdata['printerMAC'])."<br>";
-				echo "<strong>".__('IP Address:')."</strong> ".$printerdata['ipAddress'];
+				echo "<strong>".esc_html__('MAC Address:', 'star-cloudprnt-for-woocommerce')."</strong> ".strtoupper($printerdata['printerMAC'])."<br>";
+				echo "<strong>".esc_html__('IP Address:', 'star-cloudprnt-for-woocommerce')."</strong> ".$printerdata['ipAddress'];
 			?>
 
-			<h2><?php _e('Interface'); ?></h2>
+			<h2><?php esc_html_e('Interface', 'star-cloudprnt-for-woocommerce'); ?></h2>
 			<?php
-				echo "<strong>".__('Client Type:')."</strong> ".$printerdata['ClientType']."<br>";
-				echo "<strong>".__('Client Version:')."</strong> ".$printerdata['ClientVersion'];
+				echo "<strong>".esc_html__('Client Type:', 'star-cloudprnt-for-woocommerce')."</strong> ".$printerdata['ClientType']."<br>";
+				echo "<strong>".esc_html__('Client Version:', 'star-cloudprnt-for-woocommerce')."</strong> ".$printerdata['ClientVersion'];
 			?>
 
-			<h2><?php _e('Supported Encodings'); ?></h2>
+			<h2><?php esc_html_e('Supported Encodings', 'star-cloudprnt-for-woocommerce'); ?></h2>
 			<?php
 				$encodings = explode(';', $printerdata['Encodings']);
 				foreach ($encodings as $encoding)
@@ -148,17 +148,17 @@
 				}
 			?>
 
-			<h2><?php _e('Printer Queue'); ?></h2>
+			<h2><?php esc_html_e('Printer Queue', 'star-cloudprnt-for-woocommerce'); ?></h2>
 			<?php
 				$queueItems = star_cloudprnt_queue_get_queue_list($printerdata['printerMAC']);
-				if (empty($queueItems)) echo __('No items found in printer queue.').'<br>';
+				if (empty($queueItems)) echo esc_html__('No items found in printer queue.', 'star-cloudprnt-for-woocommerce').'<br>';
 				else
 				{
 					echo '<table>';
 					echo '<tr>';
-						echo '<th style="padding: 5px">'.__('Priority').'</th>';
-						echo '<th>'.__('Order ID').'</th>';
-						echo '<th>'.__('Queued On').'</th>';
+						echo '<th style="padding: 5px">'.esc_html__('Priority', 'star-cloudprnt-for-woocommerce').'</th>';
+						echo '<th>'.esc_html__('Order ID', 'star-cloudprnt-for-woocommerce').'</th>';
+						echo '<th>'.esc_html__('Queued On', 'star-cloudprnt-for-woocommerce').'</th>';
 					echo '</tr>';
 						foreach ($queueItems as $queueNumber=>$item)
 						{
@@ -174,23 +174,23 @@
 					echo '</table>';
 
 					echo '<br><button class="button button-primary" onclick="location.href=\'?page='.$_GET['page']
-							.'&printersettings='.$_GET['printersettings'].'&cq\'">'.__('Clear Queue').'</button>';
+							.'&printersettings='.$_GET['printersettings'].'&cq\'">'.esc_html__('Clear Queue', 'star-cloudprnt-for-woocommerce').'</button>';
 				}
 
 			?>
 
-			<h2><?php _e('Printed Order History'); ?></h2>
+			<h2><?php esc_html_e('Printed Order History', 'star-cloudprnt-for-woocommerce'); ?></h2>
 			<?php
 				$orderHistory = star_cloudprnt_queue_get_order_history();
-				if (empty($orderHistory)) echo __('No printed previous orders have been logged.').'<br>';
+				if (empty($orderHistory)) echo esc_html__('No printed previous orders have been logged.', 'star-cloudprnt-for-woocommerce').'<br>';
 				else
 				{
 					echo '<table>';
 					echo '<tr>';
-						echo '<th style="padding: 5px">'.__('Order ID').'</th>';
-						echo '<th>'.__('Copy Count').'</th>';
-						echo '<th>'.__('Queued On').'</th>';
-						echo '<th>'.__('Printed On').'</th>';
+						echo '<th style="padding: 5px">'.esc_html__('Order ID', 'star-cloudprnt-for-woocommerce').'</th>';
+						echo '<th>'.esc_html__('Copy Count', 'star-cloudprnt-for-woocommerce').'</th>';
+						echo '<th>'.esc_html__('Queued On', 'star-cloudprnt-for-woocommerce').'</th>';
+						echo '<th>'.esc_html__('Printed On', 'star-cloudprnt-for-woocommerce').'</th>';
 					echo '</tr>';
 						foreach ($orderHistory as $item)
 						{
@@ -210,18 +210,18 @@
 					echo '</table>';
 
 					echo '<br><button class="button button-primary" onclick="location.href=\'?page='.$_GET['page']
-							.'&printersettings='.$_GET['printersettings'].'&coh\'">'.__('Clear Order History').'</button>';
+							.'&printersettings='.$_GET['printersettings'].'&coh\'">'.esc_html__('Clear Order History', 'star-cloudprnt-for-woocommerce').'</button>';
 				}
 			?>
 
-			<h2><?php _e('Delete Printer'); ?></h2>
+			<h2><?php esc_html_e('Delete Printer', 'star-cloudprnt-for-woocommerce'); ?></h2>
 			<?php
-				if ($printerdata['printerOnline']) echo '<span style="color: red"><span class="dashicons dashicons-no"></span>'.__('You cannot delete the printer whilst it is connected').'</span>';
+				if ($printerdata['printerOnline']) echo '<span style="color: red"><span class="dashicons dashicons-no"></span>'.esc_html__('You cannot delete the printer whilst it is connected', 'star-cloudprnt-for-woocommerce').'</span>';
 				else echo '<button class="button button-primary" onclick="location.href=\'?page='.$_GET['page']
-						.'&printersettings='.$_GET['printersettings'].'&dp\'">'.__('Delete Printer').'</button>';
+						.'&printersettings='.$_GET['printersettings'].'&dp\'">'.esc_html__('Delete Printer', 'star-cloudprnt-for-woocommerce').'</button>';
 			?>
 
-			<br><br><a href="?page=<?php echo $_GET['page']; ?>"><?php _e('Return to previous page'); ?></a>
+			<br><br><a href="?page=<?php echo $_GET['page']; ?>"><?php esc_html_e('Return to previous page', 'star-cloudprnt-for-woocommerce'); ?></a>
 		<?php
 	}
 ?>

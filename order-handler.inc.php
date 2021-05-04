@@ -242,7 +242,7 @@
 
 			</script>
 
-			<a href="javascript: star_cloudprnt_trigger();"><span><span class="dashicons dashicons-printer"></span> <?php _e('Print with Star CloudPRNT', 'star-cloudprnt-for-woocommerce-plus'); ?></span></a>
+			<a href="javascript: star_cloudprnt_trigger();"><span><span class="dashicons dashicons-printer"></span> <?php esc_html_e('Print with Star CloudPRNT', 'star-cloudprnt-for-woocommerce'); ?></span></a>
       <span id="star_cp_job_sent" style="display:none"><span class="dashicons dashicons-yes"></span></span>
 
 		<?php
