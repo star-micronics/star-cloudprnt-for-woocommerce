@@ -241,6 +241,8 @@
 		$data["left"] = "{$item_qty} x Cost: {$formatted_item_price}";
 		$data["right"] = $formatted_total_price;
 
+		$data = apply_filters('smcpfw_items_item_summary', $data, $item);
+
 		return $data;
 	}
 
@@ -279,7 +281,7 @@
 				apply_filters('smcpfw_render_items_pre_item_main', $printer, $item);
 
 				$printer->clear_formatting();
-				if(apply_filters('smcpfw_render_items_item_main', false, $printer, $item) !== true)
+				if(apply_filters('smcpfw_render_items_item_main', false, $data, $printer, $item) !== true)
 					star_cloudprnt_print_item_main($data, $printer, $order, $item);
 
 				$printer->clear_formatting();
