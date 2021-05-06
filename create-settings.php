@@ -32,7 +32,7 @@
 	function star_cloudprnt_register_settings()
 	{
 		/* Attempt to set the default print job trigger to "status_processing" for new installs, but "thankyou" for sites that have
-		   already been running with the plugin - to avoid potentially breaking thos sites after upgrading the plugin, since some sites use
+		   already been running with the plugin - to avoid potentially breaking those sites after upgrading the plugin, since some sites use
 			 other plugins to change the default order status.
 			 */
 			$trigger_default = "status_processing";						// Recommended default for new sites, at which time users can choose another option if preferred
@@ -51,6 +51,9 @@
 
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-items-print-id", array("default" => "on"));
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-items-print-sku", array("default" => "off"));
+		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-items-print-tax-code", array("default" => "off"));
+
+		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-items-price-includes-tax", array("default" => "on"));
 
 		register_setting("star_cloudprnt_setup_section", "star-cloudprnt-print-items-footer-message", array("default" => __("All prices are inclusive of tax (if applicable).", 'star-cloudprnt-for-woocommerce')));
 
@@ -183,6 +186,14 @@
 			<input type="checkbox" name="star-cloudprnt-print-items-print-sku" value="on" <?php checked(get_option('star-cloudprnt-print-items-print-sku'), 'on', true) ?> >
 			<label><?php esc_html_e('Include Item SKU', 'star-cloudprnt-for-woocommerce');?></label><br/>
 
+			<input type="checkbox" name="star-cloudprnt-print-items-print-tax-code" value="on" <?php checked(get_option('star-cloudprnt-print-items-print-tax-code'), 'on', true) ?> >
+			<label>Include Item Tax Code</label><br/>
+
+		  <br/>
+			<input type="checkbox" name="star-cloudprnt-print-items-price-includes-tax" value="on" <?php checked(get_option('star-cloudprnt-print-items-price-includes-tax'), 'on', true) ?> >
+			<label>Include Tax in item price</label><br/>
+
+
 			<br/>
 			<label><?php esc_html_e('Item list footer message', 'star-cloudprnt-for-woocommerce');?></label><br/>
 			<textarea type="text" name="star-cloudprnt-print-items-footer-message" cols=60 rows=4><?php echo get_option('star-cloudprnt-print-items-footer-message') ?></textarea>
@@ -228,12 +239,12 @@
 			<input type="checkbox" name="star-cloudprnt-print-logo-bottom-cb" <?= checked(get_option('star-cloudprnt-print-logo-bottom-cb'), 'on', false); ?> onclick='document.getElementById("star-cloudprnt-bottom-logo-input").disabled = !this.checked;'>
 			<label><?php esc_html_e('Print at end of page', 'star-cloudprnt-for-woocommerce');?></label>
 			<input type="text" style="width: 15mm;" id="star-cloudprnt-bottom-logo-input" name="star-cloudprnt-print-logo-bottom-input" value="<?= $end_option_value ?>" <?= $end_disabled ?> >
+
 			<label><?php esc_html_e('Keycode', 'star-cloudprnt-for-woocommerce');?></label><br/>
 			<p><?php sprintf('<strong>%s</strong>%s<a href="http://starmicronics.com/support/Default.aspx">%s</a>',
                     esc_html__('Note:', 'star-cloudprnt-for-woocommerce'),
                     esc_html__('logos should be written to printer FlashROM memory, using a suitable tool, such as the StarPRNT Software for Windows, which can be downloaded from the', 'star-cloudprnt-for-woocommerce'),
                     esc_html__('Star global downlad site', 'star-cloudprnt-for-woocommerce')); ?></p>
-
 		<?php
 	}
 

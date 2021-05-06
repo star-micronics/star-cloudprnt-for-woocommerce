@@ -29,7 +29,7 @@ Resets text formatting to defaults. Including the default, font, magnification, 
 
 ### set_text_emphasized()
 
-Enable emphasized (bold) text printing.
+Enable emphasized (bold) for subsequently printed text.
 
 ### cancel_text_emphasized()
 
@@ -42,6 +42,14 @@ Enable highlighting for subsequently printed text. For monochrome/thermal printe
 ### cancel_text_highlight()
 
 Disable highlighting for subsequently printed text.
+
+### set_text_underlined()
+
+Enable underlining for subsequently printed text.
+
+### cancel_text_underlined()
+
+Disable underlining for subsequently printed text.
 
 ### set_text_left_align()
 
@@ -69,7 +77,7 @@ Trigger the printing of a graphic that has been pre-stored in your printers flas
 
 Add a vertical space to the document.
 
-- @param `$length` *float* Length, in mm to feed the paper by. This will be matched as closely as possible to the printers feed resolution (1/8mm steps for most models).
+- @param `$length` *float* - Length, in mm to feed the paper by. This will be matched as closely as possible to the printers feed resolution (1/8mm steps for most models).
 
 ### add_divider(`$pattern`, `$percentage`)
 
@@ -81,14 +89,14 @@ Add a horizontal divider bar to the document.
 Pattern const                                            | Description
 :--------------------------------------------------------|:-----------------------------------
 Star_CloudPRNT_Document_Builder::LINE_THIN               | A thin, solid line
-Star_CloudPRNT_Document_BuilderLINE_MEDIUM               | Medium solid line
-Star_CloudPRNT_Document_BuilderLINE_HEAVY                | Heavy solid line
-Star_CloudPRNT_Document_BuilderLINE_DOTS_SMALL           | Row of small dots
-Star_CloudPRNT_Document_BuilderLINE_DOTS_MEDIUM          | Row of medium size dots
-Star_CloudPRNT_Document_BuilderLINE_DOTS_HEAVY           | Row of large dots
-Star_CloudPRNT_Document_BuilderLINE_DASH_SMALL           | Row of small dashes
-Star_CloudPRNT_Document_BuilderLINE_DASH_MEDIUM          | Row of medium dashes
-Star_CloudPRNT_Document_BuilderLINE_DASH_HEAVY           | Row of heavy dashes
+Star_CloudPRNT_Document_Builder::LINE_MEDIUM             | Medium solid line
+Star_CloudPRNT_Document_Builder::LINE_HEAVY              | Heavy solid line
+Star_CloudPRNT_Document_Builder::LINE_DOTS_SMALL         | Row of small dots
+Star_CloudPRNT_Document_Builder::LINE_DOTS_MEDIUM        | Row of medium size dots
+Star_CloudPRNT_Document_Builder::LINE_DOTS_HEAVY         | Row of large dots
+Star_CloudPRNT_Document_Builder::LINE_DASH_SMALL         | Row of small dashes
+Star_CloudPRNT_Document_Builder::LINE_DASH_MEDIUM        | Row of medium dashes
+Star_CloudPRNT_Document_Builder::LINE_DASH_HEAVY         | Row of heavy dashes
 
 ### set_font(`$font`)
 

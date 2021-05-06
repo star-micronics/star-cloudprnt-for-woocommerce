@@ -102,6 +102,8 @@
 				$this->printJobBuilder .= "1B1E4600";
 				$this->currentFontWidth = 12;
 			}
+
+			$this->add_hex("1B730000");
 		}
 
 		public function set_font_magnification($width, $height)

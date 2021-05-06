@@ -111,69 +111,223 @@
 		$printer->add_text_line(star_cloudprnt_get_separator($printer->get_text_columns()));
 	}
 
+	function star_cloudprnt_item_main_data(&$order, &$item)
+	{
+		$data = array();
+		$data["right"] = null;
+
+		$product_name = $item['name'];
+		$product_id = $item['product_id'];
+		$variation_id = $item['variation_id'];
+		$product = wc_get_product($product_id);
+
+		$sku = $product->get_sku();
+		$alt_name = $product->get_attribute( 'star_cp_print_name' );				// Custom attribute can be used to override the product name on receipt
+
+		if ($variation_id != 0)																							// Use variation info if it exists
+		{
+			$product_variation = new WC_Product_Variation( $variation_id );
+			$product_name = $product_variation->get_title();
+			$sku = $product_variation->get_sku();
+			$item_price = $product_variation->get_price();
+		}
+
+		if ($alt_name != "")																								// Use alt name for printing if one has been set
+			$product_name = $alt_name;
+
+		$product_info = "";
+		if(get_option('star-cloudprnt-print-items-print-id') == "on")
+			$product_info .= " - ID: " . $product_id;
+		if(get_option('star-cloudprnt-print-items-print-sku') == "on" && (! empty($sku)))
+			$product_info .= " - SKU: " . $sku;
+
+		if(get_option('star-cloudprnt-print-items-print-tax-code') == "on"){
+			$tc = $item->get_tax_class();
+			if(!empty($tc)) $product_info .= "  - Tax: " . $tc;
+		}
+
+		$data["left"] = star_cloudprnt_filter_html($product_name . $product_info);
+
+
+		return $data;
+	}
+
+	function star_cloudprnt_print_item_main($data, &$printer, &$order, &$item)
+	{
+		$left = ""; $right = "";
+		if(array_key_exists("left", $data))
+			$left = $data["left"];
+
+		if(array_key_exists("right", $data))
+			$right = $data["right"];
+
+		$printer->set_text_emphasized();
+		$printer->add_two_columns_text_line($left, $right);
+		$printer->cancel_text_emphasized();
+	}
+
+	function star_cloudprnt_item_info(&$order, &$item)
+	{
+		$data = array();
+
+		$meta = $item->get_formatted_meta_data("_", TRUE);
+
+		foreach ($meta as $meta_key => $meta_item)
+		{
+			$info = array();
+			$info["key"] = $meta_key;
+			$info["value"] = $meta_item->value;
+			$info["print_key"] = star_cloudprnt_filter_html($meta_item->display_key);
+			$info["print_value"] = star_cloudprnt_filter_html($meta_item->display_value);
+
+			// Filter per info field
+			$info = apply_filters('smcpfw_items_item_info_field', $info, $item);
+
+			array_push($data, $info);
+		}
+
+		// filter whole info field array (plugins can re-order, add extras etc.)
+		$data = apply_filters('smcpfw_items_item_info_fields', $data, $item);
+
+		return $data;
+	}
+
+	function star_cloudprnt_print_item_info($data, &$printer, &$order, &$item)
+	{
+		foreach($data as $info) {
+			$printer->clear_formatting();
+			if(apply_filters('smcpfw_render_items_item_info_field', $info, $printer, $item) !== true)
+			{
+				$key = "";
+				$value = "";
+				if(array_key_exists("print_key", $info))
+					$key = $info["print_key"] . ": ";
+				if(array_key_exists("print_value", $info))
+					$value = $info["print_value"];
+				
+				$printer->add_word_wrapped_text_line(" {$key}{$value}");
+			}
+		}
+	}
+
+	function star_cloudprnt_item_summary_data(&$order, &$item)
+	{
+		$data = array();
+
+		$variation_id = $item['variation_id'];
+		$product = wc_get_product($item['product_id']);
+		$item_qty = $item->get_quantity();
+
+		// $item_total_price = floatval(wc_get_order_item_meta($item_id, "_line_total", true))
+		// 	+floatval(wc_get_order_item_meta($item_id, "_line_tax", true));
+
+
+		// Get line price, with or without tax
+		$item_total_price = floatval(wc_get_order_item_meta($item->get_id(), "_line_total", true));
+		if(get_option('star-cloudprnt-print-items-price-includes-tax') == "on")
+			$item_total_price += floatval(wc_get_order_item_meta($item->get_id(), "_line_tax", true));
+
+		$item_price = $product->get_price();																// product unit price
+
+		if ($variation_id != 0)																							// Use variation info if it exists
+		{
+			$product_variation = new WC_Product_Variation( $variation_id );
+			$item_price = $product_variation->get_price();
+		}
+
+		$formatted_item_price = star_cloudprnt_format_currency($item_price);
+		$formatted_total_price = star_cloudprnt_format_currency($item_total_price);
+
+		$data["left"] = "{$item_qty} x Cost: {$formatted_item_price}";
+		$data["right"] = $formatted_total_price;
+
+		$data = apply_filters('smcpfw_items_item_summary', $data, $item);
+
+		return $data;
+	}
+
+	function star_cloudprnt_print_item_summary($data, $printer, $order, $item)
+	{
+		$left = ""; $right = "";
+		if(array_key_exists("left", $data))
+			$left = $data["left"];
+
+		if(array_key_exists("right", $data))
+			$right = $data["right"];
+
+		$printer->add_two_columns_text_line($left, $right);
+	}
+
+
 	// iterate through the order line items, rendering each one
 	function star_cloudprnt_print_items(&$printer, &$order)
 	{
 		$order_items = $order->get_items();
-		foreach ($order_items as $item_id => $item_data)
+		foreach ($order_items as $item_id => $item)
 		{
-			$product_name = $item_data['name'];
-			$product_id = $item_data['product_id'];
-			$variation_id = $item_data['variation_id'];
-			$product = wc_get_product($product_id);
+			$printer->clear_formatting();
+			apply_filters('smcpfw_render_items_pre_item', $printer, $item);
 
-			$sku = $product->get_sku();
+			/* 
+			 * Item Main Section (Item name, SKU etc)
+			*/
 
-			$alt_name = $product->get_attribute( 'star_cp_print_name' );				// Custom attribute can be used to override the product name on receipt
+			$data = star_cloudprnt_item_main_data($order, $item);
+			$data = apply_filters('smcpfw_items_item_main', $data, $item);
 
-			$item_qty = $item_data->get_quantity();
-
-			$item_total_price = floatval(wc_get_order_item_meta($item_id, "_line_total", true))
-				+floatval(wc_get_order_item_meta($item_id, "_line_tax", true));
-
-			// To print without tax
-			//$item_total_price = floatval(wc_get_order_item_meta($item_id, "_line_total", true));
-
-			$item_price = $product->get_price();
-
-			if ($variation_id != 0)
+			if($data != null)
 			{
-				$product_variation = new WC_Product_Variation( $variation_id );
-				$product_name = $product_variation->get_title();
-				$sku = $product_variation->get_sku();
-				$item_price = $product_variation->get_price();
+				$printer->clear_formatting();
+				apply_filters('smcpfw_render_items_pre_item_main', $printer, $item);
+
+				$printer->clear_formatting();
+				if(apply_filters('smcpfw_render_items_item_main', false, $data, $printer, $item) !== true)
+					star_cloudprnt_print_item_main($data, $printer, $order, $item);
+
+				$printer->clear_formatting();
+				apply_filters('smcpfw_render_items_post_item_main', $printer, $item);
 			}
 
-			if ($alt_name != "")
-				$product_name = $alt_name;
+			/*
+			 * Item info section (order item metadata, addons etc.)
+			 */
 
-			$formatted_item_price = star_cloudprnt_format_currency($item_price);
-			$formatted_total_price = star_cloudprnt_format_currency($item_total_price);
+			$data = star_cloudprnt_item_info($order, $item);
 
-			$product_info = "";
-			if(get_option('star-cloudprnt-print-items-print-id') == "on")
-				$product_info .= sprintf(__(" - ID: %d", 'star-cloudprnt-for-woocommerce'), $product_id);
-			if(get_option('star-cloudprnt-print-items-print-sku') == "on" && (! empty($sku)))
-				$product_info .= sprintf(__(" - SKU: %s", 'star-cloudprnt-for-woocommerce'), $sku);
-
-			// $product_info .= sprintf(__(" Tax Class: %s", 'star-cloudprnt-for-woocommerce'), $item_data->get_tax_class());
-
-			$product_line = star_cloudprnt_filter_html($product_name . $product_info);
-
-			$printer->set_text_emphasized();
-			$printer->add_word_wrapped_text_line($product_line);
-			$printer->cancel_text_emphasized();
-
-			$meta = $item_data->get_formatted_meta_data("_", TRUE);
-
-			foreach ($meta as $meta_key => $meta_item)
+			if($data != null)
 			{
-				$printer->add_word_wrapped_text_line(star_cloudprnt_filter_html(" ".$meta_item->display_key.__(": ", 'star-cloudprnt-for-woocommerce').$meta_item->display_value));
+				$printer->clear_formatting();
+				apply_filters('smcpfw_render_items_pre_item_info', $printer, $item);
+
+				$printer->clear_formatting();
+				if(apply_filters('smcpfw_render_items_item_info', false, $printer, $item) !== true)
+					star_cloudprnt_print_item_info($data, $printer, $order, $item);
+
+				$printer->clear_formatting();
+				apply_filters('smcpfw_render_items_post_item_info', $printer, $item);
 			}
 
-			$printer->add_two_columns_text_line(
-				$item_qty.__(" x Cost: ", 'star-cloudprnt-for-woocommerce').$formatted_item_price,
-				$formatted_total_price);
+			/*
+			 * Item summary line (qty, unit price, total price etc.)
+			 */
+
+			$data = star_cloudprnt_item_summary_data($order, $item);
+
+			if($data != null)
+			{
+				$printer->clear_formatting();
+				apply_filters('smcpfw_render_items_pre_item_summary', $printer, $item);
+
+				$printer->clear_formatting();
+				if(apply_filters('smcpfw_render_items_item_summary', false, $printer, $item) !== true)
+					star_cloudprnt_print_item_summary($data, $printer, $order, $item);
+
+				$printer->clear_formatting();
+				apply_filters('smcpfw_render_items_post_item_summary', $printer, $item);
+			}
+
+			$printer->clear_formatting();
+			apply_filters('smcpfw_render_items_post_item', $printer, $item);
 		}
 	}
 

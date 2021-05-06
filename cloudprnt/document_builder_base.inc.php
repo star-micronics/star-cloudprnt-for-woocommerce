@@ -70,8 +70,11 @@
 		{
 			$cols = $this->get_text_columns();
 			if($cols <= 0) {
-				$this->add_word_wrapped_text_line($left);
-				$this->add_word_wrapped_text_line($right);
+				if(!empty($left))
+					$this->add_word_wrapped_text_line($left);
+
+				if(!empty($right))	
+					$this->add_word_wrapped_text_line($right);
 			}
 			else
 			{
@@ -81,8 +84,11 @@
 				if ($total_whitespace > 0)
 					$this->add_text_line($left . str_repeat(" ", $total_whitespace) . $right);
 				else {
-					$this->add_word_wrapped_text_line($left);
-					$this->add_word_wrapped_text_line($right);
+					if(!empty($left))
+						$this->add_word_wrapped_text_line($left);
+
+					if(!empty($right))
+						$this->add_word_wrapped_text_line($right);
 				}
 			}
 

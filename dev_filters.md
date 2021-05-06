@@ -215,7 +215,7 @@ Allow custom rendering of the sub-header banner.
 - @param array - Array with `left` and `right` keys, representing the sun-header banner field strings'
 - @param printer - an object that implements the print job builder API.
 - @param WC_Order - the current order.
-- @return return `true` to indict that rendering has been performed and to block the internal renderer.
+- @return return `true` to indicate that rendering has been performed and to block the internal renderer.
 
 #### Example
 
