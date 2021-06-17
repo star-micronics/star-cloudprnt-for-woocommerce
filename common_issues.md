@@ -1,14 +1,10 @@
-# Common Issues and Questions
-
-The most common user issues and questions along with their solutions where possible. Please consult this documentation before reporting an issue.
+# Frequently Asked Questions
 
 ## Compatibility with your site
 
 WordPress and WooCommerce can exist in a very wide variety of versions, hosting environments, traffic filters, PHP versions, additional plugins and themes etc. The star plugin also must work in some slightly unusual ways, to provide a built-in CloudPRNT print spooling system and to generate documents using Star printer command languages and not HTML (the native page language for WordPress). This means that it is not possible to guarantee compatibility with all sites.
 
 > Complete incompatibility with a site is very rare, but if all other options have been exhausted, please talk with your Star Micronics office who may be able to offer alternative methods of integrating your printer with WooCommerce.
-
-## Frequently Asked Questions
 
 ## Can I modify the receipt design/template?
 
@@ -54,7 +50,7 @@ This can depend on the printer model that you are using:
 
 - No models have built-in support for right-to-left languages. If you need right-to-left language support, then Star has alternative methods of integrating the printer with your site that may be more suitable, please contact your local Star office for advice.
 
-## Common Issues
+# Common Issues
 
 ## Sometimes orders do not print, print late, or unexpectedly re-print hours later
 
