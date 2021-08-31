@@ -139,7 +139,7 @@
 			if($pulse_param >= 255) $pulse_param = 255;
 			
 			if($delay_param <= 0) $delay_param = 0;
-			if($delay_param >= 255) $pulse_param = 255;
+			if($delay_param >= 255) $delay_param = 255;
 			
 			$command = sprintf("1B1D07%02X%02X%02X", $circuit, $pulse_param, $delay_param);
 			$this->printJobBuilder .= $command;
