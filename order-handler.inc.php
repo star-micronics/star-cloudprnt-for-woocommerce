@@ -147,9 +147,9 @@
 				}
 			}
       
-      // If no printer has been selected, then choose the first one on the list
+      			// If no printer has been selected, then choose the last printer
 			if (sizeof($selectedPrinter) == 0) {
-				$selectedPrinter = $printerList[0];
+				$selectedPrinter = $printer;
 			}
 			
 			/* Decide best printer emulation and print width as far as possible
