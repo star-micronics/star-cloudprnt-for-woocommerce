@@ -1,3 +1,42 @@
+= 2.0.4 =
+* Added support for TSP100IV
+
+= 2.0.3 =
+* Improve buzzer compatibility with mC-Print models.
+* Add option to print ID and or SKU on item lines
+* Add option to trigger printing when and order is assigned on-hold status
+* Enable word-wrapping when printing items, in case of very long item names
+* Enable Word-wrapping when printing header section fields, in case of long information on 58mm/2" paper
+* Format the sub-heading order number and print timestamp on tow lines, in case they can not fit side by side
+* Add printer control class methods for text highlighting, Qr Code, and Barcode printing methods to the printer command generation classes.
+  Not currently exposed as features but may be useful to anyone forking/modifying the plugin.
+
+= 2.0.2 =
+* Fix missing "Shipping Method" from the receipt header.
+
+= 2.0.1 =
+* Do not print any blank lines when the title, or item footer text is empty
+* Add some mailchimp metadata key names to the defailt exclusions list
+* Change the timing for registering settings, to avoid reported issue with accessing settings with their default value.
+* Remove all settings when uninstalled
+
+= 2.0.0 =
+* Make printing trigger method user configurable
+* Clean-up settings page design
+* Add a setting to list custom fields that should be excluded from printing
+* Add a "Print with Star CloudPRNT" button to the Edit Order page sidebar
+* Add a settings link to the plugins WordPress plugins page
+* Add support for printing order item metadata - compatible with many Add-Ons plugins
+* Add support for printing order metadata - compatible with many delivery scheduling plugins and others that append fields to an order
+* Add a setting to support multiple copies
+* Add support for setting an alternative print name for products by adding a "star_cp_print_name" attribute
+* Display a warning when WooCommerce can not be detected, instead of refusing to work completely, because the detection can fail in case of some custom WooCommerce installs.
+* Improve Timestamp display to match the site formatting local and site timezone - instead of server timezone
+* Refactor the source, to make it more approachable to developers who fork the project
+* Drop support for WordPress versions earlier than 5.x.x
+* Drop support for WooCommerce versions earlier than 4.x.x
+* Drop support for PHP versions earlier than 7.2
+
 = 1.1.2 =
 * Work around an issue that prevents printing to thermal printer models with HIX Connect interface that has earlier firmware. In this situation, the plugin will now follow the same logic as 1.0.x plugin releases.
 

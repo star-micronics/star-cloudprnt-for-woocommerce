@@ -1,10 +1,10 @@
 === Star CloudPRNT for WooCommerce ===
-Contributors: lawrenceowen, athompson1, gcubero, fmahmood
+Contributors: lawrenceowen, gcubero, fmahmood
 Tags: star, printing, printers, automated, e-commerce, store, sales, downloadable, downloads, woocommerce, restaurant, order, receipt
 Requires at least: 5.0
-Tested up to: 5.6
+Tested up to: 6.2
 Requires PHP: 7.2
-Stable tag: 2.0.3
+Stable tag: 2.0.4
 License: MIT
 
 Star CloudPRNT for WooCommerce enables Cloud printing technology with your Star Receipt printer.
@@ -38,6 +38,7 @@ https://www.youtube.com/watch?v=2O3pZJ-kfqk
 * WooCommerce plugin 4.0, 4.1, 4.2, 4.3, 4.4, 4.5, 4.6, 4.7, 4.8, 4.9, 5.0, 5.1
 * Star TSP650II, TSP700II, TSP800II or SP700 series printer with a IFBD-HI01X/HI02X interface. Printer interface firmware 1.6 or later recommended.
 * Star mC-Print3 or mC-Print2 series printer, firmware version 3.0 or later recommended.
+* Star TSP100IV, firmware version 1.2 or later recommended
 
 
 == Frequently Asked Questions ==
@@ -52,6 +53,7 @@ Supported printer models are:
 * Star TSP700II with HIX interface
 * Star TSP800II with HIX interface (currently limited to 80mm paper width support)
 * Star SP700 with HIX interface
+* Star TSP100IV-UE
 
 Version 3.0 firmware or later is recommended for mC-Print printer models.
 
@@ -109,6 +111,9 @@ This means that you printer is unable to connect with your server, and can have 
 * Add Support for Star mC-Print3 and mC-Print2 printer ranges
 
 == Changelog ==
+
+= 2.0.4 =
+* Added support for TSP100IV
 
 = 2.0.3 =
 * Improve buzzer compatibility with mC-Print models.
