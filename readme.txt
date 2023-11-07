@@ -110,6 +110,9 @@ This means that you printer is unable to connect with your server, and can have 
 
 == Changelog ==
 
+= 2.0.4 =
+* Resolve a potential script injection vulnerability on the settings page
+
 = 2.0.3 =
 * Improve buzzer compatibility with mC-Print models.
 * Add option to print ID and or SKU on item lines
